@@ -1,5 +1,5 @@
 package com.nextech.hrms.model;
-
+import java.util.Date;
 import java.io.Serializable;
 
 import javax.persistence.*;
@@ -11,7 +11,6 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 

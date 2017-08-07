@@ -1,5 +1,5 @@
 package com.nextech.hrms.model;
-
+import java.util.Date;
 public class EmployeeLeaveDTO {
 	private int totalCount;
 

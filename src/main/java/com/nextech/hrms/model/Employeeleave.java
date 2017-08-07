@@ -1,5 +1,5 @@
 package com.nextech.hrms.model;
-
+import java.util.Date;
 import java.io.Serializable;
 
 import javax.persistence.*;

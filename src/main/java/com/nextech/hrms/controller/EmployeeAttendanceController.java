@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.nextech.hrms.model.Employeeattendance;
 import com.nextech.hrms.model.Status;
+import com.nextech.hrms.model.Employeeattendance;
 import com.nextech.hrms.services.EmployeeAttendanceServices;
 import com.nextech.hrms.util.DateUtil;
 import com.nextech.hrms.util.YearUtil;
@@ -168,7 +167,6 @@ public class EmployeeAttendanceController {
 			System.err.println("Got an exception!");
 			e.printStackTrace();
 		}
-
 	}
 	
 	public void totaltime(Employeeattendance employeeattendance) throws ClassNotFoundException, SQLException{
