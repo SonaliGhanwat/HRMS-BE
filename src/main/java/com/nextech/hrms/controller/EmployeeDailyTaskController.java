@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.nextech.hrms.model.Employeeattendance;
 import com.nextech.hrms.model.Employeedailytask;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.EmployeeDailyTaskServices;
@@ -22,23 +21,19 @@ import com.nextech.hrms.services.EmployeeDailyTaskServices;
 @RequestMapping("/employeedailytask")
 public class EmployeeDailyTaskController {
 	public long totaltime;
+	public static final String USER_DOES_NOT_EXISTS = "We are sorry. This user does not exist.";
 
 	@Autowired
 	EmployeeDailyTaskServices employeeDailyTaskServices;
 
-	static final Logger logger = Logger.getLogger(EmployeeController.class);
+	static final Logger logger = Logger.getLogger(EmployeeDailyTaskController.class);
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody
 	Status addEmployee(@RequestBody Employeedailytask employeedailytask) {
 		try {
 			employeedailytask.setIsActive(true);
-			Time starttime = employeedailytask.getStarttime();
-			Time endtime = employeedailytask.getEndtime();
-			totaltime = endtime.getTime()-starttime.getTime();
-			long diffHours = totaltime / (60 * 60 * 1000) % 24;
-			System.out.print("Totaltime\n"  +diffHours);
-			employeedailytask.setTakenTime(diffHours);
+			totalTime(employeedailytask);
 			employeeDailyTaskServices.addEntity(employeedailytask);
 			return new Status(1, "Employee added Successfully !");
 		} catch (Exception e) {
@@ -54,7 +49,7 @@ public class EmployeeDailyTaskController {
 		try {
 			employeedailytask = employeeDailyTaskServices.getEntityById(id);
 			if(employeedailytask==null){
-				return new Status(1,"please Enter valid id");
+				return new Status(1,USER_DOES_NOT_EXISTS);
 			}
 			
 		} catch (Exception e) {
@@ -85,7 +80,7 @@ public class EmployeeDailyTaskController {
 		try {
 			Employeedailytask employeedailytask = employeeDailyTaskServices.getEntityById(id);
 			if(employeedailytask==null){
-				return new Status(1,"please Enter valid id");
+				return new Status(1,USER_DOES_NOT_EXISTS);
 			}
 			employeedailytask.setIsActive(false);
 			employeeDailyTaskServices.updateEntity(employeedailytask);
@@ -94,18 +89,27 @@ public class EmployeeDailyTaskController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new Status(1, "Employee deleted Successfully !");
+		return new Status(1, "Employee deleted Successfully!");
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public @ResponseBody Status updateEntity(@RequestBody Employeedailytask employeedailytask) {
 
 		try {
+			totalTime(employeedailytask);
 			employeeDailyTaskServices.updateEntity(employeedailytask);
 			return new Status(1, "Employee update Successfully !");
 		} catch (Exception e) {
 			return new Status(0, e.toString());
 		}
 
+	}
+	public void totalTime(Employeedailytask employeedailytask){
+		Time starttime = employeedailytask.getStarttime();
+		Time endtime = employeedailytask.getEndtime();
+		totaltime = endtime.getTime()-starttime.getTime();
+		long diffHours = totaltime / (60 * 60 * 1000) % 24;
+		System.out.print("Totaltime\n"  +diffHours);
+		employeedailytask.setTakenTime(diffHours);
 	}
 }

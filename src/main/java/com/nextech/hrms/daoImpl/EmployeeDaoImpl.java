@@ -1,4 +1,4 @@
-package com.nextech.hrms.dao;
+package com.nextech.hrms.daoImpl;
 
 import java.util.List;
 
@@ -9,6 +9,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.nextech.hrms.dao.EmployeeDao;
 import com.nextech.hrms.model.Employee;
 
 public class EmployeeDaoImpl implements EmployeeDao {

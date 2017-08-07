@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+
 import java.sql.Time;
 import java.util.Date;
 import java.sql.Timestamp;
@@ -26,8 +27,10 @@ public class Employeeattendance implements Serializable {
 	@Column(name="created_date")
 	private Timestamp createdDate;
 
+	//@NotBlank(message="date should not be blank")
 	@Temporal(TemporalType.DATE)
 	private Date date;
+
 
 	private Time intime;
 

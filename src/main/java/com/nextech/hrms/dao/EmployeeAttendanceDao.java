@@ -17,9 +17,13 @@ public interface EmployeeAttendanceDao {
 	
 	public boolean updateEntity(Employeeattendance employeeattendance) throws Exception;
 	
-	public boolean updateEntity(long id) throws Exception;
-	
 	public Employeeattendance getEmpolyeeAttendanceByIdandDate(long empId,Date date)throws Exception;
 	
-	public Employeeattendance  getEmployeeAttendanceByEmployeeId(long empId,Date date) throws Exception;
+	public List<Employeeattendance> calculateEmployeeAttendanceByEmployeeIdandDate(long empId,Date date)throws Exception;
+	
+    public List<Employeeattendance> getEmployeeattendanceByCurrentDate(Date date) throws Exception;	
+	
+	
 }
+
+

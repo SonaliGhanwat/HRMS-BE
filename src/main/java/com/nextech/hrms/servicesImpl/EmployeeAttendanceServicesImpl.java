@@ -1,4 +1,4 @@
-package com.nextech.hrms.services;
+package com.nextech.hrms.servicesImpl;
 
 import java.util.Date;
 import java.util.List;
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.nextech.hrms.dao.EmployeeAttendanceDao;
 import com.nextech.hrms.model.Employeeattendance;
+import com.nextech.hrms.services.EmployeeAttendanceServices;
 
 public class EmployeeAttendanceServicesImpl implements EmployeeAttendanceServices {
 
@@ -43,14 +44,17 @@ public class EmployeeAttendanceServicesImpl implements EmployeeAttendanceService
 	}
 
 	@Override
-	public boolean updateEntity(long id) throws Exception {
-		return employeeAttendanceDao.updateEntity(id);
+	public List<Employeeattendance>  calculateEmployeeAttendanceByEmployeeIdandDate(
+			long empId, Date date) throws Exception {
+		return employeeAttendanceDao.calculateEmployeeAttendanceByEmployeeIdandDate(empId, date);
 	}
 
 	@Override
-	public Employeeattendance getEmployeeAttendanceByEmployeeId(long empId,Date date)
+	public List<Employeeattendance> getEmployeeattendanceByCurrentDate(Date date)
 			throws Exception {
-	return employeeAttendanceDao.getEmployeeAttendanceByEmployeeId(empId,date);
+		return employeeAttendanceDao.getEmployeeattendanceByCurrentDate(date);
 	}
+
+
 
 }

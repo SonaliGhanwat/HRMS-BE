@@ -16,5 +16,7 @@ public interface EmployeeDailyTaskServices {
 	
 	public boolean updateEntity(Employeedailytask employeedailytask) throws Exception;
 	
+	
+	
 }
 

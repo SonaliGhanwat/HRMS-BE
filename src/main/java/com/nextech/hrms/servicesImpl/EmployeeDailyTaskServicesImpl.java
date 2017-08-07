@@ -1,10 +1,11 @@
-package com.nextech.hrms.services;
+package com.nextech.hrms.servicesImpl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.nextech.hrms.dao.EmployeeDailyTaskDao;
 import com.nextech.hrms.model.Employeedailytask;
+import com.nextech.hrms.services.EmployeeDailyTaskServices;
 
 public class EmployeeDailyTaskServicesImpl implements EmployeeDailyTaskServices {
 

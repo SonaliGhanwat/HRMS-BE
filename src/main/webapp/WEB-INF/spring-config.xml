@@ -41,14 +41,26 @@
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
+	<bean
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="java.lang.Exception">Error</prop>
+			</props>
+		</property>
+	</bean>
 
 	<bean id="persistenceExceptionTranslationPostProcessor"
 		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
 
-	<bean id="employeeDao" class="com.nextech.hrms.dao.EmployeeDaoImpl"></bean>
-	<bean id="employeeServices" class="com.nextech.hrms.services.EmployeeServicesImpl"></bean>
-	<bean id="employeeAttendanceDao" class="com.nextech.hrms.dao.EmployeeAttendanceDaoImpl"></bean>
-	<bean id="employeeAttendanceServices" class="com.nextech.hrms.services.EmployeeAttendanceServicesImpl"></bean>
-	<bean id="employeeDailyTaskDao" class="com.nextech.hrms.dao.EmployeeDailyTaskDaoImpl"></bean>
-	<bean id="employeeDailyTaskServices" class="com.nextech.hrms.services.EmployeeDailyTaskServicesImpl"></bean>
+	<bean id="employeeDao" class="com.nextech.hrms.daoImpl.EmployeeDaoImpl"></bean>
+	<bean id="employeeServices" class="com.nextech.hrms.servicesImpl.EmployeeServicesImpl"></bean>
+	<bean id="employeeAttendanceDao" class="com.nextech.hrms.daoImpl.EmployeeAttendanceDaoImpl"></bean>
+	<bean id="employeeAttendanceServices" class="com.nextech.hrms.servicesImpl.EmployeeAttendanceServicesImpl"></bean>
+	<bean id="employeeDailyTaskDao" class="com.nextech.hrms.daoImpl.EmployeeDailyTaskDaoImpl"></bean>
+	<bean id="employeeDailyTaskServices" class="com.nextech.hrms.servicesImpl.EmployeeDailyTaskServicesImpl"></bean>
+	<bean id="employeeLeaveDao" class="com.nextech.hrms.daoImpl.EmployeeLeaveDaoImpl"></bean>
+	<bean id="employeeLeaveServices" class="com.nextech.hrms.servicesImpl.EmployeeLeaveServicesImpl"></bean>
+	<bean id="userTypeDao" class="com.nextech.hrms.daoImpl.UserTypeDaoImpl"></bean>
+	<bean id="userTypeServices" class="com.nextech.hrms.servicesImpl.UserTypeServicesImpl"></bean>
 </beans>

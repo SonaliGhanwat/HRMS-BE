@@ -1,7 +1,9 @@
 package com.nextech.hrms.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.util.Date;
 import java.sql.Timestamp;
 
@@ -15,8 +17,9 @@ import java.sql.Timestamp;
 public class Employeeleave implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	private int id;
+	@Id 
+	@GeneratedValue(strategy=GenerationType.IDENTITY) 
+	private long id;
 
 	@Temporal(TemporalType.DATE)
 	private Date afterleavejoiningdate;
@@ -24,7 +27,7 @@ public class Employeeleave implements Serializable {
 	@Column(name="created_date")
 	private Timestamp createdDate;
 
-	private byte isActive;
+	private boolean isActive;
 
 	@Temporal(TemporalType.DATE)
 	private Date leavedate;
@@ -41,12 +44,16 @@ public class Employeeleave implements Serializable {
 
 	public Employeeleave() {
 	}
+	
+	public Employeeleave(int id) {
+		this.id = id;
+	}
 
-	public int getId() {
+	public long getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -66,11 +73,11 @@ public class Employeeleave implements Serializable {
 		this.createdDate = createdDate;
 	}
 
-	public byte getIsActive() {
+	public boolean getIsActive() {
 		return this.isActive;
 	}
 
-	public void setIsActive(byte isActive) {
+	public void setIsActive(boolean isActive) {
 		this.isActive = isActive;
 	}
 

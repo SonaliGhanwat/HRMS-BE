@@ -3,8 +3,12 @@ package com.nextech.hrms.model;
 import java.io.Serializable;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -24,7 +28,7 @@ public class Employee implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY) 
 	private long id;
 
-	
+	@NotBlank(message="address should not be blank")
 	private String address;
 
 	@Temporal(TemporalType.DATE)
@@ -35,26 +39,40 @@ public class Employee implements Serializable {
 	@Column(name="date_of_joining")
 	private Date dateOfJoining;
 
+	@NotBlank(message="Department should not be blank")
 	private String department;
-
+	
+	@Email(message="{Emailid should be enter valid")
+	@Size(min = 2, max = 255, message = "{Email sholud be greater than 2 or less than 255 characters}")
 	private String emailid;
 
+	@NotBlank(message="FirstName should not be blank")
+	@Pattern(regexp = "[a-zA-z]+",message="{firstName sholud be Enter only characters}")  
 	@Column(name="first_name")
 	private String firstName;
-	
 
 	private boolean isActive;
 
+	@NotBlank(message="lastName should not be blank")
+	@Pattern(regexp = "[a-zA-z]+",message="{lastName sholud be Enter only characters}") 
 	@Column(name="last_name")
 	private String lastName;
 	
+	@NotBlank(message="password should not be blank")
+    @Size(min=2,max=8,message="{password sholud be greater than 2 or less than 8 characters}")
 	private String password;
 
+    @NotBlank(message="phoneNumber should not be blank")
+    @Pattern(regexp = "[0-9]+",message="{phoneNumber sholud be Enter only Number}")  
+    @Size(min=10,max=10,message="{phoneNumber sholud be 10 Number}")
 	@Column(name="phone_number")
 	private String phoneNumber;
 
+    @NotBlank(message="salary should not be blank")
 	private String salary;
 
+	@NotBlank(message="UserId should not be blank")
+    @Size(min=2,max=255,message="{UserId sholud be greater than 2 or less than 255 characters}")
 	private String userid;
 	
 	@Column(name="created_date")
@@ -64,6 +82,7 @@ public class Employee implements Serializable {
 	private Timestamp updatedDate;
 
 	//bi-directional many-to-one association to Usertype
+
 	@ManyToOne
 	@JoinColumn(name="usertypeId")
 	private Usertype usertype;

@@ -1,4 +1,4 @@
-package com.nextech.hrms.dao;
+package com.nextech.hrms.daoImpl;
 
 import java.util.List;
 
@@ -9,6 +9,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.nextech.hrms.dao.EmployeeDailyTaskDao;
 import com.nextech.hrms.model.Employeedailytask;
 
 public class EmployeeDailyTaskDaoImpl implements EmployeeDailyTaskDao {
@@ -32,7 +33,7 @@ public class EmployeeDailyTaskDaoImpl implements EmployeeDailyTaskDao {
 		session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(Employeedailytask.class);
 		criteria.add(Restrictions.eq("isActive", true));
-		criteria.add(Restrictions.eq("employee.id", id));
+		criteria.add(Restrictions.eq("id", id));
 		Employeedailytask employeedailytask= criteria.list().size() > 0 ? (Employeedailytask) criteria.list().get(0): null;
 		session.close();
 		return employeedailytask;

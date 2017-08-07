@@ -1,4 +1,4 @@
-package com.nextech.hrms.services;
+package com.nextech.hrms.servicesImpl;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.nextech.hrms.dao.EmployeeDao;
 import com.nextech.hrms.model.Employee;
+import com.nextech.hrms.services.EmployeeServices;
 
 public class EmployeeServicesImpl implements EmployeeServices {
 
