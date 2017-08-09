@@ -2,7 +2,6 @@ package com.nextech.hrms.util;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class YearUtil {
 	public static Date convertToDate(String date) throws ParseException{

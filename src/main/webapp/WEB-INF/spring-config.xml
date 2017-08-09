@@ -63,4 +63,5 @@
 	<bean id="employeeLeaveServices" class="com.nextech.hrms.servicesImpl.EmployeeLeaveServicesImpl"></bean>
 	<bean id="userTypeDao" class="com.nextech.hrms.daoImpl.UserTypeDaoImpl"></bean>
 	<bean id="userTypeServices" class="com.nextech.hrms.servicesImpl.UserTypeServicesImpl"></bean>
+	<bean id="superDao" class="com.nextech.hrms.daoImpl.SuperDaoImpl"></bean>
 </beans>

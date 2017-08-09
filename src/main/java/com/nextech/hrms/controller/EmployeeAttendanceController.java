@@ -39,6 +39,7 @@ public class EmployeeAttendanceController {
 				employeeattendance.setIsActive(true);
 				totaltime(employeeattendance);
 				employeeAttendanceServices.addEntity(employeeattendance);
+				
 			} else {
 				return new Status(1, "EmployeeId and Date Already Exit");
 			}
@@ -55,7 +56,7 @@ public class EmployeeAttendanceController {
 			@PathVariable("id") long id) {
 		Employeeattendance employeeattendance = null;
 		try {
-			employeeattendance = employeeAttendanceServices.getEntityById(id);
+			employeeattendance = employeeAttendanceServices.getEntityById(Employeeattendance.class, id);
 			if (employeeattendance == null) {
 				return new Status(1, USER_DOES_NOT_EXISTS);
 			}
@@ -71,7 +72,7 @@ public class EmployeeAttendanceController {
 
 		List<Employeeattendance> employeeattendanceList = null;
 		try {
-			employeeattendanceList = employeeAttendanceServices.getEntityList();
+			employeeattendanceList = employeeAttendanceServices.getEntityList(Employeeattendance.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -83,8 +84,7 @@ public class EmployeeAttendanceController {
 	public @ResponseBody Status deleteEmployee(@PathVariable("id") long id) {
 
 		try {
-			Employeeattendance employeeattendance = employeeAttendanceServices
-					.getEntityById(id);
+			Employeeattendance employeeattendance = employeeAttendanceServices.getEntityById(Employeeattendance.class, id);
 			if (employeeattendance == null) {
 				return new Status(1, USER_DOES_NOT_EXISTS);
 			}
@@ -102,8 +102,11 @@ public class EmployeeAttendanceController {
 			@RequestBody Employeeattendance employeeattendance) {
 
 		try {
-			totaltime(employeeattendance);
+			
+			 totaltime(employeeattendance);
+			 employeeattendance.setIsActive(true);
 			employeeAttendanceServices.updateEntity(employeeattendance);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 

@@ -2,7 +2,6 @@ package com.nextech.hrms.daoImpl;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -17,69 +16,13 @@ import com.nextech.hrms.dao.EmployeeLeaveDao;
 import com.nextech.hrms.model.EmployeeLeaveDTO;
 import com.nextech.hrms.model.Employeeleave;
 
-public class EmployeeLeaveDaoImpl implements EmployeeLeaveDao {
+public class EmployeeLeaveDaoImpl extends SuperDaoImpl<Employeeleave> implements EmployeeLeaveDao {
 
 	@Autowired
 	SessionFactory sessionFactory;
 	Session session = null;
 	Transaction tx = null;
 
-	@Override
-	public boolean addEntity(Employeeleave employeeleave) throws Exception {
-		session = sessionFactory.openSession();
-		tx = session.beginTransaction();
-		session.save(employeeleave);
-		tx.commit();
-		session.close();
-		return false;
-	}
-
-	@Override
-	public Employeeleave getEntityById(long id) throws Exception {
-
-		 session = sessionFactory.openSession();
-			Criteria criteria = session.createCriteria(Employeeleave.class);
-			criteria.add(Restrictions.eq("isActive", true));
-			criteria.add(Restrictions.eq("id", id));
-			Employeeleave employeeleave= criteria.list().size() > 0 ? (Employeeleave) criteria.list().get(0): null;
-			session.close();
-			return employeeleave;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Employeeleave> getEntityList() throws Exception {
-		session = sessionFactory.openSession();
-		tx = session.beginTransaction();
-		List<Employeeleave> employeeleaveList = session.createCriteria(Employeeleave.class)
-				.list();
-		tx.commit();
-		session.close();
-		return employeeleaveList;
-	}
-	
-	@Override
-	public boolean deleteEntity(long id)
-			throws Exception {
-		session = sessionFactory.openSession();
-		Object o = session.load(Employeeleave.class, id);
-		tx = session.getTransaction();
-		session.beginTransaction();
-		session.delete(o);
-		tx.commit();
-		return false;
-	}
-	@Override
-	public boolean updateEntity(Employeeleave employeeleave)
-			throws Exception {
-		session = sessionFactory.openSession();
-		tx = session.beginTransaction();
-		session.update(employeeleave);
-		tx.commit();
-		session.close();
-		return false;
-	}
-	
 	@Override
 	public Employeeleave getEmpolyeeleaveByIdandDate(long empId,Date date)
 			throws Exception {
@@ -89,17 +32,6 @@ public class EmployeeLeaveDaoImpl implements EmployeeLeaveDao {
 		  criteria.add(Restrictions.eq("leavedate",date));
 		  Employeeleave employeeleave = criteria.list().size() > 0 ? (Employeeleave) criteria.list().get(0) : null;
 		  return employeeleave;
-	}
-
-	@Override
-	public boolean updateEntity(long id) throws Exception {
-		session = sessionFactory.openSession();
-		Object o = session.load(Employeeleave.class, id);
-		tx = session.getTransaction();
-		session.beginTransaction();
-		session.update(o);
-		tx.commit();
-		return  false;
 	}
 
 	@Override
@@ -129,10 +61,11 @@ public class EmployeeLeaveDaoImpl implements EmployeeLeaveDao {
 			 query1.setParameter("day", day);
 			 query1.setParameter("day1", day1);
 			 totalCount=totalCount+day1-day;
-			EmployeeLeaveDTO employeeLeaveDTO= new EmployeeLeaveDTO();
+			
+		}
+		    EmployeeLeaveDTO employeeLeaveDTO= new EmployeeLeaveDTO();
 			employeeLeaveDTO.setTotalCount(totalCount);
 			employeeLeaveDTOs.add(employeeLeaveDTO);
-		}
 		 System.out.println("Total Leave Count YEAR:"+totalCount);
 			return employeeLeaveDTOs;
 		

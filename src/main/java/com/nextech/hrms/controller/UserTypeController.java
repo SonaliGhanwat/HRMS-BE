@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.nextech.hrms.util.YearUtil;
 
 
 import com.nextech.hrms.model.Usertype;
@@ -50,7 +49,7 @@ public class UserTypeController {
 	Status getEmployee(@PathVariable("id") long id) {
 		Usertype usertype = null;
 		try {
-			usertype = userTypeServices.getEntityById(id);
+			usertype = userTypeServices.getEntityById(Usertype.class, id);
 			if(usertype==null){
 				return new Status(1,USER_DOES_NOT_EXISTS);
 			}
@@ -67,7 +66,7 @@ public class UserTypeController {
 
 		List<Usertype> usertypeList = null;
 		try {
-			usertypeList = userTypeServices.getEntityList();
+			usertypeList = userTypeServices.getEntityList(Usertype.class);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -82,7 +81,7 @@ public class UserTypeController {
 		Usertype usertype = null;
 
 		try {
-			usertype =userTypeServices.getEntityById(id);
+			usertype =userTypeServices.getEntityById(Usertype.class, id);
             if(usertype==null){
 				return new Status(1,USER_DOES_NOT_EXISTS);
 			}
@@ -98,12 +97,12 @@ public class UserTypeController {
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public @ResponseBody Status updateEntity(@RequestBody Usertype usertype) {
 		try {
+			usertype.setIsActive(true);
 			userTypeServices.updateEntity(usertype);
-			 if(usertype==null){
-					return new Status(1,USER_DOES_NOT_EXISTS);
-				}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
+			
 		}
 		return new Status(1, "Employee Update Successfully !");
 	}

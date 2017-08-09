@@ -12,12 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.nextech.hrms.util.YearUtil;
 import com.nextech.hrms.model.EmployeeLeaveDTO;
-import com.nextech.hrms.model.Employeeattendance;
 import com.nextech.hrms.model.Employeeleave;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.EmployeeLeaveServices;
 import com.nextech.hrms.util.DateUtil;
-import com.nextech.hrms.util.YearUtil;
 
 
 @Controller
@@ -56,7 +54,7 @@ public class EmployeeLeaveController {
 	Status getEmployeeAttendance(@PathVariable("id") long id) {
 		Employeeleave employeeleave = null;
 		try {
-			employeeleave = employeeLeaveServices.getEntityById(id);
+			employeeleave = employeeLeaveServices.getEntityById(Employeeleave.class, id);
 			if(employeeleave==null){
 				return new Status(1,USER_DOES_NOT_EXISTS);
 			}
@@ -73,7 +71,7 @@ public class EmployeeLeaveController {
 
 		List<Employeeleave> employeeleaveList = null;
 		try {
-			employeeleaveList = employeeLeaveServices.getEntityList();
+			employeeleaveList = employeeLeaveServices.getEntityList(Employeeleave.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -86,7 +84,7 @@ public class EmployeeLeaveController {
 	Status deleteEmployee(@PathVariable("id") long id) {
 
 		try {
-			Employeeleave employeeleave =employeeLeaveServices.getEntityById(id);
+			Employeeleave employeeleave =employeeLeaveServices.getEntityById(Employeeleave.class, id);
 			if(employeeleave==null){
 				return new Status(1,USER_DOES_NOT_EXISTS);
 			}
@@ -103,13 +101,14 @@ public class EmployeeLeaveController {
 	public @ResponseBody Status updateEntity(@RequestBody Employeeleave employeeleave) {
 
 		try {
+			employeeleave.setIsActive(true);
 			employeeLeaveServices.updateEntity(employeeleave);
-			return new Status(1, "Employee update Successfully !");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Status(1,USER_DOES_NOT_EXISTS);
+			
 		}
-
+		return new Status(1, "Employee update Successfully !");
 	}
 	
 	@RequestMapping(value = "/leaveyear/{id}", method = RequestMethod.GET)

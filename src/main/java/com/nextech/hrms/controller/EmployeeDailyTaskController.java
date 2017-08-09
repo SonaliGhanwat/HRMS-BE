@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.nextech.hrms.util.YearUtil;
 import com.nextech.hrms.model.Employeedailytask;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.EmployeeDailyTaskServices;
+import com.nextech.hrms.util.DateUtil;
 
 @Controller
 @RequestMapping("/employeedailytask")
@@ -47,7 +47,7 @@ public class EmployeeDailyTaskController {
 	Status getEmployee(@PathVariable("id") long id) {
 		Employeedailytask employeedailytask = null;
 		try {
-			employeedailytask = employeeDailyTaskServices.getEntityById(id);
+			employeedailytask = employeeDailyTaskServices.getEntityById(Employeedailytask.class, id);
 			if(employeedailytask==null){
 				return new Status(1,USER_DOES_NOT_EXISTS);
 			}
@@ -64,7 +64,7 @@ public class EmployeeDailyTaskController {
 
 		List<Employeedailytask> employeedailytaskList = null;
 		try {
-			employeedailytaskList = employeeDailyTaskServices.getEntityList();
+			employeedailytaskList = employeeDailyTaskServices.getEntityList(Employeedailytask.class);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -78,7 +78,7 @@ public class EmployeeDailyTaskController {
 	Status deleteEmployee(@PathVariable("id") long id) {
 
 		try {
-			Employeedailytask employeedailytask = employeeDailyTaskServices.getEntityById(id);
+			Employeedailytask employeedailytask = employeeDailyTaskServices.getEntityById(Employeedailytask.class, id);
 			if(employeedailytask==null){
 				return new Status(1,USER_DOES_NOT_EXISTS);
 			}
@@ -97,11 +97,31 @@ public class EmployeeDailyTaskController {
 
 		try {
 			totalTime(employeedailytask);
+			employeedailytask.setIsActive(true);
 			employeeDailyTaskServices.updateEntity(employeedailytask);
 			return new Status(1, "Employee update Successfully !");
 		} catch (Exception e) {
 			return new Status(0, e.toString());
 		}
+
+	}
+	
+	@RequestMapping(value = "/getemployeedailytask/{id}/{currentdate}", method = RequestMethod.GET)
+	public @ResponseBody Status getEmployeeAttendanceByIdandMonth( @PathVariable("id") long empId,@PathVariable("currentdate") String date) {
+		List<Employeedailytask> employeedailytaskList = null;
+		try {
+			employeedailytaskList = employeeDailyTaskServices.getEmployeeDailytaskByEmployeeIdandCurrentDate(empId,DateUtil.convertToDate(date));
+					
+			if(employeedailytaskList==null){
+				
+				return new Status(1,USER_DOES_NOT_EXISTS);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+		return new Status(1, "Employee Daily Task!", employeedailytaskList);
 
 	}
 	public void totalTime(Employeedailytask employeedailytask){
