@@ -25,7 +25,6 @@ public class UserTypeController {
 
 	@Autowired
 	UserTypeServices userTypeServices;
-
 	static final Logger logger = Logger.getLogger(UserTypeController.class);
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
