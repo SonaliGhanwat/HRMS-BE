@@ -1,41 +1,28 @@
 package com.nextech.hrms.servicesImpl;
-import java.util.Date;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.nextech.hrms.Dto.EmployeeAttendanceDto;
+import com.nextech.hrms.Dto.EmployeeDailyTaskDto;
+import com.nextech.hrms.Dto.EmployeeDto;
 import com.nextech.hrms.dao.EmployeeDao;
+import com.nextech.hrms.factory.EmployeeAttendanceFactory;
+import com.nextech.hrms.factory.EmployeeDailyTaskFactory;
+import com.nextech.hrms.factory.EmployeeFactory;
 import com.nextech.hrms.model.Employee;
+import com.nextech.hrms.model.Employeeattendance;
+import com.nextech.hrms.model.Employeedailytask;
 import com.nextech.hrms.services.EmployeeServices;
 
-public class EmployeeServicesImpl implements EmployeeServices {
+@Service
+public class EmployeeServicesImpl extends CRUDServiceImpl<Employee> implements EmployeeServices {
 
 	@Autowired
 	EmployeeDao employeeDao;
-	
-	@Override
-	public boolean addEntity(Employee employee) throws Exception {
-		return employeeDao.addEntity(employee);
-	}
-
-	@Override
-	public Employee getEntityById(long id) throws Exception {
-		return employeeDao.getEntityById(id);
-	}
-
-	@Override
-	public List<Employee> getEntityList() throws Exception {
-		return employeeDao.getEntityList();
-	}
-
-	@Override
-	public boolean deleteEntity(long id) throws Exception {
-		return employeeDao.deleteEntity(id);
-	}
-	@Override
-	public boolean updateEntity(Employee employee) throws Exception {
-		return employeeDao.updateEntity(employee);
-	}
 
 	@Override
 	public Employee getEmployeeByUserId(String userId) throws Exception {
@@ -43,9 +30,10 @@ public class EmployeeServicesImpl implements EmployeeServices {
 	}
 
 	@Override
-	public Employee getEmployeeByphoneNumber(String phoneNumber) throws Exception {
+	public Employee getEmployeeByphoneNumber(String phoneNumber)
+			throws Exception {
 		return employeeDao.getEmployeeByphoneNumber(phoneNumber);
-		
+
 	}
 
 	@Override
@@ -53,4 +41,33 @@ public class EmployeeServicesImpl implements EmployeeServices {
 		return employeeDao.getEmpolyeeByEmailid(emailId);
 	}
 
+	@Override
+	public EmployeeDto getEmployeeDto(long id) throws Exception {
+		Employee  employee =  employeeDao.getById(Employee.class, id);
+		EmployeeDto employeeDto = EmployeeFactory.setEmployeeList(employee);
+		return employeeDto;
+	}
+
+	@Override
+	public List<EmployeeDto> getEmployeeAttendanceList(
+			List<EmployeeDto> employeeDtos) throws Exception {
+		employeeDtos = new ArrayList<EmployeeDto>();
+		List<Employee> employeeList = null;
+		employeeList = employeeDao.getList(Employee.class);
+		for (Employee employee : employeeList) {
+			EmployeeDto employeeDto = EmployeeFactory.setEmployeeList(employee);
+			employeeDtos.add(employeeDto);
+		}
+		return employeeDtos;
+	}
+
+	@Override
+	public EmployeeDto getEmployeeDtoByid(long id) throws Exception {
+		Employee employee =  employeeDao.getById(Employee.class, id);
+		EmployeeDto employeeDto = EmployeeFactory.setEmployeeList(employee);
+		employee.setIsActive(false);
+		employeeDao.update(employee);
+		return employeeDto;
+		
+	}
 }

@@ -2,21 +2,18 @@ package com.nextech.hrms.services;
 
 import java.util.Date;
 import java.util.List;
+
+import com.nextech.hrms.Dto.EmployeeDailyTaskDto;
 import com.nextech.hrms.model.Employeedailytask;
 
-public interface EmployeeDailyTaskServices {
+public interface EmployeeDailyTaskServices extends CRUDService<Employeedailytask> {
+	
+	public List<Employeedailytask> getEmployeeDailytaskByEmployeeIdandCurrentDate(long empId,Date date)throws Exception;
 
-	public boolean addEntity(Employeedailytask employeedailytask) throws Exception;
-	
-	public Employeedailytask getEntityById(long id) throws Exception;
-	
-	public List<Employeedailytask> getEntityList() throws Exception;
-	
-	public boolean deleteEntity(long id) throws Exception;
-	
-	public boolean updateEntity(Employeedailytask employeedailytask) throws Exception;
-	
-	
-	
+	public EmployeeDailyTaskDto getEmployeeDailyTaskDto(long id) throws Exception;
+	 
+	public List<EmployeeDailyTaskDto> getEmployeeDailyTaskDtoList(List<EmployeeDailyTaskDto> employeeDailyTaskDtos)throws Exception;
+
+	public EmployeeDailyTaskDto getEmployeeDailyTaskDtoByid(long id)throws Exception;
 }
 

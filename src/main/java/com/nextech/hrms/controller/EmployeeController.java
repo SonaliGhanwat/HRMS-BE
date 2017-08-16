@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.nextech.hrms.util.YearUtil;
+
+import com.nextech.hrms.Dto.EmployeeDto;
+import com.nextech.hrms.factory.EmployeeFactory;
 import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.EmployeeServices;
@@ -24,7 +26,7 @@ import com.nextech.hrms.services.EmployeeServices;
 @Controller
 @RequestMapping("/employee")
 public class EmployeeController {
-	public static final String USER_DOES_NOT_EXISTS = "We are sorry. This user does not exist.";
+	public static final String EMPLOYEE_DOES_NOT_EXISTS = "We are sorry. This Employee does not exist.";
 
 	@Autowired
 	EmployeeServices employeeServices;
@@ -32,32 +34,35 @@ public class EmployeeController {
 	static final Logger logger = Logger.getLogger(EmployeeController.class);
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody Status addEmployee(@Valid @RequestBody Employee employee,BindingResult bindingResult) throws Exception {
+	public @ResponseBody Status addEmployee(
+			@Valid @RequestBody EmployeeDto employeeDto, BindingResult bindingResult)
+			throws Exception {
 		try {
-			if (bindingResult.hasErrors()) { 
+			if (bindingResult.hasErrors()) {
 				return new Status(0, bindingResult.getFieldError()
-				.getDefaultMessage());
-				}
-			
-			Employee employee1 = employeeServices.getEmployeeByUserId(employee.getUserid());
-			Employee employee2 = employeeServices.getEmployeeByphoneNumber(employee.getPhoneNumber());
-			Employee employee3 = employeeServices.getEmpolyeeByEmailid(employee.getEmailid());
-			if(employee1==null){
-			}else{
-				return new Status(1, "UserId Already Exit");
+						.getDefaultMessage());
 			}
-			if(employee2==null){
+
+			Employee employee1 = employeeServices.getEmployeeByUserId(employeeDto
+					.getUserid());
+			Employee employee2 = employeeServices
+					.getEmployeeByphoneNumber(employeeDto.getPhoneNumber());
+			Employee employee3 = employeeServices.getEmpolyeeByEmailid(employeeDto
+					.getEmailid());
+			if (employee1 == null) {
+			} else {
+				return new Status(1, "UserId Already Exist");
 			}
-			else{
-				return new Status(1, "Phone Number Already Exit");
+			if (employee2 == null) {
+			} else {
+				return new Status(1, "Phone Number Already Exist");
 			}
-			if(employee3==null){
+			if (employee3 == null) {
+			} else {
+				return new Status(1, "EmailId Already Exist");
 			}
-			else{
-				return new Status(1, "EmailId Already Exit");
-			}
-			employee.setIsActive(true);
-			employeeServices.addEntity(employee);
+			employeeDto.setIsActive(true);
+			employeeServices.addEntity(EmployeeFactory.setEmployee(employeeDto));
 			return new Status(1, "Employee added Successfully !");
 		} catch (ConstraintViolationException cve) {
 			System.out.println("Inside ConstraintViolationException");
@@ -74,70 +79,58 @@ public class EmployeeController {
 		}
 
 	}
-	
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public @ResponseBody
-	Status getEmployee(@PathVariable("id") long id) {
-		Employee employee = null;
+	public @ResponseBody Status getEmployee(@PathVariable("id") long id) {
+		EmployeeDto employeeDto = null;
 		try {
-			
-			employee = employeeServices.getEntityById(id);
-			if(employee==null){
-				return new Status(1,USER_DOES_NOT_EXISTS);
-			}
+
+			employeeDto = employeeServices.getEmployeeDto(id);
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			return new Status(1, EMPLOYEE_DOES_NOT_EXISTS);
 		}
-		 return new Status(1, "Employee List",employee);
+		return new Status(1, "Employee List", employeeDto);
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public @ResponseBody
-    List<Employee> getEmployee() {
+	public @ResponseBody List<EmployeeDto> getEmployee() {
 
-		List<Employee> employeeList = null;
+		List<EmployeeDto> employeeDtoList = null;
 		try {
-			employeeList = employeeServices.getEntityList();
+			employeeDtoList = employeeServices.getEmployeeAttendanceList(employeeDtoList);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return employeeList;
+		return employeeDtoList;
 	}
 
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-	public @ResponseBody
-	Status deleteEmployee(@PathVariable("id") long id) {
-		Employee employee = null;
+	public @ResponseBody Status deleteEmployee(@PathVariable("id") long id) {
+		EmployeeDto employeeDto = null;
 
 		try {
-			employee =employeeServices.getEntityById(id);
-            if(employee==null){
-				return new Status(1,USER_DOES_NOT_EXISTS);
-			}
-			employee.setIsActive(false);
-			employeeServices.updateEntity(employee);
-		   //employeeServices.deleteEntity(id);
+			employeeDto = employeeServices.getEmployeeDtoByid(id);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
+			return new Status(0, EMPLOYEE_DOES_NOT_EXISTS);
 		}
 		return new Status(1, "Employee deleted Successfully !");
 	}
-	
+
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
-	public @ResponseBody Status updateEntity(@RequestBody Employee employee) {
+	public @ResponseBody Status updateEntity(@Valid @RequestBody EmployeeDto employeeDto,BindingResult bindingResult) {
 		try {
-			employeeServices.updateEntity(employee);
-			 if(employee==null){
-					return new Status(1,USER_DOES_NOT_EXISTS);
-				}
+			employeeDto.setIsActive(true);
+			employeeServices.updateEntity(EmployeeFactory.setEmployeeUpdate(employeeDto));
 		} catch (Exception e) {
 			e.printStackTrace();
+			return new Status(0, EMPLOYEE_DOES_NOT_EXISTS);
 		}
 		return new Status(1, "Employee Update Successfully !");
 	}
-	
 }

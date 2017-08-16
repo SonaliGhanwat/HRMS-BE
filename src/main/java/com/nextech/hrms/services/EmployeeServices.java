@@ -1,20 +1,13 @@
 package com.nextech.hrms.services;
-import java.util.Date;
+
 import java.util.List;
 
+import com.nextech.hrms.Dto.EmployeeAttendanceDto;
+import com.nextech.hrms.Dto.EmployeeDto;
 import com.nextech.hrms.model.Employee;
 
-public interface EmployeeServices {
+public interface EmployeeServices extends CRUDService<Employee> {
 	
-	public boolean addEntity(Employee employee) throws Exception;
-	
-	public Employee getEntityById(long id) throws Exception;
-	
-	public List<Employee> getEntityList() throws Exception;
-	
-	public boolean deleteEntity(long id) throws Exception;
-	
-	public boolean updateEntity(Employee employee) throws Exception;
 	
 	public Employee  getEmployeeByUserId(String userId) throws Exception;
 	
@@ -22,4 +15,12 @@ public interface EmployeeServices {
 	
 	public Employee getEmpolyeeByEmailid(String emailId)throws Exception;
 	
+    public EmployeeDto getEmployeeDto(long id) throws Exception;
+    
+    public List<EmployeeDto> getEmployeeAttendanceList(List<EmployeeDto> employeeDtos)throws Exception;
+    
+    public EmployeeDto getEmployeeDtoByid(long id)throws Exception;
+
+
+
 }

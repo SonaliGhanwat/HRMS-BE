@@ -1,27 +1,25 @@
 package com.nextech.hrms.services;
 import java.util.Date;
-import java.util.Date;
 import java.util.List;
 
+
+
+
+import com.nextech.hrms.Dto.EmployeeAttendanceDto;
 import com.nextech.hrms.model.Employeeattendance;
 
-public interface EmployeeAttendanceServices {
-	
-	public boolean addEntity(Employeeattendance employeeattendance) throws Exception;
-	
-	public Employeeattendance getEntityById(long id) throws Exception;
-	
-	public List<Employeeattendance> getEntityList() throws Exception;
-	
-	public boolean deleteEntity(long id) throws Exception;
-	
-	public boolean updateEntity(Employeeattendance employeeattendance) throws Exception;
-	
+
+public interface EmployeeAttendanceServices extends CRUDService<Employeeattendance> {
 	
 	public Employeeattendance getEmpolyeeAttendanceByIdandDate(long empId,Date date)throws Exception;
 	
 	public List<Employeeattendance> calculateEmployeeAttendanceByEmployeeIdandDate(long empId,Date date)throws Exception;
 	
     public List<Employeeattendance> getEmployeeattendanceByCurrentDate(Date date) throws Exception;	
-
+    
+    public EmployeeAttendanceDto getEmployeeAttendanceDto(long id) throws Exception;
+    
+    public List<EmployeeAttendanceDto> getEmployeeAttendanceList(List<EmployeeAttendanceDto> employeeAttendanceDtos)throws Exception;
+    
+    public EmployeeAttendanceDto getEmployeeAttendanceDtoByid(long id)throws Exception;
 }

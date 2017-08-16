@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.nextech.hrms.util.YearUtil;
 
 
+
+
+import com.nextech.hrms.Dto.UserTypeDto;
+import com.nextech.hrms.factory.UserTypeFactory;
 import com.nextech.hrms.model.Usertype;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.UserTypeServices;
@@ -25,15 +28,16 @@ public class UserTypeController {
 
 	@Autowired
 	UserTypeServices userTypeServices;
+
 	static final Logger logger = Logger.getLogger(UserTypeController.class);
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody Status addEmployee(@RequestBody Usertype usertype) {
+	public @ResponseBody Status addEmployee(@RequestBody UserTypeDto userTypeDto) {
 		try {
-			Usertype usertype1 = userTypeServices.getUserTypeByIdandName(usertype.getUsertypeName());
+			Usertype usertype1 = userTypeServices.getUserTypeByIdandName(userTypeDto.getUsertypeName());
 			if(usertype1==null){
-			usertype.setIsActive(true);
-			userTypeServices.addEntity(usertype);
+				userTypeDto.setIsActive(true);
+			userTypeServices.addEntity(UserTypeFactory.setUserType(userTypeDto));
 			}else{
 				return new Status(1, " Usertype Name Already Exit");
 			}
@@ -41,70 +45,64 @@ public class UserTypeController {
 		} catch (Exception e) {
 		     e.printStackTrace();
 		}
-		return new Status(1, "Employee added Successfully !");
+		return new Status(1, "UserType added Successfully !");
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody
 	Status getEmployee(@PathVariable("id") long id) {
-		Usertype usertype = null;
+		UserTypeDto userTypeDto = null;
 		try {
-			usertype = userTypeServices.getEntityById(id);
-			if(usertype==null){
-				return new Status(1,USER_DOES_NOT_EXISTS);
-			}
+			userTypeDto = userTypeServices.getUserTypeDto(id);
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			return new Status(1,USER_DOES_NOT_EXISTS);
 		}
-		 return new Status(1, "Employee List",usertype);
+		 return new Status(1, "UserType List",userTypeDto);
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public @ResponseBody
-    List<Usertype> getEmployee() {
+    List<UserTypeDto> getEmployee() {
 
-		List<Usertype> usertypeList = null;
+		List<UserTypeDto> userTypeDtoList = null;
 		try {
-			usertypeList = userTypeServices.getEntityList();
+			userTypeDtoList = userTypeServices.getUserTypeList(userTypeDtoList);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return usertypeList;
+		return userTypeDtoList;
 	}
 
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody
 	Status deleteEmployee(@PathVariable("id") long id) {
-		Usertype usertype = null;
+		UserTypeDto userTypeDto = null;
 
 		try {
-			usertype =userTypeServices.getEntityById(id);
-            if(usertype==null){
-				return new Status(1,USER_DOES_NOT_EXISTS);
-			}
-            usertype.setIsActive(false);
-            userTypeServices.updateEntity(usertype);
-		   //employeeServices.deleteEntity(id);
+			userTypeDto =userTypeServices.getUserTypeDtoByid(id);
+           
 		} catch (Exception e) {
 			e.printStackTrace();
+			return new Status(1,USER_DOES_NOT_EXISTS);
 		}
-		return new Status(1, "Employee deleted Successfully !");
+		return new Status(1, "UserType deleted Successfully !");
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
-	public @ResponseBody Status updateEntity(@RequestBody Usertype usertype) {
+	public @ResponseBody Status updateEntity(@RequestBody UserTypeDto userTypeDto) {
 		try {
-			userTypeServices.updateEntity(usertype);
-			 if(usertype==null){
-					return new Status(1,USER_DOES_NOT_EXISTS);
-				}
+			userTypeDto.setIsActive(true);
+			userTypeServices.updateEntity(UserTypeFactory.setUserTypeUpdate(userTypeDto));
+			
 		} catch (Exception e) {
 			e.printStackTrace();
+			
 		}
-		return new Status(1, "Employee Update Successfully !");
+		return new Status(1, "UserType Update Successfully !");
 	}
 	
 }

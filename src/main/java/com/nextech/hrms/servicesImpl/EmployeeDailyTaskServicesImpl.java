@@ -1,42 +1,62 @@
 package com.nextech.hrms.servicesImpl;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Date;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.nextech.hrms.Dto.EmployeeAttendanceDto;
+import com.nextech.hrms.Dto.EmployeeDailyTaskDto;
 import com.nextech.hrms.dao.EmployeeDailyTaskDao;
+import com.nextech.hrms.factory.EmployeeAttendanceFactory;
+import com.nextech.hrms.factory.EmployeeDailyTaskFactory;
+import com.nextech.hrms.model.Employeeattendance;
 import com.nextech.hrms.model.Employeedailytask;
 import com.nextech.hrms.services.EmployeeDailyTaskServices;
-
-public class EmployeeDailyTaskServicesImpl implements EmployeeDailyTaskServices {
+@Service
+public class EmployeeDailyTaskServicesImpl extends CRUDServiceImpl<Employeedailytask> implements EmployeeDailyTaskServices {
 
 	@Autowired
 	EmployeeDailyTaskDao employeeDailyTaskDao;
-	
+
 	@Override
-	public boolean addEntity(Employeedailytask employeedailytask) throws Exception {
-		return employeeDailyTaskDao.addEntity(employeedailytask);
+	public List<Employeedailytask> getEmployeeDailytaskByEmployeeIdandCurrentDate(
+			long empId, Date date) throws Exception {
+		
+		return employeeDailyTaskDao.getEmployeeDailytaskByEmployeeIdandCurrentDate(empId, date);
 	}
 
 	@Override
-	public Employeedailytask getEntityById(long id) throws Exception {
-		return employeeDailyTaskDao.getEntityById(id);
+	public EmployeeDailyTaskDto getEmployeeDailyTaskDto(long id)
+			throws Exception {
+		Employeedailytask  employeedailytask =  employeeDailyTaskDao.getById(Employeedailytask.class, id);
+		EmployeeDailyTaskDto employeeDailyTaskDto = EmployeeDailyTaskFactory.setEmployeeDailyTaskList(employeedailytask);
+		return employeeDailyTaskDto;
 	}
 
 	@Override
-	public List<Employeedailytask> getEntityList() throws Exception {
-		return employeeDailyTaskDao.getEntityList();
+	public List<EmployeeDailyTaskDto> getEmployeeDailyTaskDtoList(
+			List<EmployeeDailyTaskDto> employeeDailyTaskDtos) throws Exception {
+		employeeDailyTaskDtos = new ArrayList<EmployeeDailyTaskDto>();
+		List<Employeedailytask> employeedailytaskList = null;
+		employeedailytaskList = employeeDailyTaskDao.getList(Employeedailytask.class);
+		for (Employeedailytask employeedailytask : employeedailytaskList) {
+			EmployeeDailyTaskDto employeeDailyTaskDto = EmployeeDailyTaskFactory.setEmployeeDailyTaskList(employeedailytask);
+			employeeDailyTaskDtos.add(employeeDailyTaskDto);
+		}
+		return employeeDailyTaskDtos;
 	}
 
 	@Override
-	public boolean deleteEntity(long id) throws Exception {
-		return employeeDailyTaskDao.deleteEntity(id);
+	public EmployeeDailyTaskDto getEmployeeDailyTaskDtoByid(long id)
+			throws Exception {
+		Employeedailytask employeedailytask =  employeeDailyTaskDao.getById(Employeedailytask.class, id);
+		EmployeeDailyTaskDto employeeDailyTaskDto = EmployeeDailyTaskFactory.setEmployeeDailyTaskList(employeedailytask);
+		employeedailytask.setIsActive(false);
+		employeeDailyTaskDao.update(employeedailytask);
+		return employeeDailyTaskDto;
+		
 	}
-	@Override
-	public boolean updateEntity(Employeedailytask employeedailytask) throws Exception {
-		return employeeDailyTaskDao.updateEntity(employeedailytask);
-	}
-
-	
-
 }
 

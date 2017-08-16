@@ -1,8 +1,9 @@
 package com.nextech.hrms.daoImpl;
 import java.util.Date;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -11,72 +12,20 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.nextech.hrms.dao.EmployeeAttendanceDao;
 import com.nextech.hrms.model.Employeeattendance;
 
-public class EmployeeAttendanceDaoImpl implements EmployeeAttendanceDao {
+@Repository
+@Transactional
+public class EmployeeAttendanceDaoImpl extends SuperDaoImpl<Employeeattendance> implements EmployeeAttendanceDao {
 
 	@Autowired
 	SessionFactory sessionFactory;
 	Session session = null;
 	Transaction tx = null;
 
-	@Override
-	public boolean addEntity(Employeeattendance employeeattendance) throws Exception {
-		session = sessionFactory.openSession();
-		tx = session.beginTransaction();
-		session.save(employeeattendance);
-		tx.commit();
-		session.close();
-		return false;
-	}
-
-	@Override
-	public Employeeattendance getEntityById(long id) throws Exception {
-
-		 session = sessionFactory.openSession();
-		Criteria criteria = session.createCriteria(Employeeattendance.class);
-		criteria.add(Restrictions.eq("isActive", true));
-		criteria.add(Restrictions.eq("id", id));
-		Employeeattendance employeeattendance= criteria.list().size() > 0 ? (Employeeattendance) criteria.list().get(0): null;
-		session.close();
-		return employeeattendance;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Employeeattendance> getEntityList() throws Exception {
-		session = sessionFactory.openSession();
-		tx = session.beginTransaction();
-		List<Employeeattendance> employeeattendanceList = session.createCriteria(Employeeattendance.class)
-				.list();
-		tx.commit();
-		session.close();
-		return employeeattendanceList;
-	}
-	
-	@Override
-	public boolean deleteEntity(long id)
-			throws Exception {
-		session = sessionFactory.openSession();
-		Object o = session.load(Employeeattendance.class, id);
-		tx = session.getTransaction();
-		session.beginTransaction();
-		session.delete(o);
-		tx.commit();
-		return false;
-	}
-	@Override
-	public boolean updateEntity(Employeeattendance employeeattendance)
-			throws Exception {
-		session = sessionFactory.openSession();
-		tx = session.beginTransaction();
-		session.update(employeeattendance);
-		tx.commit();
-		session.close();
-		return false;
-	}
 	
 	@Override
 	public Employeeattendance getEmpolyeeAttendanceByIdandDate(long empId,Date date)
@@ -88,9 +37,7 @@ public class EmployeeAttendanceDaoImpl implements EmployeeAttendanceDao {
 		  Employeeattendance employeeattendance = criteria.list().size() > 0 ? (Employeeattendance) criteria.list().get(0) : null;
 		  return employeeattendance;
 	}
-	
-	
-	
+
 	public List<Employeeattendance> calculateEmployeeAttendanceByEmployeeIdandDate(long empId,Date date)
 			throws Exception {
 		session = sessionFactory.openSession();
@@ -105,7 +52,6 @@ public class EmployeeAttendanceDaoImpl implements EmployeeAttendanceDao {
 		  query.setParameter("employeeid", empId);
 		 query.setParameter("year", year);
 		 query.setParameter("month", month);
-		
 		 List<Employeeattendance> employeeattendances = query.list();
 		  return employeeattendances;
 	}
@@ -119,6 +65,4 @@ public class EmployeeAttendanceDaoImpl implements EmployeeAttendanceDao {
 		  List<Employeeattendance> employeeattendance =criteria.list();
 		  return employeeattendance;
 	}
-
-
 }
