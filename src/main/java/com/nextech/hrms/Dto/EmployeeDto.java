@@ -10,7 +10,7 @@ public class EmployeeDto extends AbstractDTO {
 	private String password;
 	private String firstName;
 	private String lastName;
-	private String phoneNumber;
+	private long phoneNumber;
 	private String emailid;
 	private Date dateOfJoining;
 	private Date dateOfBirth;
@@ -42,10 +42,10 @@ public class EmployeeDto extends AbstractDTO {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	public String getPhoneNumber() {
+	public long getPhoneNumber() {
 		return phoneNumber;
 	}
-	public void setPhoneNumber(String phoneNumber) {
+	public void setPhoneNumber(long phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 	public String getEmailid() {

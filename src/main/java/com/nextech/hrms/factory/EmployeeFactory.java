@@ -1,11 +1,19 @@
 package com.nextech.hrms.factory;
 
-import com.nextech.hrms.Dto.EmployeeAttendanceDto;
-import com.nextech.hrms.Dto.EmployeeDailyTaskDto;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.nextech.hrms.Dto.EmployeeDto;
 import com.nextech.hrms.model.Employee;
-import com.nextech.hrms.model.Employeeattendance;
-import com.nextech.hrms.model.Employeedailytask;
+import com.nextech.hrms.model.Usertype;
 
 public class EmployeeFactory {
 	
@@ -73,4 +81,34 @@ public class EmployeeFactory {
 		return employee;
 
 	}
+	public static List<EmployeeDto> setEmployeeExcel(MultipartFile employeeExcelFile)throws Exception{
+		List<EmployeeDto> employeeDtos = new ArrayList<>();
+		
+	        Workbook workbook = new XSSFWorkbook(employeeExcelFile.getInputStream());
+	        Sheet worksheet = workbook.getSheetAt(0);
+	        Iterator<Row> iterator = worksheet.iterator();
+	        while (iterator.hasNext()) {
+	        	EmployeeDto employeeDto = new EmployeeDto();
+	        	Row row = iterator.next();
+	        	if(row.getRowNum()!=0){
+				employeeDto.setUserid(row.getCell(1).getStringCellValue());
+				employeeDto.setPassword(row.getCell(2).getStringCellValue());
+				employeeDto.setFirstName(row.getCell(3).getStringCellValue());
+				employeeDto.setLastName(row.getCell(4).getStringCellValue());
+				employeeDto.setPhoneNumber((long)(row.getCell(5).getNumericCellValue()));
+				employeeDto.setEmailid(row.getCell(6).getStringCellValue());
+				employeeDto.setDateOfJoining(new Date(row.getCell(7).getDateCellValue().getTime()));
+				employeeDto.setDateOfBirth(new Date(row.getCell(8).getDateCellValue().getTime()));
+				employeeDto.setAddress(row.getCell(9).getStringCellValue());
+				employeeDto.setDepartment(row.getCell(10).getStringCellValue());
+				employeeDto.setSalary(row.getCell(11).getStringCellValue());
+				Usertype usertype = new Usertype();
+				usertype.setId((int)(row.getCell(12).getNumericCellValue()));
+        		employeeDto.setUsertype(usertype);
+				employeeDtos.add(employeeDto);
+	        	}
+	        }
+			return employeeDtos;
+			
+		}
 }

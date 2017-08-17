@@ -39,7 +39,7 @@ public class UserTypeController {
 				userTypeDto.setIsActive(true);
 			userTypeServices.addEntity(UserTypeFactory.setUserType(userTypeDto));
 			}else{
-				return new Status(1, " Usertype Name Already Exit");
+				return new Status(1, " Usertype Name Already Exist");
 			}
 			
 		} catch (Exception e) {

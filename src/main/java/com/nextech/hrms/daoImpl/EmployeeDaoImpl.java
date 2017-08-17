@@ -23,7 +23,7 @@ public class EmployeeDaoImpl extends SuperDaoImpl<Employee> implements EmployeeD
 	}
 
 	@Override
-	public Employee getEmployeeByphoneNumber(String phoneNumber)
+	public Employee getEmployeeByphoneNumber(long phoneNumber)
 			throws Exception {
 		session = sessionFactory.openSession();
 	  Criteria criteria = session.createCriteria(Employee.class);

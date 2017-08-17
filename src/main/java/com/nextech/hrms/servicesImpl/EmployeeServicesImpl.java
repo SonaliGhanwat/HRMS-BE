@@ -16,6 +16,7 @@ import com.nextech.hrms.factory.EmployeeFactory;
 import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.Employeeattendance;
 import com.nextech.hrms.model.Employeedailytask;
+import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.EmployeeServices;
 
 @Service
@@ -30,7 +31,7 @@ public class EmployeeServicesImpl extends CRUDServiceImpl<Employee> implements E
 	}
 
 	@Override
-	public Employee getEmployeeByphoneNumber(String phoneNumber)
+	public Employee getEmployeeByphoneNumber(long phoneNumber)
 			throws Exception {
 		return employeeDao.getEmployeeByphoneNumber(phoneNumber);
 
@@ -68,6 +69,31 @@ public class EmployeeServicesImpl extends CRUDServiceImpl<Employee> implements E
 		employee.setIsActive(false);
 		employeeDao.update(employee);
 		return employeeDto;
+		
+	}
+
+	@Override
+	public void addEmployee(List<EmployeeDto> employeeDtos) throws Exception {
+		// TODO Auto-generated method stub
+		for (EmployeeDto employeeDto : employeeDtos) {
+			employeeDto.setUserid(employeeDto.getUserid());
+			employeeDto.setPassword(employeeDto.getPassword());
+			employeeDto.setFirstName(employeeDto.getFirstName());
+			employeeDto.setLastName(employeeDto.getLastName());
+			employeeDto.setPhoneNumber(employeeDto.getPhoneNumber());
+			employeeDto.setEmailid(employeeDto.getEmailid());
+			employeeDto.setDateOfJoining(employeeDto.getDateOfJoining());
+			employeeDto.setDateOfBirth(employeeDto.getDateOfBirth());
+			employeeDto.setAddress(employeeDto.getAddress());
+			employeeDto.setDepartment(employeeDto.getDepartment());
+			employeeDto.setSalary(employeeDto.getSalary());
+			employeeDto.setUsertype(employeeDto.getUsertype());
+			Employee employee1 = employeeDao.getEmployeeByUserId(employeeDto.getUserid());
+			if (employee1 == null) {
+				employeeDao.add(EmployeeFactory.setEmployee(employeeDto));
+			}
+		
+		}
 		
 	}
 }

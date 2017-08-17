@@ -1,5 +1,8 @@
 package com.nextech.hrms.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.PersistenceException;
@@ -7,20 +10,28 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.nextech.hrms.Dto.EmployeeDto;
 import com.nextech.hrms.factory.EmployeeFactory;
 import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.Status;
+import com.nextech.hrms.model.Usertype;
 import com.nextech.hrms.services.EmployeeServices;
 
 @Controller
@@ -33,36 +44,13 @@ public class EmployeeController {
 
 	static final Logger logger = Logger.getLogger(EmployeeController.class);
 
-	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody Status addEmployee(
-			@Valid @RequestBody EmployeeDto employeeDto, BindingResult bindingResult)
+	@Transactional @RequestMapping(value = "/create", headers = "Content-Type=*/*",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody Status addEmployee(@RequestParam("employeeExcelFile") MultipartFile employeeExcelFile)
 			throws Exception {
 		try {
-			if (bindingResult.hasErrors()) {
-				return new Status(0, bindingResult.getFieldError()
-						.getDefaultMessage());
-			}
 
-			Employee employee1 = employeeServices.getEmployeeByUserId(employeeDto
-					.getUserid());
-			Employee employee2 = employeeServices
-					.getEmployeeByphoneNumber(employeeDto.getPhoneNumber());
-			Employee employee3 = employeeServices.getEmpolyeeByEmailid(employeeDto
-					.getEmailid());
-			if (employee1 == null) {
-			} else {
-				return new Status(1, "UserId Already Exist");
-			}
-			if (employee2 == null) {
-			} else {
-				return new Status(1, "Phone Number Already Exist");
-			}
-			if (employee3 == null) {
-			} else {
-				return new Status(1, "EmailId Already Exist");
-			}
-			employeeDto.setIsActive(true);
-			employeeServices.addEntity(EmployeeFactory.setEmployee(employeeDto));
+			List<EmployeeDto> employeeDtos =  EmployeeFactory.setEmployeeExcel(employeeExcelFile);
+			employeeServices.addEmployee(employeeDtos);
 			return new Status(1, "Employee added Successfully !");
 		} catch (ConstraintViolationException cve) {
 			System.out.println("Inside ConstraintViolationException");
