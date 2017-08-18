@@ -21,7 +21,9 @@ public interface EmployeeLeaveServices extends CRUDService<Employeeleave>{
 	
 	public List<EmployeeLeaveDto> getEmployeeLeaveDtoList(List<EmployeeLeaveDto> employeeLeaveDtos)throws Exception;
 
-	 public EmployeeLeaveDto getEmployeeLeaveDtoByid(long id)throws Exception;
+	public EmployeeLeaveDto getEmployeeLeaveDtoByid(long id)throws Exception;
+	
+	public void addEmployeeLeaveExcel(List<EmployeeLeaveDto> employeeLeaveDtos)throws Exception;
 
 	
 }

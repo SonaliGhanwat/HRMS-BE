@@ -5,6 +5,7 @@ import java.util.List;
 
 
 
+
 import com.nextech.hrms.Dto.EmployeeAttendanceDto;
 import com.nextech.hrms.model.Employeeattendance;
 
@@ -22,4 +23,6 @@ public interface EmployeeAttendanceServices extends CRUDService<Employeeattendan
     public List<EmployeeAttendanceDto> getEmployeeAttendanceList(List<EmployeeAttendanceDto> employeeAttendanceDtos)throws Exception;
     
     public EmployeeAttendanceDto getEmployeeAttendanceDtoByid(long id)throws Exception;
+    
+    public void addEmployeeAttendanceExcel(List<EmployeeAttendanceDto> employeeAttendanceDtos) throws Exception;
 }

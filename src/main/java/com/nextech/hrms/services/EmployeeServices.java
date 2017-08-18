@@ -20,7 +20,7 @@ public interface EmployeeServices extends CRUDService<Employee> {
     
     public EmployeeDto getEmployeeDtoByid(long id)throws Exception;
     
-    public void addEmployee(List<EmployeeDto> employeeDtos) throws Exception;
+    public void addEmployeeExcel(List<EmployeeDto> employeeDtos) throws Exception;
  
 
 

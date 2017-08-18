@@ -5,11 +5,14 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.nextech.hrms.util.YearUtil;
 import com.nextech.hrms.Dto.EmployeeLeaveDto;
@@ -32,21 +35,15 @@ public class EmployeeLeaveController {
 
 	static final Logger logger = Logger.getLogger(EmployeeLeaveController.class);
 
-	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody
-	Status addEmployeeLeave(@RequestBody EmployeeLeaveDto employeeLeaveDto) {
+	@Transactional @RequestMapping(value = "/create", headers = "Content-Type=*/*",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody Status addEmployeeLeave(@RequestParam("employeeLeaveExcelFile") MultipartFile employeeLeaveExcelFile) {
 		try {
-			
-			Employeeleave employeeleave1 = employeeLeaveServices.getEmpolyeeleaveByIdandDate(employeeLeaveDto.getEmployee().getId(), employeeLeaveDto.getLeavedate());
-			if(employeeleave1==null){
-				employeeLeaveDto.setIsActive(true);
-				employeeLeaveServices.addEntity(EmployeeLeaveFactory.setEmployeeleave(employeeLeaveDto));
-		}else{
-			return new Status(1, "EmployeeId and Date Already Exist");
-		}
+			    List<EmployeeLeaveDto> employeeLeaveDtos = EmployeeLeaveFactory.setEmployeeLeaveExcel(employeeLeaveExcelFile) ;
+				employeeLeaveServices.addEmployeeLeaveExcel(employeeLeaveDtos);
+		
 			return new Status(1, "Employee Leave added Successfully !");
 		} catch (Exception e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 			return new Status(0, e.toString());
 		}
 	}
@@ -107,7 +104,7 @@ public class EmployeeLeaveController {
 		return new Status(1, "Employee Leave update Successfully !");
 	}
 	
-	@RequestMapping(value = "/leaveyear/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/leaveYear/{id}", method = RequestMethod.GET)
 	public @ResponseBody List<EmployeeLeaveDTO> getYearlyEmployeeLeaveByEmployeeId(@PathVariable("id") long empId) {
 		List<EmployeeLeaveDTO> employeeleaves = null;
 		try {
@@ -119,8 +116,8 @@ public class EmployeeLeaveController {
 		return employeeleaves;
 	}
 	
-	@RequestMapping(value = "/leavemonth/{id}/{Year-Month}", method = RequestMethod.GET)
-	public @ResponseBody Status getMonthlyEmployeeLeaveByEmployeeId(@PathVariable("id") long empId,@PathVariable("Year-Month") String date) {
+	@RequestMapping(value = "/leaveMonth/{id}/{yearMonth}", method = RequestMethod.GET)
+	public @ResponseBody Status getMonthlyEmployeeLeaveByEmployeeId(@PathVariable("id") long empId,@PathVariable("yearMonth") String date) {
 		
 		try {
 			List<Employeeleave> employeeleaves = null;
@@ -132,8 +129,8 @@ public class EmployeeLeaveController {
 		return new Status(1,"Employee Leave");
 	}
 	
-	@RequestMapping(value = "/getemployeeleave/{currentdate}", method = RequestMethod.GET)
-	public @ResponseBody Status getEmployeeAttendanceByIdandMonth( @PathVariable("currentdate") String date) {
+	@RequestMapping(value = "/getEmployeeLeave/{Date}", method = RequestMethod.GET)
+	public @ResponseBody Status getEmployeeAttendanceByIdandMonth( @PathVariable("Date") String date) {
 		List<Employeeleave> employeeleaveList = null;
 		try {
 			employeeleaveList = employeeLeaveServices

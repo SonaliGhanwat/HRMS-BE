@@ -15,5 +15,7 @@ public interface EmployeeDailyTaskServices extends CRUDService<Employeedailytask
 	public List<EmployeeDailyTaskDto> getEmployeeDailyTaskDtoList(List<EmployeeDailyTaskDto> employeeDailyTaskDtos)throws Exception;
 
 	public EmployeeDailyTaskDto getEmployeeDailyTaskDtoByid(long id)throws Exception;
+	
+	public void addEmployeeDailyTaskExcel(List<EmployeeDailyTaskDto> employeeDailyTaskDtos)throws Exception;
 }
 

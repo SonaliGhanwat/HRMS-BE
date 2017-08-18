@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.nextech.hrms.Dto.EmployeeAttendanceDto;
 import com.nextech.hrms.Dto.EmployeeDailyTaskDto;
+import com.nextech.hrms.controller.EmployeeDailyTaskController;
 import com.nextech.hrms.dao.EmployeeDailyTaskDao;
 import com.nextech.hrms.factory.EmployeeAttendanceFactory;
 import com.nextech.hrms.factory.EmployeeDailyTaskFactory;
@@ -56,6 +56,24 @@ public class EmployeeDailyTaskServicesImpl extends CRUDServiceImpl<Employeedaily
 		employeedailytask.setIsActive(false);
 		employeeDailyTaskDao.update(employeedailytask);
 		return employeeDailyTaskDto;
+		
+	}
+
+	@Override
+	public void addEmployeeDailyTaskExcel(List<EmployeeDailyTaskDto> employeeDailyTaskDtos) throws Exception {
+		
+		EmployeeDailyTaskController employeeDailyTaskController = new EmployeeDailyTaskController();
+		
+		for(EmployeeDailyTaskDto employeeDailyTaskDto :employeeDailyTaskDtos){
+			employeeDailyTaskDto.setEmployee(employeeDailyTaskDto.getEmployee());
+			employeeDailyTaskDto.setDate(employeeDailyTaskDto.getDate());
+			employeeDailyTaskDto.setTaskName(employeeDailyTaskDto.getTaskName());
+			employeeDailyTaskDto.setEstimationTime(employeeDailyTaskDto.getEstimationTime());
+			employeeDailyTaskDto.setStarttime(employeeDailyTaskDto.getStarttime());
+			employeeDailyTaskDto.setEndtime(employeeDailyTaskDto.getEndtime());
+			employeeDailyTaskDto.setTakenTime(employeeDailyTaskController.calculateTotalTime(employeeDailyTaskDto));
+			employeeDailyTaskDao.add(EmployeeDailyTaskFactory.setEmployeeDailyTask(employeeDailyTaskDto));
+     	}
 		
 	}
 }

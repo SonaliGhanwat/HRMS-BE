@@ -53,4 +53,19 @@ public class UserTypeServicesImpl extends CRUDServiceImpl<Usertype>implements Us
 		userTypeDao.update(usertype);
 		return userTypeDto;
 	}
+
+	@Override
+	public void addEmployeeExcel(List<UserTypeDto> userTypeDtos)
+			throws Exception {
+		for(UserTypeDto userTypeDto : userTypeDtos){
+			userTypeDto.setUsertypeName(userTypeDto.getUsertypeName());
+			userTypeDto.setDescription(userTypeDto.getDescription());
+			Usertype usertype1 = userTypeDao.getUserTypeByIdandName(userTypeDto.getUsertypeName());
+			if(usertype1==null){
+				userTypeDao.add(UserTypeFactory.setUserType(userTypeDto));
+			}
+			
+		}
+		
+	}
 }

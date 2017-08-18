@@ -1,8 +1,5 @@
 package com.nextech.hrms.controller;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.PersistenceException;
@@ -10,10 +7,6 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -29,9 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.nextech.hrms.Dto.EmployeeDto;
 import com.nextech.hrms.factory.EmployeeFactory;
-import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.Status;
-import com.nextech.hrms.model.Usertype;
 import com.nextech.hrms.services.EmployeeServices;
 
 @Controller
@@ -48,9 +39,8 @@ public class EmployeeController {
 	public @ResponseBody Status addEmployee(@RequestParam("employeeExcelFile") MultipartFile employeeExcelFile)
 			throws Exception {
 		try {
-
 			List<EmployeeDto> employeeDtos =  EmployeeFactory.setEmployeeExcel(employeeExcelFile);
-			employeeServices.addEmployee(employeeDtos);
+			employeeServices.addEmployeeExcel(employeeDtos);
 			return new Status(1, "Employee added Successfully !");
 		} catch (ConstraintViolationException cve) {
 			System.out.println("Inside ConstraintViolationException");

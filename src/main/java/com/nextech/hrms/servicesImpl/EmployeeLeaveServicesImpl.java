@@ -74,4 +74,22 @@ public class EmployeeLeaveServicesImpl extends CRUDServiceImpl<Employeeleave> im
 		
 	}
 
+	@Override
+	public void addEmployeeLeaveExcel(List<EmployeeLeaveDto> employeeLeaveDtos)
+			throws Exception {
+		for(EmployeeLeaveDto employeeLeaveDto:employeeLeaveDtos){
+			employeeLeaveDto.setEmployee(employeeLeaveDto.getEmployee());
+			employeeLeaveDto.setSubject(employeeLeaveDto.getSubject());
+			employeeLeaveDto.setLeavedate(employeeLeaveDto.getLeavedate());
+			employeeLeaveDto.setAfterleavejoiningdate(employeeLeaveDto.getAfterleavejoiningdate());
+			Employeeleave employeeleave = employeeLeaveDao.getEmpolyeeleaveByIdandDate(employeeLeaveDto.getEmployee().getId(),employeeLeaveDto.getLeavedate());
+			if(employeeleave==null){
+				employeeLeaveDao.add(EmployeeLeaveFactory.setEmployeeleave(employeeLeaveDto));
+			}
+
+			
+		}
+		
+	}
+
 }

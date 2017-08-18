@@ -6,12 +6,15 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.nextech.hrms.Dto.EmployeeAttendanceDto;
 import com.nextech.hrms.factory.EmployeeAttendanceFactory;
@@ -32,18 +35,13 @@ public class EmployeeAttendanceController {
 	@Autowired
 	EmployeeAttendanceServices employeeAttendanceServices;
 	
+	@Transactional @RequestMapping(value = "/create", headers = "Content-Type=*/*",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 
-	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody Status addEmployeeAttendance(@RequestBody EmployeeAttendanceDto employeeAttendanceDto) {
+	public @ResponseBody Status addEmployeeAttendance(@RequestParam("employeeAttendanceExcelFile") MultipartFile employeeAttendanceExcelFile) {
 		try {
-			Employeeattendance employeeattendance1 = employeeAttendanceServices.getEmpolyeeAttendanceByIdandDate(employeeAttendanceDto.getEmployee().getId(), employeeAttendanceDto.getDate());
-			if (employeeattendance1 == null) {
-				employeeAttendanceDto.setTotaltime(calculateTotalTime(employeeAttendanceDto));
-				employeeAttendanceDto.setStatus(getEmployeeAttendanceStatus(employeeAttendanceDto));
-				employeeAttendanceServices.addEntity(EmployeeAttendanceFactory.setEmployeeAttendance(employeeAttendanceDto));
-			} else {
-				return new Status(1, "EmployeeId and Date Already Exist.");
-			}
+			List<EmployeeAttendanceDto> employeeAttendanceDtos = EmployeeAttendanceFactory.setEmployeeAttendanceExcel(employeeAttendanceExcelFile);
+			
+			employeeAttendanceServices.addEmployeeAttendanceExcel(employeeAttendanceDtos);
 			return new Status(1, "Employee Attendance added Successfully !");
 		} catch (Exception e) {
 			System.out.println("Inside Exception");
@@ -107,8 +105,8 @@ public class EmployeeAttendanceController {
 		return new Status(1, "Employee Attendance update Successfully !");
 	}
 
-	@RequestMapping(value = "/geAttendanceByDate/{date}", method = RequestMethod.GET)
-	public @ResponseBody Status getEmployeeAttendanceByDate( @PathVariable("date") String date) {
+	@RequestMapping(value = "/getAttendanceByDate/{Date}", method = RequestMethod.GET)
+	public @ResponseBody Status getEmployeeAttendanceByDate( @PathVariable("Date") String date) {
 		List<Employeeattendance> employeeattendanceList = null;
 		try {
 			employeeattendanceList = employeeAttendanceServices
@@ -123,10 +121,9 @@ public class EmployeeAttendanceController {
 
 		}
 		return new Status(1, "Employee Attendance!", employeeattendanceList); // TODO Use proper message to indicate correct reason user
-
 	}
 	
-	@RequestMapping(value = "/attendance/{id}/{yearMonth}", method = RequestMethod.GET)
+	@RequestMapping(value = "/getAttendance/{id}/{yearMonth}", method = RequestMethod.GET)
 	public @ResponseBody Status calculateEmployeeAttendanceByIdandMonth(
 			@PathVariable("id") long empId, @PathVariable("yearMonth") String yearMonthString) {
 		List<Employeeattendance> employeeattendanceList = null;
@@ -143,7 +140,7 @@ public class EmployeeAttendanceController {
 
 		}
 
-		return new Status(1, "Employee Attendance!",count);
+		return new Status(1, "Employee Attendance!",employeeattendanceList);
 
 	}
 

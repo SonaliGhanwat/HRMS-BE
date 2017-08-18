@@ -15,6 +15,8 @@ public interface UserTypeServices extends CRUDService<Usertype> {
     public List<UserTypeDto> getUserTypeList(List<UserTypeDto> userTypeDtos)throws Exception;
     
     public UserTypeDto getUserTypeDtoByid(long id)throws Exception;
+    
+    public void addEmployeeExcel(List<UserTypeDto> userTypeDtos) throws Exception;
 
 
 	

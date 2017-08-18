@@ -9,6 +9,7 @@ public class EmployeeLeaveDto extends AbstractDTO{
 	private String subject;
 	private Date leavedate;
 	private Date afterleavejoiningdate;
+	
 	public Employee getEmployee() {
 		return employee;
 	}
