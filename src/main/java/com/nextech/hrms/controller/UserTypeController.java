@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,18 +22,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nextech.hrms.Dto.UserTypeDto;
+import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.UserTypeFactory;
-import com.nextech.hrms.model.Usertype;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.UserTypeServices;
 
 @Controller
 @RequestMapping("/usertype")
 public class UserTypeController {
-	public static final String USER_DOES_NOT_EXISTS = "We are sorry. This user does not exist.";
 
 	@Autowired
 	UserTypeServices userTypeServices;
+	
+	@Autowired
+	private MessageSource messageSource;
 
 	static final Logger logger = Logger.getLogger(UserTypeController.class);
 
@@ -44,7 +47,7 @@ public class UserTypeController {
 		} catch (Exception e) {
 		     e.printStackTrace();
 		}
-		return new Status(1, "UserType added Successfully !");
+		return new Status(1, messageSource.getMessage(MessageConstant.UserType_Added_Successfully, null,null));
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -56,9 +59,9 @@ public class UserTypeController {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Status(1,USER_DOES_NOT_EXISTS);
+			return new Status(1,messageSource.getMessage(MessageConstant.UserType_DOES_NOT_EXISTS, null,null));
 		}
-		 return new Status(1, "UserType List",userTypeDto);
+		 return new Status(1, "UserType By Id",userTypeDto);
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -79,16 +82,16 @@ public class UserTypeController {
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody
 	Status deleteEmployee(@PathVariable("id") long id) {
-		UserTypeDto userTypeDto = null;
+		//UserTypeDto userTypeDto = null;
 
 		try {
-			userTypeDto =userTypeServices.getUserTypeDtoByid(id);
+			    userTypeServices.getUserTypeDtoByid(id);
            
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Status(1,USER_DOES_NOT_EXISTS);
+			return new Status(1,messageSource.getMessage(MessageConstant.UserType_DOES_NOT_EXISTS, null,null));
 		}
-		return new Status(1, "UserType deleted Successfully !");
+		return new Status(1, messageSource.getMessage(MessageConstant.UserType_Delete_Successfully, null,null));
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
@@ -101,7 +104,7 @@ public class UserTypeController {
 			e.printStackTrace();
 			
 		}
-		return new Status(1, "UserType Update Successfully !");
+		return new Status(1,messageSource.getMessage(MessageConstant.UserType_Update_Successfully, null,null));
 	}
 	
 }

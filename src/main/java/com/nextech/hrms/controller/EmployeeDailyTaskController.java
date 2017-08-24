@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nextech.hrms.Dto.EmployeeDailyTaskDto;
+import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeDailyTaskFactory;
 import com.nextech.hrms.model.Employeedailytask;
 import com.nextech.hrms.model.Status;
@@ -27,10 +29,12 @@ import com.nextech.hrms.util.DateUtil;
 @RequestMapping("/employeedailytask")
 public class EmployeeDailyTaskController {
 	public long totaltime;
-	public static final String EMPLOYEE_DOES_NOT_EXISTS = "We are sorry. This Employee does not exist.";
 
 	@Autowired
 	EmployeeDailyTaskServices employeeDailyTaskServices;
+	
+	@Autowired
+	private MessageSource messageSource;
 
 	static final Logger logger = Logger.getLogger(EmployeeDailyTaskController.class);
 
@@ -39,9 +43,9 @@ public class EmployeeDailyTaskController {
 		try {
 			List<EmployeeDailyTaskDto> employeeDailyTaskDtos = EmployeeDailyTaskFactory.setEmployeeDailyTaskExcel(employeeDailyTaskExcelFile);
 			employeeDailyTaskServices.addEmployeeDailyTaskExcel(employeeDailyTaskDtos);
-			return new Status(1, "Employee Daily Task added Successfully !");
+			return new Status(1, messageSource.getMessage(MessageConstant.EmployeeDailyTask_Added_Successfully, null,null));
 		} catch (Exception e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 			return new Status(0, e.toString());
 		}
 	}
@@ -55,9 +59,9 @@ public class EmployeeDailyTaskController {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Status(1,EMPLOYEE_DOES_NOT_EXISTS);
+			return new Status(1,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS, null,null));
 		}
-		return new Status(1, "Employee Daily Task List !",employeeDailyTaskDto);
+		return new Status(1, "Employee Daily Task By Id !",employeeDailyTaskDto);
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -83,9 +87,9 @@ public class EmployeeDailyTaskController {
 			EmployeeDailyTaskDto employeeDailyTaskDto = employeeDailyTaskServices.getEmployeeDailyTaskDtoByid(id);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Status(1,EMPLOYEE_DOES_NOT_EXISTS);
+			return new Status(0,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS, null,null));
 		}
-		return new Status(1, "Employee Daily Task deleted Successfully!");
+		return new Status(1, messageSource.getMessage(MessageConstant.EmployeeDailyTask_Delete_Successfully, null,null));
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
@@ -94,7 +98,7 @@ public class EmployeeDailyTaskController {
 		try {
 			calculateTotalTime(employeeDailyTaskDto);
 			employeeDailyTaskServices.updateEntity(EmployeeDailyTaskFactory.setEmployeeDailyTaskUpdate(employeeDailyTaskDto));
-			return new Status(1, "Employee Daily Task update Successfully !");
+			return new Status(1, messageSource.getMessage(MessageConstant.EmployeeDailyTask_Update_Successfully, null,null));
 		} catch (Exception e) {
 			return new Status(0, e.toString());
 		}
@@ -109,14 +113,14 @@ public class EmployeeDailyTaskController {
 					
 			if(employeedailytaskList==null){
 				
-				return new Status(1,EMPLOYEE_DOES_NOT_EXISTS);
+				return new Status(1,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS, null,null));
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 
 		}
-		return new Status(1, "Employee Daily Task!", employeedailytaskList);
+		return new Status(1, "Employee Daily Task By Id and Date!", employeedailytaskList);
 
 	}
 	public long calculateTotalTime(EmployeeDailyTaskDto employeeDailyTaskDto){

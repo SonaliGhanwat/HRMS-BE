@@ -5,6 +5,7 @@ import java.sql.Time;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nextech.hrms.Dto.EmployeeAttendanceDto;
+import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeAttendanceFactory;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.model.Employeeattendance;
@@ -27,13 +29,12 @@ import com.nextech.hrms.util.YearUtil;
 @RestController
 @RequestMapping("/employeeattendance")
 public class EmployeeAttendanceController {
-	public static final String EMPLOYEE_DOES_NOT_EXISTS = "We are sorry. This Employee does not exist.";
-	
-
-	
 	
 	@Autowired
 	EmployeeAttendanceServices employeeAttendanceServices;
+	
+	@Autowired
+	private MessageSource messageSource;
 	
 	@Transactional @RequestMapping(value = "/create", headers = "Content-Type=*/*",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 
@@ -42,7 +43,7 @@ public class EmployeeAttendanceController {
 			List<EmployeeAttendanceDto> employeeAttendanceDtos = EmployeeAttendanceFactory.setEmployeeAttendanceExcel(employeeAttendanceExcelFile);
 			
 			employeeAttendanceServices.addEmployeeAttendanceExcel(employeeAttendanceDtos);
-			return new Status(1, "Employee Attendance added Successfully !");
+			return new Status(1, messageSource.getMessage(MessageConstant.EmployeeAttendance_Added_Successfully, null,null));
 		} catch (Exception e) {
 			System.out.println("Inside Exception");
 			e.printStackTrace();
@@ -57,7 +58,7 @@ public class EmployeeAttendanceController {
 			employeeAttendanceDto = employeeAttendanceServices.getEmployeeAttendanceDto(id);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Status(1, EMPLOYEE_DOES_NOT_EXISTS);
+			return new Status(1,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS,null,null));
 		}
 		return new Status(1, "Employee Attendance List", employeeAttendanceDto);
 	}
@@ -84,9 +85,9 @@ public class EmployeeAttendanceController {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Status(1, EMPLOYEE_DOES_NOT_EXISTS);
+			return new Status(0,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS,null,null));
 		}
-		return new Status(1, "Employee Attendance deleted Successfully !");
+		return new Status(1, messageSource.getMessage(MessageConstant.EmployeeAttendance_Delete_Successfully,null,null));
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
@@ -102,7 +103,7 @@ public class EmployeeAttendanceController {
 			e.printStackTrace();
 
 		}
-		return new Status(1, "Employee Attendance update Successfully !");
+		return new Status(1, messageSource.getMessage(MessageConstant.EmployeeAttendance_Update_Successfully, null,null));
 	}
 
 	@RequestMapping(value = "/getAttendanceByDate/{Date}", method = RequestMethod.GET)
@@ -111,16 +112,16 @@ public class EmployeeAttendanceController {
 		try {
 			employeeattendanceList = employeeAttendanceServices
 					.getEmployeeattendanceByCurrentDate(DateUtil.convertToDate(date));
-			if(employeeattendanceList==null){
+			if(employeeattendanceList!=null){
 				// TODO create constants for success status code and error status code and user everywhere
-				return new Status(1,EMPLOYEE_DOES_NOT_EXISTS);// TODO Use proper message to indicate correct reason user
+				return new Status(0,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS,null,null));// TODO Use proper message to indicate correct reason user
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 
 		}
-		return new Status(1, "Employee Attendance!", employeeattendanceList); // TODO Use proper message to indicate correct reason user
+		return new Status(1, "Employee Attendance By Date!", employeeattendanceList); // TODO Use proper message to indicate correct reason user
 	}
 	
 	@RequestMapping(value = "/getAttendance/{id}/{yearMonth}", method = RequestMethod.GET)

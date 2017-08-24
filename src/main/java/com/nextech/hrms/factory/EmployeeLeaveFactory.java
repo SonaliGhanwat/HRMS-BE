@@ -1,6 +1,7 @@
 package com.nextech.hrms.factory;
 
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -72,11 +73,11 @@ public class EmployeeLeaveFactory {
         	employeeLeaveDto.setSubject(row.getCell(2).getStringCellValue());
         	employeeLeaveDto.setLeavedate(new Date(row.getCell(3).getDateCellValue().getTime()));
         	employeeLeaveDto.setAfterleavejoiningdate(new Date(row.getCell(4).getDateCellValue().getTime()));
+        	employeeLeaveDto.setIsActive(true);
         	employeeLeaveDtos.add(employeeLeaveDto);
         	}
         }
 		return employeeLeaveDtos;
-		
 	}
 
 

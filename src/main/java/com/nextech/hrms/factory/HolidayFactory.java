@@ -11,10 +11,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.nextech.hrms.Dto.EmployeeAttendanceDto;
 import com.nextech.hrms.Dto.HolidayDto;
-import com.nextech.hrms.Dto.UserTypeDto;
-import com.nextech.hrms.model.Employeeattendance;
 import com.nextech.hrms.model.Holiday;
 
 public class HolidayFactory {
@@ -39,7 +36,17 @@ public class HolidayFactory {
 		holidayDto.setUpdatedDate(holiday.getUpdatedDate());
 		holidayDto.setIsActive(true);
 		return holidayDto;
-		
+	}
+	
+	public static Holiday setHolidayUpdate(HolidayDto holidayDto)throws Exception{
+		Holiday holiday = new Holiday();
+		holiday.setId(holidayDto.getId());
+		holiday.setHolidayDate(holidayDto.getHolidayDate());
+		holiday.setHolidayName(holidayDto.getHolidayName());
+		holiday.setCreatedDate(holidayDto.getCreatedDate());
+		holiday.setUpdatedDate(holidayDto.getUpdatedDate());
+		holiday.setActive(true);
+		return holiday;
 	}
 
 	public static List<HolidayDto> setHolidayExcel(MultipartFile holidayExcelFile)throws Exception{
@@ -57,7 +64,6 @@ public class HolidayFactory {
 	        	}
 			}
 			return holidayDtos;			
-		
 	}
 }
 

@@ -56,7 +56,6 @@ public class EmployeeDailyTaskServicesImpl extends CRUDServiceImpl<Employeedaily
 		employeedailytask.setIsActive(false);
 		employeeDailyTaskDao.update(employeedailytask);
 		return employeeDailyTaskDto;
-		
 	}
 
 	@Override

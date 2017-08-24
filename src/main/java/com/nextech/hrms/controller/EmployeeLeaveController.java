@@ -3,6 +3,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.nextech.hrms.util.YearUtil;
 import com.nextech.hrms.Dto.EmployeeLeaveDto;
+import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeLeaveFactory;
 import com.nextech.hrms.model.EmployeeLeaveDTO;
 import com.nextech.hrms.model.Employeeleave;
@@ -28,10 +30,12 @@ import com.nextech.hrms.util.DateUtil;
 @RequestMapping("/employeeleave")
 public class EmployeeLeaveController {
 	public long totaltime;
-	public static final String Employee_DOES_NOT_EXISTS = "We are sorry. This Employee does not exist.";
 
 	@Autowired
 	EmployeeLeaveServices employeeLeaveServices;
+	
+	@Autowired
+	private MessageSource messageSource;
 
 	static final Logger logger = Logger.getLogger(EmployeeLeaveController.class);
 
@@ -41,7 +45,7 @@ public class EmployeeLeaveController {
 			    List<EmployeeLeaveDto> employeeLeaveDtos = EmployeeLeaveFactory.setEmployeeLeaveExcel(employeeLeaveExcelFile) ;
 				employeeLeaveServices.addEmployeeLeaveExcel(employeeLeaveDtos);
 		
-			return new Status(1, "Employee Leave added Successfully !");
+			return new Status(1, messageSource.getMessage(MessageConstant.EmployeeLeave_Added_Successfully, null,null));
 		} catch (Exception e) {
 			 e.printStackTrace();
 			return new Status(0, e.toString());
@@ -57,9 +61,9 @@ public class EmployeeLeaveController {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Status(1,Employee_DOES_NOT_EXISTS);
+			return new Status(1,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS, null,null));
 		}
-		return new Status(1, "Employee Leave List",employeeLeaveDto);
+		return new Status(1, "Employee Leave By Id",employeeLeaveDto);
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -85,23 +89,22 @@ public class EmployeeLeaveController {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Status(1,Employee_DOES_NOT_EXISTS);
+			return new Status(1,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS, null,null));
 		}
-		return new Status(1, "Employee Leave deleted Successfully !");
+		return new Status(1, messageSource.getMessage(MessageConstant.EmployeeLeave_Delete_Successfully, null,null));
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public @ResponseBody Status updateEntity(@RequestBody EmployeeLeaveDto employeeLeaveDto) {
 
 		try {
-			employeeLeaveDto.setIsActive(true);
 			employeeLeaveServices.updateEntity(EmployeeLeaveFactory.setEmployeeLeaveUpdate(employeeLeaveDto));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			
 		}
-		return new Status(1, "Employee Leave update Successfully !");
+		return new Status(1, messageSource.getMessage(MessageConstant.EmployeeLeave_Update_Successfully, null,null));
 	}
 	
 	@RequestMapping(value = "/leaveYear/{id}", method = RequestMethod.GET)
@@ -126,7 +129,7 @@ public class EmployeeLeaveController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new Status(1,"Employee Leave");
+		return new Status(1,"Employee Leave By Id and Month");
 	}
 	
 	@RequestMapping(value = "/getEmployeeLeave/{Date}", method = RequestMethod.GET)
@@ -138,9 +141,9 @@ public class EmployeeLeaveController {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Status(1,Employee_DOES_NOT_EXISTS);
+			return new Status(1,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS, null,null));
 		}
-		return new Status(1, "Employee Leave!", employeeleaveList);
+		return new Status(1, "Employee Leave By Date!", employeeleaveList);
 	}
 }
 
