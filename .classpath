@@ -54,13 +54,5 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/welcome/Downloads/poi-3.9/poi-3.5-FINAL.jar"/>
-	<classpathentry kind="lib" path="C:/Users/welcome/Downloads/poi-3.9/poi-3.9-20121203.jar"/>
-	<classpathentry kind="lib" path="C:/Users/welcome/Downloads/poi-3.9/poi-examples-3.9-20121203.jar"/>
-	<classpathentry kind="lib" path="C:/Users/welcome/Downloads/poi-3.9/poi-excelant-3.9-20121203.jar"/>
-	<classpathentry kind="lib" path="C:/Users/welcome/Downloads/poi-3.9/poi-ooxml-3.9-20121203.jar"/>
-	<classpathentry kind="lib" path="C:/Users/welcome/Downloads/poi-3.9/poi-ooxml-schemas-3.9-20121203.jar"/>
-	<classpathentry kind="lib" path="C:/Users/welcome/Downloads/poi-3.9/poi-scratchpad-3.9-20121203.jar"/>
-	<classpathentry kind="lib" path="C:/Users/welcome/Downloads/poi-3.9/xmlbeans-2.3.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
