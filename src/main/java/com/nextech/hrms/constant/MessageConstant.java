@@ -18,7 +18,9 @@ public class MessageConstant {
 	public static String UserType_Added_Successfully="userTypeAdd";
 	public static String UserType_Delete_Successfully="userTypeDelete";
 	public static String UserType_Update_Successfully="userTypeUpdate";
+	public static String Holiday_DOES_NOT_EXISTS="holidayExit";
 	public static String Holiday_Added_Successfully="holidayAdd";
-	public static String Holiday_Update_Successfully="holidayDelete";
+	public static String Holiday_Update_Successfully="holidayUpdate";
+	public static String Holiday_Delete_Successfully="holidayDelete";
 
 }

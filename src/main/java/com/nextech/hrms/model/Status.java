@@ -7,7 +7,9 @@ public class Status {
 
 	public Status() {
 	}
-	
+	public Status(Object data) {
+		this.data = data;
+	}
 	public Status(int code, String message) {
 		this.code = code;
 		this.message = message;

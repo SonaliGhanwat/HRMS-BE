@@ -36,7 +36,26 @@ public class EmployeeAttendanceController {
 	@Autowired
 	private MessageSource messageSource;
 	
-	@Transactional @RequestMapping(value = "/create", headers = "Content-Type=*/*",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/create", method = RequestMethod.POST,headers = "Accept=application/json")
+	public @ResponseBody Status addEmployeeAttendance(@RequestBody EmployeeAttendanceDto employeeAttendanceDto) {
+		try {
+			Employeeattendance employeeattendance1 = employeeAttendanceServices.getEmpolyeeAttendanceByIdandDate(employeeAttendanceDto.getEmployee().getId(), employeeAttendanceDto.getDate());
+			if (employeeattendance1 == null) {
+				employeeAttendanceDto.setTotaltime(calculateTotalTime(employeeAttendanceDto));
+				employeeAttendanceDto.setStatus(getEmployeeAttendanceStatus(employeeAttendanceDto));
+				employeeAttendanceServices.addEntity(EmployeeAttendanceFactory.setEmployeeAttendance(employeeAttendanceDto));
+			} else {
+				return new Status(1, "EmployeeId and Date Already Exist.");
+			}
+			return new Status(1, "Employee Attendance added Successfully !");
+		} catch (Exception e) {
+			System.out.println("Inside Exception");
+			e.printStackTrace();
+			return new Status(0, e.getCause().getMessage());
+		}
+	}
+	
+	@Transactional @RequestMapping(value = "/createExcel", headers = "Content-Type=*/*",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 
 	public @ResponseBody Status addEmployeeAttendance(@RequestParam("employeeAttendanceExcelFile") MultipartFile employeeAttendanceExcelFile) {
 		try {
@@ -52,18 +71,18 @@ public class EmployeeAttendanceController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public @ResponseBody Status getEmployeeAttendance(@PathVariable("id") long id) {
+	public @ResponseBody EmployeeAttendanceDto getEmployeeAttendance(@PathVariable("id") long id) {
 		EmployeeAttendanceDto employeeAttendanceDto = null;
 		try {
 			employeeAttendanceDto = employeeAttendanceServices.getEmployeeAttendanceDto(id);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Status(1,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS,null,null));
+			//return new Status(1,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS,null,null));
 		}
-		return new Status(1, "Employee Attendance List", employeeAttendanceDto);
+		return  employeeAttendanceDto;
 	}
 
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@RequestMapping(value = "/list", method = RequestMethod.GET,headers = "Accept=application/json")
 	public @ResponseBody List<EmployeeAttendanceDto> getEmployee() {
 
 		List<EmployeeAttendanceDto> employeeAttendanceDtoList = null;
@@ -76,7 +95,7 @@ public class EmployeeAttendanceController {
 		return employeeAttendanceDtoList;
 	}
 
-	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE,headers = "Accept=application/json")
 	public @ResponseBody Status deleteEmployee(@PathVariable("id") long id) {
 
 		try {
@@ -90,7 +109,8 @@ public class EmployeeAttendanceController {
 		return new Status(1, messageSource.getMessage(MessageConstant.EmployeeAttendance_Delete_Successfully,null,null));
 	}
 
-	@RequestMapping(value = "/update", method = RequestMethod.PUT)
+	
+	@RequestMapping(value = "/update", method = RequestMethod.PUT,headers="Accept=application/json")
 	public @ResponseBody Status updateEntity(
 			@RequestBody EmployeeAttendanceDto employeeAttendanceDto) {
 
@@ -106,26 +126,26 @@ public class EmployeeAttendanceController {
 		return new Status(1, messageSource.getMessage(MessageConstant.EmployeeAttendance_Update_Successfully, null,null));
 	}
 
-	@RequestMapping(value = "/getAttendanceByDate/{Date}", method = RequestMethod.GET)
-	public @ResponseBody Status getEmployeeAttendanceByDate( @PathVariable("Date") String date) {
+	@RequestMapping(value = "/getAttendanceByDate/{Date}", method = RequestMethod.GET,headers = "Accept=application/json")
+	public @ResponseBody List<Employeeattendance> getEmployeeAttendanceByDate( @PathVariable("Date") String date) {
 		List<Employeeattendance> employeeattendanceList = null;
 		try {
 			employeeattendanceList = employeeAttendanceServices
 					.getEmployeeattendanceByCurrentDate(DateUtil.convertToDate(date));
-			if(employeeattendanceList!=null){
+			/*if(employeeattendanceList!=null){
 				// TODO create constants for success status code and error status code and user everywhere
 				return new Status(0,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS,null,null));// TODO Use proper message to indicate correct reason user
-			}
+			}*/
 
 		} catch (Exception e) {
 			e.printStackTrace();
 
 		}
-		return new Status(1, "Employee Attendance By Date!", employeeattendanceList); // TODO Use proper message to indicate correct reason user
+		return  employeeattendanceList; // TODO Use proper message to indicate correct reason user
 	}
 	
-	@RequestMapping(value = "/getAttendance/{id}/{yearMonth}", method = RequestMethod.GET)
-	public @ResponseBody Status calculateEmployeeAttendanceByIdandMonth(
+	@RequestMapping(value = "/getAttendance/{id}/{yearMonth}", method = RequestMethod.GET,headers = "Accept=application/json")
+	public @ResponseBody List<Employeeattendance> calculateEmployeeAttendanceByIdandMonth(
 			@PathVariable("id") long empId, @PathVariable("yearMonth") String yearMonthString) {
 		List<Employeeattendance> employeeattendanceList = null;
 		String count="";
@@ -141,7 +161,7 @@ public class EmployeeAttendanceController {
 
 		}
 
-		return new Status(1, "Employee Attendance!",employeeattendanceList);
+		return employeeattendanceList;
 
 	}
 

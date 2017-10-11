@@ -25,6 +25,7 @@ import com.nextech.hrms.Dto.UserTypeDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.UserTypeFactory;
 import com.nextech.hrms.model.Status;
+import com.nextech.hrms.model.Usertype;
 import com.nextech.hrms.services.UserTypeServices;
 
 @Controller
@@ -38,8 +39,25 @@ public class UserTypeController {
 	private MessageSource messageSource;
 
 	static final Logger logger = Logger.getLogger(UserTypeController.class);
+	
+	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody Status addEmployee(@RequestBody UserTypeDto userTypeDto) {
+		try {
+			Usertype usertype1 = userTypeServices.getUserTypeByIdandName(userTypeDto.getUsertypeName());
+			if(usertype1==null){
+				userTypeDto.setIsActive(true);
+			userTypeServices.addEntity(UserTypeFactory.setUserType(userTypeDto));
+			}else{
+				return new Status(1, " Usertype Name Already Exit");
+			}
+			
+		} catch (Exception e) {
+		     e.printStackTrace();
+		}
+		return new Status(1, "UserType added Successfully !");
+	}
 
-	@Transactional @RequestMapping(value = "/create", headers = "Content-Type=*/*",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Transactional @RequestMapping(value = "/createExcel", headers = "Content-Type=*/*",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody Status addEmployee(@RequestParam("userTypeExcelFile") MultipartFile userTypeExcelFile) {
 		try {
 			List<UserTypeDto> userTypeDtos = UserTypeFactory.setUserTypeExcel(userTypeExcelFile);
@@ -52,16 +70,15 @@ public class UserTypeController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody
-	Status getEmployee(@PathVariable("id") long id) {
+	UserTypeDto getEmployee(@PathVariable("id") long id) {
 		UserTypeDto userTypeDto = null;
 		try {
 			userTypeDto = userTypeServices.getUserTypeDto(id);
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Status(1,messageSource.getMessage(MessageConstant.UserType_DOES_NOT_EXISTS, null,null));
 		}
-		 return new Status(1, "UserType By Id",userTypeDto);
+		 return userTypeDto;
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -75,7 +92,6 @@ public class UserTypeController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return userTypeDtoList;
 	}
 

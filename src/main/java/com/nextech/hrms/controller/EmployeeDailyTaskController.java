@@ -38,7 +38,20 @@ public class EmployeeDailyTaskController {
 
 	static final Logger logger = Logger.getLogger(EmployeeDailyTaskController.class);
 
-	@Transactional @RequestMapping(value = "/create", headers = "Content-Type=*/*",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/create", method = RequestMethod.POST,headers = "Accept=application/json")
+	public @ResponseBody
+	Status addEmployee(@RequestBody EmployeeDailyTaskDto employeeDailyTaskDto) {
+		try {
+			employeeDailyTaskDto.setIsActive(true);
+			employeeDailyTaskDto.setTakenTime(calculateTotalTime(employeeDailyTaskDto));
+			employeeDailyTaskServices.addEntity(EmployeeDailyTaskFactory.setEmployeeDailyTask(employeeDailyTaskDto));
+			return new Status(1, "Employee Daily Task added Successfully !");
+		} catch (Exception e) {
+			// e.printStackTrace();
+			return new Status(0, e.toString());
+		}
+	}
+	@Transactional @RequestMapping(value = "/createExcel", headers = "Content-Type=*/*",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody Status addEmployee(@RequestParam("employeeDailyTaskExcelFile") MultipartFile employeeDailyTaskExcelFile) {
 		try {
 			List<EmployeeDailyTaskDto> employeeDailyTaskDtos = EmployeeDailyTaskFactory.setEmployeeDailyTaskExcel(employeeDailyTaskExcelFile);
@@ -51,20 +64,19 @@ public class EmployeeDailyTaskController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public @ResponseBody
-	Status getEmployee(@PathVariable("id") long id) {
+	public @ResponseBody EmployeeDailyTaskDto getEmployee(@PathVariable("id") long id) {
 		EmployeeDailyTaskDto employeeDailyTaskDto = null;
 		try {
 			employeeDailyTaskDto = employeeDailyTaskServices.getEmployeeDailyTaskDto(id);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Status(1,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS, null,null));
+			
 		}
-		return new Status(1, "Employee Daily Task By Id !",employeeDailyTaskDto);
+		return employeeDailyTaskDto;
 	}
 
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@RequestMapping(value = "/list", method = RequestMethod.GET,headers = "Accept=application/json")
 	public @ResponseBody
     List<EmployeeDailyTaskDto> getEmployee() {
 
@@ -79,7 +91,7 @@ public class EmployeeDailyTaskController {
 		return employeeDailyTaskDtoList;
 	}
 
-	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE,headers = "Accept=application/json")
 	public @ResponseBody
 	Status deleteEmployee(@PathVariable("id") long id) {
 
@@ -121,7 +133,6 @@ public class EmployeeDailyTaskController {
 
 		}
 		return new Status(1, "Employee Daily Task By Id and Date!", employeedailytaskList);
-
 	}
 	public long calculateTotalTime(EmployeeDailyTaskDto employeeDailyTaskDto){
 		Time starttime = employeeDailyTaskDto.getStarttime();

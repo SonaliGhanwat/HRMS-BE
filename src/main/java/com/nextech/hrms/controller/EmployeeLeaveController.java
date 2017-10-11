@@ -38,8 +38,28 @@ public class EmployeeLeaveController {
 	private MessageSource messageSource;
 
 	static final Logger logger = Logger.getLogger(EmployeeLeaveController.class);
+	
+	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody
+	Status addEmployeeLeave(@RequestBody EmployeeLeaveDto employeeLeaveDto) {
+		try {
+			
+			Employeeleave employeeleave1 = employeeLeaveServices.getEmpolyeeleaveByIdandDate(employeeLeaveDto.getEmployee().getId(), employeeLeaveDto.getLeavedate());
+			if(employeeleave1==null){
+				employeeLeaveDto.setIsActive(true);
+				employeeLeaveServices.addEntity(EmployeeLeaveFactory.setEmployeeleave(employeeLeaveDto));
+		}else{
+			return new Status(1, "EmployeeId and Date Already Exist");
+		}
+			return new Status(1, "Employee Leave added Successfully !");
+		} catch (Exception e) {
+			// e.printStackTrace();
+			return new Status(0, e.toString());
+		}
+	}
 
-	@Transactional @RequestMapping(value = "/create", headers = "Content-Type=*/*",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+
+	@Transactional @RequestMapping(value = "/createExcel", headers = "Content-Type=*/*",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody Status addEmployeeLeave(@RequestParam("employeeLeaveExcelFile") MultipartFile employeeLeaveExcelFile) {
 		try {
 			    List<EmployeeLeaveDto> employeeLeaveDtos = EmployeeLeaveFactory.setEmployeeLeaveExcel(employeeLeaveExcelFile) ;
@@ -54,16 +74,16 @@ public class EmployeeLeaveController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody
-	Status getEmployeeLeave(@PathVariable("id") long id) {
+	EmployeeLeaveDto getEmployeeLeave(@PathVariable("id") long id) {
 		EmployeeLeaveDto employeeLeaveDto = null;
 		try {
 			employeeLeaveDto = employeeLeaveServices.getEmployeeLeaveDto(id);
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Status(1,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS, null,null));
+			
 		}
-		return new Status(1, "Employee Leave By Id",employeeLeaveDto);
+		return employeeLeaveDto;
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -133,7 +153,7 @@ public class EmployeeLeaveController {
 	}
 	
 	@RequestMapping(value = "/getEmployeeLeave/{Date}", method = RequestMethod.GET)
-	public @ResponseBody Status getEmployeeAttendanceByIdandMonth( @PathVariable("Date") String date) {
+	public @ResponseBody List<Employeeleave> getEmployeeAttendanceByIdandMonth( @PathVariable("Date") String date) {
 		List<Employeeleave> employeeleaveList = null;
 		try {
 			employeeleaveList = employeeLeaveServices
@@ -141,9 +161,9 @@ public class EmployeeLeaveController {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Status(1,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS, null,null));
+			//return new Status(1,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS, null,null));
 		}
-		return new Status(1, "Employee Leave By Date!", employeeleaveList);
+		return  employeeleaveList;
 	}
 }
 
