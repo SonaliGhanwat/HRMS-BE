@@ -47,7 +47,7 @@ public class EmployeeAttendanceController {
 			} else {
 				return new Status(1, "EmployeeId and Date Already Exist.");
 			}
-			return new Status(1, "Employee Attendance added Successfully !");
+			return new Status(0, "Employee Attendance added Successfully !");
 		} catch (Exception e) {
 			System.out.println("Inside Exception");
 			e.printStackTrace();

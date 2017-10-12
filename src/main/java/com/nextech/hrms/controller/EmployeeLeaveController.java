@@ -51,7 +51,7 @@ public class EmployeeLeaveController {
 		}else{
 			return new Status(1, "EmployeeId and Date Already Exist");
 		}
-			return new Status(1, "Employee Leave added Successfully !");
+			return new Status(0, "Employee Leave added Successfully !");
 		} catch (Exception e) {
 			// e.printStackTrace();
 			return new Status(0, e.toString());

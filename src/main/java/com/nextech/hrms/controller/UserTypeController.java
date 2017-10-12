@@ -54,7 +54,7 @@ public class UserTypeController {
 		} catch (Exception e) {
 		     e.printStackTrace();
 		}
-		return new Status(1, "UserType added Successfully !");
+		return new Status(0, "UserType added Successfully !");
 	}
 
 	@Transactional @RequestMapping(value = "/createExcel", headers = "Content-Type=*/*",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)

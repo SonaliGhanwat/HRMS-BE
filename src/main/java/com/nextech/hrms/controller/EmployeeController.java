@@ -70,7 +70,7 @@ public class EmployeeController {
 			}
 			employeeDto.setIsActive(true);
 			employeeServices.addEntity(EmployeeFactory.setEmployee(employeeDto));
-			return new Status(1, "Employee added Successfully !");
+			return new Status(0, "Employee added Successfully !");
 		/*} catch (ConstraintViolationException cve) {
 			System.out.println("Inside ConstraintViolationException");
 			cve.printStackTrace();
