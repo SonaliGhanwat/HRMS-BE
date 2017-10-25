@@ -21,6 +21,7 @@ public class Employeeleave implements Serializable {
 	private long id;
 
 	@Temporal(TemporalType.DATE)
+	@Column(name="To_Date")
 	private Date afterleavejoiningdate;
 
 	@Column(name="created_date")
@@ -29,6 +30,7 @@ public class Employeeleave implements Serializable {
 	private boolean isActive;
 
 	@Temporal(TemporalType.DATE)
+	@Column(name="from_Date")
 	private Date leavedate;
 
 	private String subject;

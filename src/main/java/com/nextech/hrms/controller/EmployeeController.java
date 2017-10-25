@@ -130,6 +130,24 @@ public class EmployeeController {
 
 		return employeeDtoList;
 	}
+	@RequestMapping(value = "/login", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,headers = "Accept=application/json")
+	public @ResponseBody Status getEmployee(@RequestBody Employee emplyee) throws Exception {
+ 
+		Employee employeeDB = employeeServices.getEmployeeByUserId(emplyee.getUserid());
+		try {
+			if(employeeDB ==null){
+				return  new Status(1,"Please Enetr Valid UserId");
+			}else if(!employeeDB.getPassword().equals(emplyee.getPassword())){
+				return new Status(1,"Please Enter Valid Password");
+			}
+			return new Status(0,"Login Successfully");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
 
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE ,headers = "Accept=application/json")
 	public @ResponseBody Status deleteEmployee(@PathVariable("id") long id) {
