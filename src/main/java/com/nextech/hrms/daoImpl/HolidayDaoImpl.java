@@ -1,5 +1,6 @@
 package com.nextech.hrms.daoImpl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import com.nextech.hrms.dao.HolidayDao;
 import com.nextech.hrms.model.Employeeattendance;
+import com.nextech.hrms.model.Employeedailytask;
 import com.nextech.hrms.model.Holiday;
 
 @Repository
@@ -31,6 +33,16 @@ public class HolidayDaoImpl extends SuperDaoImpl<Holiday> implements HolidayDao{
 		  criteria.add(Restrictions.eq("holidayName", Name));
 		  Holiday holiday = criteria.list().size() > 0 ? (Holiday) criteria.list().get(0) : null;
 		  return holiday;
+	}
+	@Override
+	public List<Holiday> getHolidayList(Date date) throws Exception {
+		// TODO Auto-generated method stub
+		session = sessionFactory.openSession();
+		 Criteria criteria = session.createCriteria(Holiday.class);
+		  criteria.add(Restrictions.eq("holidayDate",date));
+		  @SuppressWarnings("unchecked")
+		List<Holiday> holidays =criteria.list();
+		  return holidays;
 	}
 	
 

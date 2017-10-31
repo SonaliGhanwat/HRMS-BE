@@ -15,4 +15,6 @@ public interface EmployeeLeaveDao extends SuperDao<Employeeleave>{
 	
 	public List<Employeeleave> getEmployeeLeaveByCurrentDate(Date date) throws Exception;	
 	
+	public List <Employeeleave> getEmployeeLeaveListByDate(Date date) throws Exception;
+	
 }

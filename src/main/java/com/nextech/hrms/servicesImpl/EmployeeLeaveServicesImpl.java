@@ -92,4 +92,10 @@ public class EmployeeLeaveServicesImpl extends CRUDServiceImpl<Employeeleave> im
 		
 	}
 
+	@Override
+	public List<Employeeleave> getEmployeeLeaveList(Date date) throws Exception {
+		// TODO Auto-generated method stub
+		return employeeLeaveDao.getEmployeeLeaveListByDate(date);
+	}
+
 }

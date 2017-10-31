@@ -2,6 +2,7 @@ package com.nextech.hrms.controller;
 
 import java.sql.SQLException;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.nextech.hrms.Dto.EmployeeAttendanceDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeAttendanceFactory;
+import com.nextech.hrms.model.Employee;
+import com.nextech.hrms.model.Employeeleave;
+import com.nextech.hrms.model.Holiday;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.model.Employeeattendance;
 import com.nextech.hrms.services.EmployeeAttendanceServices;
+import com.nextech.hrms.services.EmployeeLeaveServices;
 import com.nextech.hrms.util.DateUtil;
 import com.nextech.hrms.util.YearUtil;
 
@@ -34,11 +39,25 @@ public class EmployeeAttendanceController {
 	EmployeeAttendanceServices employeeAttendanceServices;
 	
 	@Autowired
+	EmployeeLeaveServices employeeLeaveServices;
+	
+	
+	@Autowired
 	private MessageSource messageSource;
 	
 	@RequestMapping(value = "/create", method = RequestMethod.POST,headers = "Accept=application/json")
 	public @ResponseBody Status addEmployeeAttendance(@RequestBody EmployeeAttendanceDto employeeAttendanceDto) {
 		try {
+			List<Employeeleave> employeeleaves = employeeLeaveServices.getEntityList(Employeeleave.class);
+			SimpleDateFormat dateFormatter = new SimpleDateFormat ("yyyy/MM/dd");
+			for (Employeeleave employeeleave:employeeleaves) {
+				 String leaveDate = dateFormatter.format(employeeleave.getLeavedate());
+				    String attendanceDate = dateFormatter.format(employeeAttendanceDto.getDate());
+				if(leaveDate.equals(attendanceDate)&&employeeAttendanceDto.getEmployee().getId()==employeeleave.getEmployee().getId()){
+					return new Status(1,"Sorry You have allready applied leave for this day,So you cant fill Attendance");
+				}
+			}
+			
 			Employeeattendance employeeattendance1 = employeeAttendanceServices.getEmpolyeeAttendanceByIdandDate(employeeAttendanceDto.getEmployee().getId(), employeeAttendanceDto.getDate());
 			if (employeeattendance1 == null) {
 				employeeAttendanceDto.setTotaltime(calculateTotalTime(employeeAttendanceDto));

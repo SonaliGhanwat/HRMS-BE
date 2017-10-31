@@ -1,4 +1,5 @@
 package com.nextech.hrms.controller;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -21,8 +22,10 @@ import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeLeaveFactory;
 import com.nextech.hrms.model.EmployeeLeaveDTO;
 import com.nextech.hrms.model.Employeeleave;
+import com.nextech.hrms.model.Holiday;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.EmployeeLeaveServices;
+import com.nextech.hrms.services.HolidayServices;
 import com.nextech.hrms.util.DateUtil;
 
 
@@ -35,15 +38,26 @@ public class EmployeeLeaveController {
 	EmployeeLeaveServices employeeLeaveServices;
 	
 	@Autowired
+	HolidayServices holidayServices;
+	
+	@Autowired
 	private MessageSource messageSource;
 
 	static final Logger logger = Logger.getLogger(EmployeeLeaveController.class);
 	
 	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody
-	Status addEmployeeLeave(@RequestBody EmployeeLeaveDto employeeLeaveDto) {
+	public @ResponseBody Status addEmployeeLeave(@RequestBody EmployeeLeaveDto employeeLeaveDto) {
 		try {
-			
+			List<Holiday> holidays = holidayServices.getEntityList(Holiday.class);
+			SimpleDateFormat dateFormatter = new SimpleDateFormat ("yyyy/MM/dd");
+			for (Holiday holiday : holidays) {
+				 String holidayDate = dateFormatter.format(holiday.getHolidayDate());
+				    String leaveDate = dateFormatter.format(employeeLeaveDto.getLeavedate());
+				if(holidayDate.equals(leaveDate)){
+					
+					return new Status(1,"Please dont apply holiday leve for leave");
+				}
+			}
 			Employeeleave employeeleave1 = employeeLeaveServices.getEmpolyeeleaveByIdandDate(employeeLeaveDto.getEmployee().getId(), employeeLeaveDto.getLeavedate());
 			if(employeeleave1==null){
 				employeeLeaveDto.setIsActive(true);

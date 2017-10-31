@@ -33,7 +33,9 @@ public class Employee implements Serializable {
 	@Temporal(TemporalType.DATE)
 	@Column(name="date_of_joining")
 	private Date dateOfJoining;
-
+	
+/*	private long createdBy;
+*/
 	//@NotBlank(message="Department should not be blank")
 	private String department;
 	
@@ -297,5 +299,11 @@ public class Employee implements Serializable {
 
 		return employeeleave;
 	}
+	/*public long getCreatedBy() {
+		return createdBy;
+	}
+	public void setCreatedBy(long createdBy) {
+		this.createdBy = createdBy;
+	}*/
 
 }

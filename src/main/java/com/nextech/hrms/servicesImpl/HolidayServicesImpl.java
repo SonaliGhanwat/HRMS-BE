@@ -1,6 +1,7 @@
 package com.nextech.hrms.servicesImpl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +72,12 @@ public class HolidayServicesImpl extends CRUDServiceImpl<Holiday>implements Holi
 		Holiday  usertype =  holidayDao.getById(Holiday.class, id);
 		HolidayDto userTypeDto = HolidayFactory.setHolidayList(usertype);
 		return userTypeDto;
+	}
+
+	@Override
+	public List<Holiday> getHolidayList(Date date) throws Exception {
+		// TODO Auto-generated method stub
+		return holidayDao.getHolidayList(date);
 	}
 	
 	

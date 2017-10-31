@@ -1,11 +1,9 @@
 package com.nextech.hrms.services;
 
+import java.util.Date;
 import java.util.List;
 
-import com.nextech.hrms.Dto.EmployeeAttendanceDto;
-import com.nextech.hrms.Dto.EmployeeDto;
 import com.nextech.hrms.Dto.HolidayDto;
-import com.nextech.hrms.Dto.UserTypeDto;
 import com.nextech.hrms.model.Holiday;
 
 public interface HolidayServices extends CRUDService<Holiday> {
@@ -19,5 +17,7 @@ public interface HolidayServices extends CRUDService<Holiday> {
     public HolidayDto getHolidayDtoByid(long id)throws Exception;
     
     public HolidayDto getHolidayDto(long id) throws Exception;
+    
+    public List<Holiday> getHolidayList(Date date) throws Exception;
 
 }

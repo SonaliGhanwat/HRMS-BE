@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import com.nextech.hrms.dao.EmployeeLeaveDao;
 import com.nextech.hrms.model.EmployeeLeaveDTO;
 import com.nextech.hrms.model.Employeeleave;
+import com.nextech.hrms.model.Holiday;
 
 @Repository
 public class EmployeeLeaveDaoImpl extends SuperDaoImpl<Employeeleave> implements EmployeeLeaveDao {
@@ -115,5 +116,16 @@ public class EmployeeLeaveDaoImpl extends SuperDaoImpl<Employeeleave> implements
 			  List<Employeeleave> employeeleaveList =criteria.list();
 			  return employeeleaveList;
 		}
+
+	@Override
+	public List<Employeeleave> getEmployeeLeaveListByDate(Date date)
+			throws Exception {
+		session = sessionFactory.openSession();
+		 Criteria criteria = session.createCriteria(Employeeleave.class);
+		  criteria.add(Restrictions.eq("leavedate",date));
+		  @SuppressWarnings("unchecked")
+		List<Employeeleave> employeeleaves =criteria.list();
+		  return employeeleaves;
+	}
 	
 }
