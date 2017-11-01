@@ -25,4 +25,6 @@ public interface EmployeeAttendanceServices extends CRUDService<Employeeattendan
     public EmployeeAttendanceDto getEmployeeAttendanceDtoByid(long id)throws Exception;
     
     public void addEmployeeAttendanceExcel(List<EmployeeAttendanceDto> employeeAttendanceDtos) throws Exception;
+    
+    public List<Employeeattendance> getEmployeeattendanceByUserid(long empId) throws Exception;
 }

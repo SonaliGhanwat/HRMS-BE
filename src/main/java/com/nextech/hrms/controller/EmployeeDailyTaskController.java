@@ -1,6 +1,7 @@
 package com.nextech.hrms.controller;
 
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -21,8 +22,10 @@ import com.nextech.hrms.Dto.EmployeeDailyTaskDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeDailyTaskFactory;
 import com.nextech.hrms.model.Employeedailytask;
+import com.nextech.hrms.model.Employeeleave;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.EmployeeDailyTaskServices;
+import com.nextech.hrms.services.EmployeeLeaveServices;
 import com.nextech.hrms.util.DateUtil;
 
 @Controller
@@ -34,6 +37,9 @@ public class EmployeeDailyTaskController {
 	EmployeeDailyTaskServices employeeDailyTaskServices;
 	
 	@Autowired
+	EmployeeLeaveServices employeeLeaveServices;
+	
+	@Autowired
 	private MessageSource messageSource;
 
 	static final Logger logger = Logger.getLogger(EmployeeDailyTaskController.class);
@@ -42,6 +48,15 @@ public class EmployeeDailyTaskController {
 	public @ResponseBody
 	Status addEmployee(@RequestBody EmployeeDailyTaskDto employeeDailyTaskDto) {
 		try {
+			List<Employeeleave> employeeleaves = employeeLeaveServices.getEntityList(Employeeleave.class);
+			SimpleDateFormat dateFormatter = new SimpleDateFormat ("yyyy/MM/dd");
+			for (Employeeleave employeeleave:employeeleaves) {
+				 String leaveDate = dateFormatter.format(employeeleave.getLeavedate());
+				    String attendanceDate = dateFormatter.format(employeeDailyTaskDto.getDate());
+				if(leaveDate.equals(attendanceDate)&&employeeDailyTaskDto.getEmployee().getId()==employeeleave.getEmployee().getId()){
+					return new Status(1,"Sorry You have allready applied leave for this day,So you cant fill Task");
+				}
+			}
 			employeeDailyTaskDto.setIsActive(true);
 			employeeDailyTaskDto.setTakenTime(calculateTotalTime(employeeDailyTaskDto));
 			employeeDailyTaskServices.addEntity(EmployeeDailyTaskFactory.setEmployeeDailyTask(employeeDailyTaskDto));

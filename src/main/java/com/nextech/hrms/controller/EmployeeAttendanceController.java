@@ -101,6 +101,23 @@ public class EmployeeAttendanceController {
 		return  employeeAttendanceDto;
 	}
 
+	@RequestMapping(value = "/getAttendanceByUserid/{Userid}", method = RequestMethod.GET,headers = "Accept=application/json")
+	public @ResponseBody List<Employeeattendance> getEmployeeAttendanceByUserId( @PathVariable("Userid") long empId) {
+		List<Employeeattendance> employeeattendanceList = null;
+		try {
+			employeeattendanceList = employeeAttendanceServices
+					.getEmployeeattendanceByUserid(empId);
+			/*if(employeeattendanceList!=null){
+				// TODO create constants for success status code and error status code and user everywhere
+				return new Status(0,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS,null,null));// TODO Use proper message to indicate correct reason user
+			}*/
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+		return  employeeattendanceList; // TODO Use proper message to indicate correct reason user
+	}
 	@RequestMapping(value = "/list", method = RequestMethod.GET,headers = "Accept=application/json")
 	public @ResponseBody List<EmployeeAttendanceDto> getEmployee() {
 

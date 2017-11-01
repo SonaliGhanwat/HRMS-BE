@@ -90,5 +90,11 @@ public class EmployeeAttendanceServicesImpl extends CRUDServiceImpl<Employeeatte
 	}
 	
 	}
+
+	@Override
+	public List<Employeeattendance> getEmployeeattendanceByUserid(long empId)
+			throws Exception {
+		return employeeAttendanceDao.getEmployeeattendanceByUserid(empId);
+	}
 	
 }
