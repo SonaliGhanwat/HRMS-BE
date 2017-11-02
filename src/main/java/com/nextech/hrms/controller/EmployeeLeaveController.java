@@ -1,6 +1,9 @@
 package com.nextech.hrms.controller;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,7 @@ import com.nextech.hrms.Dto.EmployeeLeaveDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeLeaveFactory;
 import com.nextech.hrms.model.EmployeeLeaveDTO;
+import com.nextech.hrms.model.Employeedailytask;
 import com.nextech.hrms.model.Employeeleave;
 import com.nextech.hrms.model.Holiday;
 import com.nextech.hrms.model.Status;
@@ -106,13 +110,49 @@ public class EmployeeLeaveController {
 
 		List<EmployeeLeaveDto> employeeLeaveDtolist = null;
 		try {
-			employeeLeaveDtolist = employeeLeaveServices.getEmployeeLeaveDtoList(employeeLeaveDtolist);
+			employeeLeaveDtolist = employeeLeaveServices.getEmployeeLeaveDtoList();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return employeeLeaveDtolist;
 	}
+
+	@RequestMapping(value = "/getLeaveByUserid/{EmpId}", method = RequestMethod.GET,headers = "Accept=application/json")
+	public @ResponseBody List<EmployeeLeaveDto> getEmployeeLeaveByUserId( @PathVariable("EmpId") long empId) {
+		 List<EmployeeLeaveDto> employeeLeaveDTOs = new ArrayList<EmployeeLeaveDto>();
+		 List<Employeeleave> employeeleaves =  null;
+		try {
+			employeeleaves = employeeLeaveServices.getEmployeeLeaveByUserid(empId);
+			int totalCount=0;
+			int totalLeave=12;
+			/*int count = 0;*/
+			for (Employeeleave employeeleave : employeeleaves) {
+				
+				EmployeeLeaveDto employeeLeaveDTO= new EmployeeLeaveDto();
+				 SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+				  int day = Integer.valueOf(dayFormat.format(employeeleave.getLeavedate()));
+				  SimpleDateFormat dayFormat1 = new SimpleDateFormat("dd");
+				  int day1 = Integer.valueOf(dayFormat1.format(employeeleave.getAfterleavejoiningdate()));
+				 totalCount=totalCount+day1-day;
+				 totalLeave = totalLeave-totalCount;
+				 employeeLeaveDTO.setAfterleavejoiningdate(employeeleave.getAfterleavejoiningdate());
+				 employeeLeaveDTO.setLeavedate(employeeleave.getLeavedate());
+				 employeeLeaveDTO.setSubject(employeeleave.getSubject());
+				 employeeLeaveDTO.setEmployee(employeeleave.getEmployee());
+				 employeeLeaveDTO.setTotalCount(totalCount);
+				 employeeLeaveDTO.setPendingLeave(totalLeave);
+				 employeeLeaveDTOs.add(employeeLeaveDTO);
+				 
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+		return  employeeLeaveDTOs; 
+	}
+
 
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody

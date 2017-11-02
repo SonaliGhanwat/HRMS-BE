@@ -75,5 +75,12 @@ public class EmployeeDailyTaskServicesImpl extends CRUDServiceImpl<Employeedaily
      	}
 		
 	}
+
+	@Override
+	public List<Employeedailytask> getEmployeeDailyTaskByUserid(long empId)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return employeeDailyTaskDao.getEmployeeDailyTaskByUserid(empId);
+	}
 }
 

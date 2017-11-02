@@ -3,6 +3,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.nextech.hrms.model.EmployeeLeaveDTO;
+import com.nextech.hrms.model.Employeedailytask;
 import com.nextech.hrms.model.Employeeleave;
 
 public interface EmployeeLeaveDao extends SuperDao<Employeeleave>{
@@ -16,5 +17,7 @@ public interface EmployeeLeaveDao extends SuperDao<Employeeleave>{
 	public List<Employeeleave> getEmployeeLeaveByCurrentDate(Date date) throws Exception;	
 	
 	public List <Employeeleave> getEmployeeLeaveListByDate(Date date) throws Exception;
+	
+	public List<Employeeleave> getEmployeeLeaveByUserid(long empId) throws Exception;
 	
 }

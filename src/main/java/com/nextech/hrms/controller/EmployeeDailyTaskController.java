@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.nextech.hrms.Dto.EmployeeDailyTaskDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeDailyTaskFactory;
+import com.nextech.hrms.model.Employeeattendance;
 import com.nextech.hrms.model.Employeedailytask;
 import com.nextech.hrms.model.Employeeleave;
 import com.nextech.hrms.model.Status;
@@ -91,6 +92,23 @@ public class EmployeeDailyTaskController {
 		return employeeDailyTaskDto;
 	}
 
+	@RequestMapping(value = "/getDailyTaskByUserid/{Userid}", method = RequestMethod.GET,headers = "Accept=application/json")
+	public @ResponseBody List<Employeedailytask> getEmployeeDailyTaskByUserId( @PathVariable("Userid") long empId) {
+		List<Employeedailytask> employeedailytasks = null;
+		try {
+			employeedailytasks = employeeDailyTaskServices
+					.getEmployeeDailyTaskByUserid(empId);
+			/*if(employeeattendanceList!=null){
+				// TODO create constants for success status code and error status code and user everywhere
+				return new Status(0,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS,null,null));// TODO Use proper message to indicate correct reason user
+			}*/
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+		return  employeedailytasks; // TODO Use proper message to indicate correct reason user
+	}
 	@RequestMapping(value = "/list", method = RequestMethod.GET,headers = "Accept=application/json")
 	public @ResponseBody
     List<EmployeeDailyTaskDto> getEmployee() {

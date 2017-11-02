@@ -9,6 +9,8 @@ public class EmployeeLeaveDto extends AbstractDTO{
 	private String subject;
 	private Date leavedate;
 	private Date afterleavejoiningdate;
+	private int totalCount;
+	private int pendingLeave;
 	
 	public Employee getEmployee() {
 		return employee;
@@ -34,6 +36,21 @@ public class EmployeeLeaveDto extends AbstractDTO{
 	public void setAfterleavejoiningdate(Date afterleavejoiningdate) {
 		this.afterleavejoiningdate = afterleavejoiningdate;
 	}
-	
+	public int getPendingLeave() {
+		return pendingLeave;
+	}
+
+	public void setPendingLeave(int pendingLeave) {
+		this.pendingLeave = pendingLeave;
+	}
+
+	public int getTotalCount() {
+		return totalCount;
+	}
+
+	public void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
+	}
+
 
 }

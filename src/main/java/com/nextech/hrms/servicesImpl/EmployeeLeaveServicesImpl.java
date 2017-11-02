@@ -52,9 +52,8 @@ public class EmployeeLeaveServicesImpl extends CRUDServiceImpl<Employeeleave> im
 	}
 
 	@Override
-	public List<EmployeeLeaveDto> getEmployeeLeaveDtoList(
-			List<EmployeeLeaveDto> employeeLeaveDtos) throws Exception {
-		employeeLeaveDtos = new ArrayList<EmployeeLeaveDto>();
+	public List<EmployeeLeaveDto> getEmployeeLeaveDtoList() throws Exception {
+		List<EmployeeLeaveDto> employeeLeaveDtos = new ArrayList<EmployeeLeaveDto>();
 		List<Employeeleave> employeeDailyTaskDtoList = null;
 		employeeDailyTaskDtoList = employeeLeaveDao.getList(Employeeleave.class);
 		for (Employeeleave employeeleave : employeeDailyTaskDtoList) {
@@ -96,6 +95,13 @@ public class EmployeeLeaveServicesImpl extends CRUDServiceImpl<Employeeleave> im
 	public List<Employeeleave> getEmployeeLeaveList(Date date) throws Exception {
 		// TODO Auto-generated method stub
 		return employeeLeaveDao.getEmployeeLeaveListByDate(date);
+	}
+
+	@Override
+	public List<Employeeleave> getEmployeeLeaveByUserid(long empId)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return employeeLeaveDao.getEmployeeLeaveByUserid(empId);
 	}
 
 }
