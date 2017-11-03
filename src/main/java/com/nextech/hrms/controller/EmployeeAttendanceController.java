@@ -222,7 +222,7 @@ public class EmployeeAttendanceController {
 	public long calculateTotalTime(EmployeeAttendanceDto employeeAttendanceDto) throws ClassNotFoundException, SQLException{
 		Time intime = employeeAttendanceDto.getIntime();
 		Time outtime = employeeAttendanceDto.getOuttime();
-		long totalTime = outtime.getTime() - intime.getTime();
+		long totalTime = outtime.getHours() - intime.getTime();
 		return (totalTime / (60 * 60 * 1000) % 24);
 	}
 }
