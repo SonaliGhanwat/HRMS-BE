@@ -21,8 +21,8 @@ public class Employeeleave implements Serializable {
 	private long id;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="To_Date")
-	private Date afterleavejoiningdate;
+	@Column(name="to_date")
+	private Date toDate;
 
 	@Column(name="created_date")
 	private Timestamp createdDate;
@@ -30,8 +30,8 @@ public class Employeeleave implements Serializable {
 	private boolean isActive;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="from_Date")
-	private Date leavedate;
+	@Column(name="from_date")
+	private Date fromDate;
 
 	private String subject;
 
@@ -58,13 +58,7 @@ public class Employeeleave implements Serializable {
 		this.id = id;
 	}
 
-	public Date getAfterleavejoiningdate() {
-		return this.afterleavejoiningdate;
-	}
-
-	public void setAfterleavejoiningdate(Date afterleavejoiningdate) {
-		this.afterleavejoiningdate = afterleavejoiningdate;
-	}
+	
 
 	public Timestamp getCreatedDate() {
 		return this.createdDate;
@@ -82,12 +76,22 @@ public class Employeeleave implements Serializable {
 		this.isActive = isActive;
 	}
 
-	public Date getLeavedate() {
-		return this.leavedate;
+	
+
+	public Date getToDate() {
+		return toDate;
 	}
 
-	public void setLeavedate(Date leavedate) {
-		this.leavedate = leavedate;
+	public void setToDate(Date toDate) {
+		this.toDate = toDate;
+	}
+
+	public Date getFromDate() {
+		return fromDate;
+	}
+
+	public void setFromDate(Date fromDate) {
+		this.fromDate = fromDate;
 	}
 
 	public String getSubject() {

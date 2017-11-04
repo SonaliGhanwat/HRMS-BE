@@ -48,15 +48,10 @@ public class EmployeeAttendanceController {
 	@RequestMapping(value = "/create", method = RequestMethod.POST,headers = "Accept=application/json")
 	public @ResponseBody Status addEmployeeAttendance(@RequestBody EmployeeAttendanceDto employeeAttendanceDto) {
 		try {
-			List<Employeeleave> employeeleaves = employeeLeaveServices.getEntityList(Employeeleave.class);
-			SimpleDateFormat dateFormatter = new SimpleDateFormat ("yyyy/MM/dd");
-			for (Employeeleave employeeleave:employeeleaves) {
-				 String leaveDate = dateFormatter.format(employeeleave.getLeavedate());
-				    String attendanceDate = dateFormatter.format(employeeAttendanceDto.getDate());
-				if(leaveDate.equals(attendanceDate)&&employeeAttendanceDto.getEmployee().getId()==employeeleave.getEmployee().getId()){
+			Employeeleave employeeleaves = employeeLeaveServices.getEmpolyeeleaveByIdandDate(employeeAttendanceDto.getEmployee().getId(),employeeAttendanceDto.getDate());
+				if(employeeleaves!=null){
 					return new Status(1,"Sorry You have allready applied leave for this day,So you cant fill Attendance");
-				}
-			}
+				}else{
 			
 			Employeeattendance employeeattendance1 = employeeAttendanceServices.getEmpolyeeAttendanceByIdandDate(employeeAttendanceDto.getEmployee().getId(), employeeAttendanceDto.getDate());
 			if (employeeattendance1 == null) {
@@ -64,16 +59,18 @@ public class EmployeeAttendanceController {
 				employeeAttendanceDto.setStatus(getEmployeeAttendanceStatus(employeeAttendanceDto));
 				employeeAttendanceServices.addEntity(EmployeeAttendanceFactory.setEmployeeAttendance(employeeAttendanceDto));
 			} else {
-				return new Status(1, "EmployeeId and Date Already Exist.");
+				return new Status(1, "You have Allready Add attenadnce.");
 			}
 			return new Status(0, "Employee Attendance added Successfully !");
-		} catch (Exception e) {
+		} 
+		}catch (Exception e) {
 			System.out.println("Inside Exception");
 			e.printStackTrace();
 			return new Status(0, e.getCause().getMessage());
 		}
+		
 	}
-	
+		
 	@Transactional @RequestMapping(value = "/createExcel", headers = "Content-Type=*/*",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 
 	public @ResponseBody Status addEmployeeAttendance(@RequestParam("employeeAttendanceExcelFile") MultipartFile employeeAttendanceExcelFile) {
@@ -222,7 +219,7 @@ public class EmployeeAttendanceController {
 	public long calculateTotalTime(EmployeeAttendanceDto employeeAttendanceDto) throws ClassNotFoundException, SQLException{
 		Time intime = employeeAttendanceDto.getIntime();
 		Time outtime = employeeAttendanceDto.getOuttime();
-		long totalTime = outtime.getHours() - intime.getTime();
+		long totalTime = outtime.getTime() - intime.getTime();
 		return (totalTime / (60 * 60 * 1000) % 24);
 	}
 }

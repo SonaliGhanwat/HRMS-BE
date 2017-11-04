@@ -44,6 +44,14 @@ public class HolidayDaoImpl extends SuperDaoImpl<Holiday> implements HolidayDao{
 		List<Holiday> holidays =criteria.list();
 		  return holidays;
 	}
+	@Override
+	public Holiday getHolidayBYDate(Date date) throws Exception {
+		session = sessionFactory.openSession();
+		 Criteria criteria = session.createCriteria(Holiday.class);
+		  criteria.add(Restrictions.eq("holidayDate",date));
+		  Holiday holiday = criteria.list().size() > 0 ? (Holiday) criteria.list().get(0) : null;
+		  return holiday;
+	}
 	
 
 }

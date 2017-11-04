@@ -79,6 +79,11 @@ public class HolidayServicesImpl extends CRUDServiceImpl<Holiday>implements Holi
 		// TODO Auto-generated method stub
 		return holidayDao.getHolidayList(date);
 	}
+
+	@Override
+	public Holiday getHolidayBYDate(Date date) throws Exception {
+		return holidayDao.getHolidayBYDate(date);
+	}
 	
 	
 

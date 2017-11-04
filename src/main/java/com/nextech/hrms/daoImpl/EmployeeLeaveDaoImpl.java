@@ -33,7 +33,7 @@ public class EmployeeLeaveDaoImpl extends SuperDaoImpl<Employeeleave> implements
 		session = sessionFactory.openSession();
 		 Criteria criteria = session.createCriteria(Employeeleave.class);
 		  criteria.add(Restrictions.eq("employee.id", empId));
-		  criteria.add(Restrictions.eq("leavedate",date));
+		  criteria.add(Restrictions.eq("fromDate",date));
 		  Employeeleave employeeleave = criteria.list().size() > 0 ? (Employeeleave) criteria.list().get(0) : null;
 		  return employeeleave;
 	}
@@ -48,8 +48,8 @@ public class EmployeeLeaveDaoImpl extends SuperDaoImpl<Employeeleave> implements
 		  Employeeleave employeeleave = criteria.list().size() > 0 ? (Employeeleave) criteria.list().get(0) : null;
 		  
 		  SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
-		  int year = Integer.valueOf(yearFormat.format(employeeleave.getLeavedate()));
-		  Query query = session.createQuery("FROM Employeeleave where employeeid=:employeeid and year(leavedate)=:year");
+		  int year = Integer.valueOf(yearFormat.format(employeeleave.getFromDate()));
+		  Query query = session.createQuery("FROM Employeeleave where employeeid=:employeeid and year(fromDate)=:year");
 		 query.setParameter("employeeid", empId);
 		 query.setParameter("year", year);
 		 List<EmployeeLeaveDTO> employeeLeaveDTOs = new ArrayList<EmployeeLeaveDTO>();
@@ -57,10 +57,10 @@ public class EmployeeLeaveDaoImpl extends SuperDaoImpl<Employeeleave> implements
 		 int totalCount=0;
 		 for (Employeeleave employeeleave1 : employeeleaves) {
 			 SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
-			  int day = Integer.valueOf(dayFormat.format(employeeleave1.getLeavedate()));
+			  int day = Integer.valueOf(dayFormat.format(employeeleave1.getFromDate()));
 			  SimpleDateFormat dayFormat1 = new SimpleDateFormat("dd");
-			  int day1 = Integer.valueOf(dayFormat1.format(employeeleave1.getAfterleavejoiningdate()));
-			 Query query1 = session.createQuery("FROM Employeeleave where employeeid=:employeeid and Day(leavedate)=:day and Day(afterleavejoiningdate)=:day1");
+			  int day1 = Integer.valueOf(dayFormat1.format(employeeleave1.getToDate()));
+			 Query query1 = session.createQuery("FROM Employeeleave where employeeid=:employeeid and Day(fromDate)=:day and Day(toDate)=:day1");
 			 query1.setParameter("employeeid", empId);
 			 query1.setParameter("day", day);
 			 query1.setParameter("day1", day1);
@@ -86,7 +86,7 @@ public class EmployeeLeaveDaoImpl extends SuperDaoImpl<Employeeleave> implements
 		  
 		  SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
 		  int month = Integer.valueOf(monthFormat .format(date));
-		  Query query = session.createQuery("FROM Employeeleave where employeeid=:employeeid and year(leavedate)=:year and month(leavedate)=:month");
+		  Query query = session.createQuery("FROM Employeeleave where employeeid=:employeeid and year(fromDate)=:year and month(fromDate)=:month");
 		 query.setParameter("employeeid", empId);
 		 query.setParameter("year", year);
 		 query.setParameter("month", month);
@@ -95,10 +95,10 @@ public class EmployeeLeaveDaoImpl extends SuperDaoImpl<Employeeleave> implements
 		 List<Employeeleave> employeeleaves = query.list();
 		 for (Employeeleave employeeleave1 : employeeleaves) {
 			 SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
-			  int day = Integer.valueOf(dayFormat.format(employeeleave1.getLeavedate()));
+			  int day = Integer.valueOf(dayFormat.format(employeeleave1.getFromDate()));
 			  SimpleDateFormat dayFormat1 = new SimpleDateFormat("dd");
-			  int day1 = Integer.valueOf(dayFormat1.format(employeeleave1.getAfterleavejoiningdate()));
-			 Query query1 = session.createQuery("FROM Employeeleave where employeeid=:employeeid and Day(leavedate)=:day and Day(afterleavejoiningdate)=:day1");
+			  int day1 = Integer.valueOf(dayFormat1.format(employeeleave1.getToDate()));
+			 Query query1 = session.createQuery("FROM Employeeleave where employeeid=:employeeid and Day(fromDate)=:day and Day(toDate)=:day1");
 			 query1.setParameter("employeeid", empId);
 			 query1.setParameter("day", day);
 			 query1.setParameter("day1", day1);
@@ -113,7 +113,7 @@ public class EmployeeLeaveDaoImpl extends SuperDaoImpl<Employeeleave> implements
 			throws Exception {
 			session = sessionFactory.openSession();
 			 Criteria criteria = session.createCriteria(Employeeleave.class);
-			  criteria.add(Restrictions.eq("leavedate",date));
+			  criteria.add(Restrictions.eq("fromDate",date));
 			  List<Employeeleave> employeeleaveList =criteria.list();
 			  return employeeleaveList;
 		}
@@ -123,7 +123,7 @@ public class EmployeeLeaveDaoImpl extends SuperDaoImpl<Employeeleave> implements
 			throws Exception {
 		session = sessionFactory.openSession();
 		 Criteria criteria = session.createCriteria(Employeeleave.class);
-		  criteria.add(Restrictions.eq("leavedate",date));
+		  criteria.add(Restrictions.eq("fromDate",date));
 		  @SuppressWarnings("unchecked")
 		List<Employeeleave> employeeleaves =criteria.list();
 		  return employeeleaves;

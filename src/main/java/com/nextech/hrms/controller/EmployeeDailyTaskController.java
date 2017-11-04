@@ -49,20 +49,16 @@ public class EmployeeDailyTaskController {
 	public @ResponseBody
 	Status addEmployee(@RequestBody EmployeeDailyTaskDto employeeDailyTaskDto) {
 		try {
-			List<Employeeleave> employeeleaves = employeeLeaveServices.getEntityList(Employeeleave.class);
-			SimpleDateFormat dateFormatter = new SimpleDateFormat ("yyyy/MM/dd");
-			for (Employeeleave employeeleave:employeeleaves) {
-				 String leaveDate = dateFormatter.format(employeeleave.getLeavedate());
-				    String attendanceDate = dateFormatter.format(employeeDailyTaskDto.getDate());
-				if(leaveDate.equals(attendanceDate)&&employeeDailyTaskDto.getEmployee().getId()==employeeleave.getEmployee().getId()){
-					return new Status(1,"Sorry You have allready applied leave for this day,So you cant fill Task");
-				}
-			}
+			Employeeleave employeeleaves = employeeLeaveServices.getEmpolyeeleaveByIdandDate(employeeDailyTaskDto.getEmployee().getId(),employeeDailyTaskDto.getDate());
+			if(employeeleaves!=null){
+				return new Status(1,"Sorry You have allready applied leave for this day,So you cant fill Attendance");
+			}else{
 			employeeDailyTaskDto.setIsActive(true);
 			employeeDailyTaskDto.setTakenTime(calculateTotalTime(employeeDailyTaskDto));
 			employeeDailyTaskServices.addEntity(EmployeeDailyTaskFactory.setEmployeeDailyTask(employeeDailyTaskDto));
 			return new Status(1, "Employee Daily Task added Successfully !");
-		} catch (Exception e) {
+		}
+		}catch (Exception e) {
 			// e.printStackTrace();
 			return new Status(0, e.toString());
 		}

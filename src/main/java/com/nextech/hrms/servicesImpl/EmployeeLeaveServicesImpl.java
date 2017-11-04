@@ -79,9 +79,9 @@ public class EmployeeLeaveServicesImpl extends CRUDServiceImpl<Employeeleave> im
 		for(EmployeeLeaveDto employeeLeaveDto:employeeLeaveDtos){
 			employeeLeaveDto.setEmployee(employeeLeaveDto.getEmployee());
 			employeeLeaveDto.setSubject(employeeLeaveDto.getSubject());
-			employeeLeaveDto.setLeavedate(employeeLeaveDto.getLeavedate());
-			employeeLeaveDto.setAfterleavejoiningdate(employeeLeaveDto.getAfterleavejoiningdate());
-			Employeeleave employeeleave = employeeLeaveDao.getEmpolyeeleaveByIdandDate(employeeLeaveDto.getEmployee().getId(),employeeLeaveDto.getLeavedate());
+			employeeLeaveDto.setFromDate(employeeLeaveDto.getFromDate());
+			employeeLeaveDto.setToDate(employeeLeaveDto.getToDate());
+			Employeeleave employeeleave = employeeLeaveDao.getEmpolyeeleaveByIdandDate(employeeLeaveDto.getEmployee().getId(),employeeLeaveDto.getFromDate());
 			if(employeeleave==null){
 				employeeLeaveDao.add(EmployeeLeaveFactory.setEmployeeleave(employeeLeaveDto));
 			}

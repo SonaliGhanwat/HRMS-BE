@@ -7,8 +7,8 @@ import com.nextech.hrms.model.Employee;
 public class EmployeeLeaveDto extends AbstractDTO{
 	private Employee employee;
 	private String subject;
-	private Date leavedate;
-	private Date afterleavejoiningdate;
+	private Date fromDate;
+	private Date toDate;
 	private int totalCount;
 	private int pendingLeave;
 	
@@ -24,17 +24,18 @@ public class EmployeeLeaveDto extends AbstractDTO{
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-	public Date getLeavedate() {
-		return leavedate;
+	
+	public Date getFromDate() {
+		return fromDate;
 	}
-	public void setLeavedate(Date leavedate) {
-		this.leavedate = leavedate;
+	public void setFromDate(Date fromDate) {
+		this.fromDate = fromDate;
 	}
-	public Date getAfterleavejoiningdate() {
-		return afterleavejoiningdate;
+	public Date getToDate() {
+		return toDate;
 	}
-	public void setAfterleavejoiningdate(Date afterleavejoiningdate) {
-		this.afterleavejoiningdate = afterleavejoiningdate;
+	public void setToDate(Date toDate) {
+		this.toDate = toDate;
 	}
 	public int getPendingLeave() {
 		return pendingLeave;

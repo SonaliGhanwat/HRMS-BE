@@ -52,17 +52,11 @@ public class EmployeeLeaveController {
 	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody Status addEmployeeLeave(@RequestBody EmployeeLeaveDto employeeLeaveDto) {
 		try {
-			List<Holiday> holidays = holidayServices.getEntityList(Holiday.class);
-			SimpleDateFormat dateFormatter = new SimpleDateFormat ("yyyy/MM/dd");
-			for (Holiday holiday : holidays) {
-				 String holidayDate = dateFormatter.format(holiday.getHolidayDate());
-				    String leaveDate = dateFormatter.format(employeeLeaveDto.getLeavedate());
-				if(holidayDate.equals(leaveDate)){
-					
-					return new Status(1,"Please dont apply holiday leve for leave");
-				}
-			}
-			Employeeleave employeeleave1 = employeeLeaveServices.getEmpolyeeleaveByIdandDate(employeeLeaveDto.getEmployee().getId(), employeeLeaveDto.getLeavedate());
+			Holiday holiday = holidayServices.getHolidayBYDate(employeeLeaveDto.getFromDate());
+			if(holiday!=null){
+				return new Status(1,"Please dont apply holiday leve for leave");
+			}else{
+			Employeeleave employeeleave1 = employeeLeaveServices.getEmpolyeeleaveByIdandDate(employeeLeaveDto.getEmployee().getId(), employeeLeaveDto.getFromDate());
 			if(employeeleave1==null){
 				employeeLeaveDto.setIsActive(true);
 				employeeLeaveServices.addEntity(EmployeeLeaveFactory.setEmployeeleave(employeeLeaveDto));
@@ -70,7 +64,8 @@ public class EmployeeLeaveController {
 			return new Status(1, "EmployeeId and Date Already Exist");
 		}
 			return new Status(0, "Employee Leave added Successfully !");
-		} catch (Exception e) {
+		} 
+		}catch (Exception e) {
 			// e.printStackTrace();
 			return new Status(0, e.toString());
 		}
@@ -131,13 +126,13 @@ public class EmployeeLeaveController {
 				
 				EmployeeLeaveDto employeeLeaveDTO= new EmployeeLeaveDto();
 				 SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
-				  int day = Integer.valueOf(dayFormat.format(employeeleave.getLeavedate()));
+				  int day = Integer.valueOf(dayFormat.format(employeeleave.getFromDate()));
 				  SimpleDateFormat dayFormat1 = new SimpleDateFormat("dd");
-				  int day1 = Integer.valueOf(dayFormat1.format(employeeleave.getAfterleavejoiningdate()));
+				  int day1 = Integer.valueOf(dayFormat1.format(employeeleave.getToDate()));
 				 totalCount=totalCount+day1-day;
 				 totalLeave = totalLeave-totalCount;
-				 employeeLeaveDTO.setAfterleavejoiningdate(employeeleave.getAfterleavejoiningdate());
-				 employeeLeaveDTO.setLeavedate(employeeleave.getLeavedate());
+				 employeeLeaveDTO.setToDate(employeeleave.getToDate());
+				 employeeLeaveDTO.setFromDate(employeeleave.getFromDate());
 				 employeeLeaveDTO.setSubject(employeeleave.getSubject());
 				 employeeLeaveDTO.setEmployee(employeeleave.getEmployee());
 				 employeeLeaveDTO.setTotalCount(totalCount);

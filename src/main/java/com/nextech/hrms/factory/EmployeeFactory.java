@@ -37,7 +37,6 @@ public class EmployeeFactory {
 		employee.setUsertype(employeeDto.getUsertype());
 		employee.setCreatedDate(employeeDto.getCreatedDate());
 		employee.setUpdatedDate(employeeDto.getUpdatedDate());
-	
 		employee.setIsActive(true);
 		return employee;
 		

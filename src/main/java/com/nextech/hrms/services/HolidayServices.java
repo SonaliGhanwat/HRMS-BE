@@ -19,5 +19,7 @@ public interface HolidayServices extends CRUDService<Holiday> {
     public HolidayDto getHolidayDto(long id) throws Exception;
     
     public List<Holiday> getHolidayList(Date date) throws Exception;
+    
+    public Holiday getHolidayBYDate(Date date)throws Exception;
 
 }

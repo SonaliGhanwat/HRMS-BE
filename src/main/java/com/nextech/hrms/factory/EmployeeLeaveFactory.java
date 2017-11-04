@@ -24,8 +24,8 @@ public class EmployeeLeaveFactory {
 		employeeleave.setId(employeeLeaveDto.getId());
 		employeeleave.setEmployee(employeeLeaveDto.getEmployee());
 		employeeleave.setSubject(employeeLeaveDto.getSubject());
-		employeeleave.setLeavedate(employeeLeaveDto.getLeavedate());
-		employeeleave.setAfterleavejoiningdate(employeeLeaveDto.getAfterleavejoiningdate());
+		employeeleave.setFromDate(employeeLeaveDto.getFromDate());
+		employeeleave.setToDate(employeeLeaveDto.getToDate());
 		employeeleave.setCreatedDate(employeeLeaveDto.getCreatedDate());
 		employeeleave.setUpdatedDate(employeeLeaveDto.getUpdatedDate());
 		employeeleave.setIsActive(true);
@@ -37,8 +37,8 @@ public class EmployeeLeaveFactory {
 		employeeLeaveDto.setId(employeeleave.getId());
 		employeeLeaveDto.setEmployee(employeeleave.getEmployee());
 		employeeLeaveDto.setSubject(employeeleave.getSubject());
-		employeeLeaveDto.setLeavedate(employeeleave.getLeavedate());
-		employeeLeaveDto.setAfterleavejoiningdate(employeeleave.getAfterleavejoiningdate());
+		employeeLeaveDto.setFromDate(employeeleave.getFromDate());
+		employeeLeaveDto.setToDate(employeeleave.getToDate());
 		employeeLeaveDto.setCreatedDate(employeeleave.getCreatedDate());
 		employeeLeaveDto.setUpdatedDate(employeeleave.getUpdatedDate());
 		employeeLeaveDto.setIsActive(true);
@@ -50,8 +50,8 @@ public class EmployeeLeaveFactory {
 		employeeleave.setId(employeeLeaveDto.getId());
 		employeeleave.setEmployee(employeeLeaveDto.getEmployee());
 		employeeleave.setSubject(employeeLeaveDto.getSubject());
-		employeeleave.setLeavedate(employeeLeaveDto.getLeavedate());
-		employeeleave.setAfterleavejoiningdate(employeeLeaveDto.getAfterleavejoiningdate());
+		employeeleave.setFromDate(employeeLeaveDto.getFromDate());
+		employeeleave.setToDate(employeeLeaveDto.getToDate());
 		employeeleave.setCreatedDate(employeeLeaveDto.getCreatedDate());
 		employeeleave.setUpdatedDate(employeeLeaveDto.getUpdatedDate());
 		employeeleave.setIsActive(true);
@@ -71,8 +71,8 @@ public class EmployeeLeaveFactory {
         	employee.setId((int)(row.getCell(1).getNumericCellValue()));
         	employeeLeaveDto.setEmployee(employee);
         	employeeLeaveDto.setSubject(row.getCell(2).getStringCellValue());
-        	employeeLeaveDto.setLeavedate(new Date(row.getCell(3).getDateCellValue().getTime()));
-        	employeeLeaveDto.setAfterleavejoiningdate(new Date(row.getCell(4).getDateCellValue().getTime()));
+        	employeeLeaveDto.setFromDate(new Date(row.getCell(3).getDateCellValue().getTime()));
+        	employeeLeaveDto.setToDate(new Date(row.getCell(4).getDateCellValue().getTime()));
         	employeeLeaveDto.setIsActive(true);
         	employeeLeaveDtos.add(employeeLeaveDto);
         	}
