@@ -38,7 +38,7 @@ public class EmployeetypeController {
 			}
 			employeetype.setIsactive(true);
 			employeetypeService.addEntity(employeetype);
-			return new Status(1, "Employeetype added Successfully !");
+			return new Status(0, "Employeetype added Successfully !");
 		} catch (ConstraintViolationException cve) {
 			System.out.println("Inside ConstraintViolationException");
 			cve.printStackTrace();
@@ -71,7 +71,7 @@ public class EmployeetypeController {
 		try {
 			employeetype.setIsactive(true);
 			employeetypeService.updateEntity(employeetype);
-			return new Status(1, "Employeetype update Successfully !");
+			return new Status(0, "Employeetype update Successfully !");
 		} catch (Exception e) {
 			 e.printStackTrace();
 			return new Status(0, e.toString());
@@ -99,7 +99,7 @@ public class EmployeetypeController {
 			Employeetype employeetype = employeetypeService.getEntityById(Employeetype.class,id);
 			employeetype.setIsactive(false);
 			employeetypeService.updateEntity(employeetype);
-			return new Status(1, "Employeetype deleted Successfully !");
+			return new Status(0, "Employeetype deleted Successfully !");
 		} catch (Exception e) {
 			return new Status(0, e.toString());
 		}
