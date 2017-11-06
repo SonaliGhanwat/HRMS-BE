@@ -98,6 +98,15 @@ public class Employee implements Serializable {
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL)
 	private List<Employeeleave> employeeleaves;
+	
+	@ManyToOne
+	@JoinColumn(name="employeeTypeId")
+	private Employeetype employeetype;
+
+	//bi-directional many-to-one association to Designation
+	@ManyToOne
+	@JoinColumn(name="designationId")
+	private Designation designation;
 
 	public Employee() {
 		
@@ -305,5 +314,20 @@ public class Employee implements Serializable {
 	public void setCreatedBy(long createdBy) {
 		this.createdBy = createdBy;
 	}*/
+	public Employeetype getEmployeetype() {
+		return this.employeetype;
+	}
+
+	public void setEmployeetype(Employeetype employeetype) {
+		this.employeetype = employeetype;
+	}
+
+	public Designation getDesignation() {
+		return this.designation;
+	}
+
+	public void setDesignation(Designation designation) {
+		this.designation = designation;
+	}
 
 }
