@@ -1,3 +1,4 @@
+
 package com.nextech.hrms.model;
 import java.util.Date;
 import java.io.Serializable;
@@ -5,12 +6,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import java.sql.Timestamp;
-
-
-/**
- * The persistent class for the employeeleave database table.
- * 
- */
 @Entity
 @NamedQuery(name="Employeeleave.findAll", query="SELECT e FROM Employeeleave e")
 public class Employeeleave implements Serializable {
@@ -42,6 +37,11 @@ public class Employeeleave implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="employeeid")
 	private Employee employee;
+	
+	@ManyToOne
+	@JoinColumn(name="leavetypeid")
+	private Leavetype leavetype;
+
 
 	public Employeeleave() {
 	}
@@ -116,6 +116,13 @@ public class Employeeleave implements Serializable {
 
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
+	}
+	public Leavetype getLeavetype() {
+		return this.leavetype;
+	}
+
+	public void setLeavetype(Leavetype leavetype) {
+		this.leavetype = leavetype;
 	}
 
 }

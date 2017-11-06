@@ -30,6 +30,7 @@
 				<value>com.nextech.hrms.model.Holiday</value> 
 				<value>com.nextech.hrms.model.Designation</value>
 				<value>com.nextech.hrms.model.Employeetype</value>
+				<value>com.nextech.hrms.model.Leavetype</value> 
 			</list>
 		</property>
 		<property name="hibernateProperties">
