@@ -22,5 +22,9 @@ public class MessageConstant {
 	public static String Holiday_Added_Successfully="holidayAdd";
 	public static String Holiday_Update_Successfully="holidayUpdate";
 	public static String Holiday_Delete_Successfully="holidayDelete";
+	public static String LeaveType_Added_Successfully="leaveTypeAdd";
+	public static String LeaveType_Delete_Successfully="leaveTypeDelete";
+	public static String LeaveType_Update_Successfully="leaveTypeUpdate";
+	public static String LeaveType_DOES_NOT_EXISTS="leaveTypeExit";
 
 }

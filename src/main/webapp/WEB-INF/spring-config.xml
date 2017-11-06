@@ -28,6 +28,7 @@
 				<value>com.nextech.hrms.model.Employeeleave</value>
 				<value>com.nextech.hrms.model.Usertype</value> 
 				<value>com.nextech.hrms.model.Holiday</value> 
+				<value>com.nextech.hrms.model.Leavetype</value> 
 			</list>
 		</property>
 		<property name="hibernateProperties">

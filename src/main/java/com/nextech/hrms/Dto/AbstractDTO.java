@@ -7,6 +7,20 @@ public class AbstractDTO {
 	private Timestamp createdDate;
 	private Timestamp updatedDate;
 	private boolean isIsActive;
+	private int createdBy;
+	private int updatedBy;
+	public int getCreatedBy() {
+		return createdBy;
+	}
+	public void setCreatedBy(int createdBy) {
+		this.createdBy = createdBy;
+	}
+	public int getUpdatedBy() {
+		return updatedBy;
+	}
+	public void setUpdatedBy(int updatedBy) {
+		this.updatedBy = updatedBy;
+	}
 	public long getId() {
 		return id;
 	}
