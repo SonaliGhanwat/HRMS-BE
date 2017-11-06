@@ -59,7 +59,7 @@ public class EmployeeAttendanceController {
 				employeeAttendanceDto.setStatus(getEmployeeAttendanceStatus(employeeAttendanceDto));
 				employeeAttendanceServices.addEntity(EmployeeAttendanceFactory.setEmployeeAttendance(employeeAttendanceDto));
 			} else {
-				return new Status(1, "You have Allready Add attenadnce.");
+				return new Status(1, "You have allready added attenadnce.");
 			}
 			return new Status(0, "Employee Attendance added Successfully !");
 		} 
