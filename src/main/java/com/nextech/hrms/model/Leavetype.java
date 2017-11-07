@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -33,7 +35,8 @@ public class Leavetype implements Serializable {
 	private Timestamp updatedDate;
 
 	//bi-directional many-to-one association to Employeeleave
-	@OneToMany(mappedBy="leavetype")
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "leavetype", cascade = CascadeType.ALL)
 	private List<Employeeleave> employeeleaves;
 
 	public Leavetype() {

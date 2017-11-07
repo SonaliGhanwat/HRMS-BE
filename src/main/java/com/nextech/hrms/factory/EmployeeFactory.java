@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -35,6 +33,8 @@ public class EmployeeFactory {
 		employee.setDepartment(employeeDto.getDepartment());
 		employee.setSalary(employeeDto.getSalary());
 		employee.setUsertype(employeeDto.getUsertype());
+		employee.setEmployeetype(employeeDto.getEmployeetype());
+		employee.setDesignation(employeeDto.getDesignation());
 		employee.setCreatedDate(employeeDto.getCreatedDate());
 		employee.setUpdatedDate(employeeDto.getUpdatedDate());
 		employee.setIsActive(true);
@@ -56,6 +56,8 @@ public class EmployeeFactory {
 		employeeDto.setDepartment(employee.getDepartment());
 		employeeDto.setSalary(employee.getSalary());
 		employeeDto.setUsertype(employee.getUsertype());
+		employeeDto.setEmployeetype(employee.getEmployeetype());
+		employeeDto.setDesignation(employee.getDesignation());
 		employeeDto.setCreatedDate(employee.getCreatedDate());
 		employeeDto.setUpdatedDate(employee.getUpdatedDate());
 		employeeDto.setIsActive(true);
@@ -78,6 +80,8 @@ public class EmployeeFactory {
 		employee.setDepartment(employeeDto.getDepartment());
 		employee.setSalary(employeeDto.getSalary());
 		employee.setUsertype(employeeDto.getUsertype());
+		employee.setEmployeetype(employeeDto.getEmployeetype());
+		employee.setDesignation(employeeDto.getDesignation());
 		employee.setCreatedDate(employeeDto.getCreatedDate());
 		employee.setUpdatedDate(employeeDto.getUpdatedDate());
 		employee.setIsActive(true);

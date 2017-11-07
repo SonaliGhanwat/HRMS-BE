@@ -26,6 +26,7 @@ public class EmployeeLeaveFactory {
 		employeeleave.setSubject(employeeLeaveDto.getSubject());
 		employeeleave.setFromDate(employeeLeaveDto.getFromDate());
 		employeeleave.setToDate(employeeLeaveDto.getToDate());
+		employeeleave.setLeavetype(employeeLeaveDto.getLeavetype());
 		employeeleave.setCreatedDate(employeeLeaveDto.getCreatedDate());
 		employeeleave.setUpdatedDate(employeeLeaveDto.getUpdatedDate());
 		employeeleave.setIsActive(true);
@@ -39,6 +40,7 @@ public class EmployeeLeaveFactory {
 		employeeLeaveDto.setSubject(employeeleave.getSubject());
 		employeeLeaveDto.setFromDate(employeeleave.getFromDate());
 		employeeLeaveDto.setToDate(employeeleave.getToDate());
+		employeeLeaveDto.setLeavetype(employeeleave.getLeavetype());
 		employeeLeaveDto.setCreatedDate(employeeleave.getCreatedDate());
 		employeeLeaveDto.setUpdatedDate(employeeleave.getUpdatedDate());
 		employeeLeaveDto.setIsActive(true);
@@ -52,6 +54,7 @@ public class EmployeeLeaveFactory {
 		employeeleave.setSubject(employeeLeaveDto.getSubject());
 		employeeleave.setFromDate(employeeLeaveDto.getFromDate());
 		employeeleave.setToDate(employeeLeaveDto.getToDate());
+		employeeleave.setLeavetype(employeeLeaveDto.getLeavetype());
 		employeeleave.setCreatedDate(employeeLeaveDto.getCreatedDate());
 		employeeleave.setUpdatedDate(employeeLeaveDto.getUpdatedDate());
 		employeeleave.setIsActive(true);

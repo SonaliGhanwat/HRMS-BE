@@ -1,4 +1,5 @@
 package com.nextech.hrms.controller;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,14 +21,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nextech.hrms.util.YearUtil;
+import com.nextech.hrms.Dto.EmployeeAttendanceDto;
 import com.nextech.hrms.Dto.EmployeeLeaveDto;
 import com.nextech.hrms.constant.MessageConstant;
+import com.nextech.hrms.factory.EmployeeAttendanceFactory;
 import com.nextech.hrms.factory.EmployeeLeaveFactory;
 import com.nextech.hrms.model.EmployeeLeaveDTO;
-import com.nextech.hrms.model.Employeedailytask;
 import com.nextech.hrms.model.Employeeleave;
 import com.nextech.hrms.model.Holiday;
 import com.nextech.hrms.model.Status;
+import com.nextech.hrms.services.EmployeeAttendanceServices;
 import com.nextech.hrms.services.EmployeeLeaveServices;
 import com.nextech.hrms.services.HolidayServices;
 import com.nextech.hrms.util.DateUtil;
@@ -45,6 +48,9 @@ public class EmployeeLeaveController {
 	HolidayServices holidayServices;
 	
 	@Autowired
+	EmployeeAttendanceServices employeeAttendanceServices ;
+	
+	@Autowired
 	private MessageSource messageSource;
 
 	static final Logger logger = Logger.getLogger(EmployeeLeaveController.class);
@@ -60,8 +66,17 @@ public class EmployeeLeaveController {
 			if(employeeleave1==null){
 				employeeLeaveDto.setIsActive(true);
 				employeeLeaveServices.addEntity(EmployeeLeaveFactory.setEmployeeleave(employeeLeaveDto));
+				EmployeeAttendanceDto employeeAttendanceDto = new EmployeeAttendanceDto();
+				employeeAttendanceDto.setEmployee(employeeLeaveDto.getEmployee());
+				employeeAttendanceDto.setDate(employeeLeaveDto.getFromDate());
+	            String time = ("00:00:00");
+	            Time intime = Time.valueOf(time);
+	            employeeAttendanceDto.setIntime(intime);
+	            employeeAttendanceDto.setOuttime(intime);
+				employeeAttendanceDto.setStatus("Leave");
+				employeeAttendanceServices.addEntity(EmployeeAttendanceFactory.setEmployeeAttendance(employeeAttendanceDto));
 		}else{
-			return new Status(1, "EmployeeId and Date Already Exist");
+			return new Status(1, "You have allready added leave");
 		}
 			return new Status(0, "Employee Leave added Successfully !");
 		} 
