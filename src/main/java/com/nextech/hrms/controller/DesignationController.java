@@ -21,8 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nextech.hrms.Dto.DesignationDTO;
 import com.nextech.hrms.model.Designation;
+import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.DesignationService;
+import com.nextech.hrms.services.EmployeeServices;
 
 @RestController
 @RequestMapping("/designation")
@@ -30,6 +32,9 @@ public class DesignationController {
 	
 	@Autowired
 	DesignationService designationService;
+	
+	@Autowired
+	EmployeeServices employeeServices;
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
 	public @ResponseBody Status addDesignation(@Valid @RequestBody Designation designation,
@@ -115,19 +120,17 @@ public class DesignationController {
 			List<DesignationDTO> designationDTOs  = new ArrayList<DesignationDTO>();
 			Designation designation = designationService.getEntityById(Designation.class,id);
 			List<Designation> designations= designationService.getEntityList(Designation.class);
-			if(designation.getBand()==5&&designation.getLevel()==1){
+			if(designation.getBand()==4&&designation.getLevel()==3){
 				for (Designation designation2 : designations) {
 					DesignationDTO designationDTO =  new DesignationDTO();
-					if(!designation2.getName().equals("Trainee")){
+					if(designation2.getBand()<=4&&designation2.getLevel()>=3&&designation2.getId()!=designation.getId()){
 						designationDTO.setId(designation2.getId());
 						designationDTO.setName(designation2.getName());
 						designationDTOs.add(designationDTO);	
-					}
+					} 
 				}
 				return new Status(designationDTOs);
 			}
-			
-		
 		} catch (Exception e) {
 			return new Status(0, e.toString());
 		}
