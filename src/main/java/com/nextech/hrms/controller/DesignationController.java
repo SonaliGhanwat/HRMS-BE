@@ -1,5 +1,6 @@
 package com.nextech.hrms.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.PersistenceException;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nextech.hrms.Dto.DesignationDTO;
 import com.nextech.hrms.model.Designation;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.DesignationService;
@@ -39,7 +41,7 @@ public class DesignationController {
 			}
 			designation.setIsactive(true);
 			designationService.addEntity(designation);
-			return new Status(1, "Designation added Successfully !");
+			return new Status(0, "Designation added Successfully !");
 		} catch (ConstraintViolationException cve) {
 			System.out.println("Inside ConstraintViolationException");
 			cve.printStackTrace();
@@ -72,7 +74,7 @@ public class DesignationController {
 		try {
 			designation.setIsactive(true);
 			designationService.updateEntity(designation);
-			return new Status(1, "Designation update Successfully !");
+			return new Status(0, "Designation update Successfully !");
 		} catch (Exception e) {
 			 e.printStackTrace();
 			return new Status(0, e.toString());
@@ -100,10 +102,37 @@ public class DesignationController {
 			Designation designation = designationService.getEntityById(Designation.class,id);
 			designation.setIsactive(false);
 			designationService.updateEntity(designation);
-			return new Status(1, "Designation deleted Successfully !");
+			return new Status(0, "Designation deleted Successfully !");
 		} catch (Exception e) {
 			return new Status(0, e.toString());
 		}
 
 	}
+	@RequestMapping(value = "reportTo/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
+	public @ResponseBody Status getDesignationById(@PathVariable("id") long id) {
+
+		try {
+			List<DesignationDTO> designationDTOs  = new ArrayList<DesignationDTO>();
+			Designation designation = designationService.getEntityById(Designation.class,id);
+			List<Designation> designations= designationService.getEntityList(Designation.class);
+			if(designation.getBand()==5&&designation.getLevel()==1){
+				for (Designation designation2 : designations) {
+					DesignationDTO designationDTO =  new DesignationDTO();
+					if(!designation2.getName().equals("Trainee")){
+						designationDTO.setId(designation2.getId());
+						designationDTO.setName(designation2.getName());
+						designationDTOs.add(designationDTO);	
+					}
+				}
+				return new Status(designationDTOs);
+			}
+			
+		
+		} catch (Exception e) {
+			return new Status(0, e.toString());
+		}
+		return null;
+
+	}
 }
+
