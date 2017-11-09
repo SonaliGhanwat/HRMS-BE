@@ -21,6 +21,8 @@ public interface EmployeeServices extends CRUDService<Employee> {
     public EmployeeDto getEmployeeDtoByid(long id)throws Exception;
     
     public void addEmployeeExcel(List<EmployeeDto> employeeDtos) throws Exception;
+    
+	public List<Employee> getDesignationById(long id) throws Exception;	
  
 
 

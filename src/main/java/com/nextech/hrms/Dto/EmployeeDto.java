@@ -22,6 +22,7 @@ public class EmployeeDto extends AbstractDTO {
 	private Usertype usertype;
 	private Employeetype employeetype;
 	private Designation designation;
+	private int reportTo;
 	public String getUserid() {
 		return userid;
 	}
@@ -105,6 +106,12 @@ public class EmployeeDto extends AbstractDTO {
 	}
 	public void setDesignation(Designation designation) {
 		this.designation = designation;
+	}
+	public int getReportTo() {
+		return reportTo;
+	}
+	public void setReportTo(int reportTo) {
+		this.reportTo = reportTo;
 	}
 
 }

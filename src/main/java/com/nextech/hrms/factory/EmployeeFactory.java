@@ -35,6 +35,7 @@ public class EmployeeFactory {
 		employee.setUsertype(employeeDto.getUsertype());
 		employee.setEmployeetype(employeeDto.getEmployeetype());
 		employee.setDesignation(employeeDto.getDesignation());
+		employee.setReportTo(employeeDto.getReportTo());
 		employee.setCreatedDate(employeeDto.getCreatedDate());
 		employee.setUpdatedDate(employeeDto.getUpdatedDate());
 		employee.setIsActive(true);
@@ -58,6 +59,7 @@ public class EmployeeFactory {
 		employeeDto.setUsertype(employee.getUsertype());
 		employeeDto.setEmployeetype(employee.getEmployeetype());
 		employeeDto.setDesignation(employee.getDesignation());
+		employeeDto.setReportTo(employee.getReportTo());
 		employeeDto.setCreatedDate(employee.getCreatedDate());
 		employeeDto.setUpdatedDate(employee.getUpdatedDate());
 		employeeDto.setIsActive(true);
@@ -82,6 +84,7 @@ public class EmployeeFactory {
 		employee.setUsertype(employeeDto.getUsertype());
 		employee.setEmployeetype(employeeDto.getEmployeetype());
 		employee.setDesignation(employeeDto.getDesignation());
+		employee.setReportTo(employeeDto.getReportTo());
 		employee.setCreatedDate(employeeDto.getCreatedDate());
 		employee.setUpdatedDate(employeeDto.getUpdatedDate());
 		employee.setIsActive(true);
