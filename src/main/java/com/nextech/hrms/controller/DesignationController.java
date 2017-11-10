@@ -25,24 +25,29 @@ import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.model.Designation;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.DesignationService;
+import com.nextech.hrms.services.EmployeeServices;
 
 @RestController
 @RequestMapping("/designation")
 public class DesignationController {
-	
+
 	@Autowired
 	DesignationService designationService;
 	
 	@Autowired
 	private MessageSource messageSource;
 
+	@Autowired
+	EmployeeServices employeeServices;
+
 	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
-	public @ResponseBody Status addDesignation(@Valid @RequestBody Designation designation,
-			BindingResult bindingResult,HttpServletRequest request,HttpServletResponse response) {
+	public @ResponseBody Status addDesignation(
+			@Valid @RequestBody Designation designation,
+			BindingResult bindingResult, HttpServletRequest request,
+			HttpServletResponse response) {
 		try {
 			if (bindingResult.hasErrors()) {
-				return new Status(0, bindingResult.getFieldError()
-						.getDefaultMessage());
+				return new Status(0, bindingResult.getFieldError().getDefaultMessage());
 			}
 			designation.setIsactive(true);
 			designationService.addEntity(designation);
@@ -66,7 +71,8 @@ public class DesignationController {
 	public @ResponseBody Designation getDesignation(@PathVariable("id") long id) {
 		Designation designation = null;
 		try {
-			designation = designationService.getEntityById(Designation.class, id);
+			designation = designationService.getEntityById(Designation.class,
+					id);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -75,13 +81,14 @@ public class DesignationController {
 
 	@RequestMapping(value = "/update", method = RequestMethod.PUT, headers = "Accept=application/json")
 	public @ResponseBody Status updateUserType(
-			@RequestBody Designation designation,HttpServletRequest request,HttpServletResponse response) {
+			@RequestBody Designation designation, HttpServletRequest request,
+			HttpServletResponse response) {
 		try {
 			designation.setIsactive(true);
 			designationService.updateEntity(designation);
 			return new Status(0, "Designation update Successfully !");
 		} catch (Exception e) {
-			 e.printStackTrace();
+			e.printStackTrace();
 			return new Status(0, e.toString());
 		}
 	}
@@ -104,7 +111,8 @@ public class DesignationController {
 	public @ResponseBody Status deleteDesignation(@PathVariable("id") long id) {
 
 		try {
-			Designation designation = designationService.getEntityById(Designation.class,id);
+			Designation designation = designationService.getEntityById(
+					Designation.class, id);
 			designation.setIsactive(false);
 			designationService.updateEntity(designation);
 			return new Status(0, "Designation deleted Successfully !");
@@ -113,5 +121,25 @@ public class DesignationController {
 		}
 
 	}
-}
 
+	@RequestMapping(value = "reportTo/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
+	public @ResponseBody Status getDesignationById(@PathVariable("id") long id) {
+		try {
+			List<DesignationDTO> designationDTOs = new ArrayList<DesignationDTO>();
+			Designation designation = designationService.getEntityById(Designation.class, id);
+			List<Designation> designations = designationService.getEntityList(Designation.class);
+			for (Designation designation2 : designations) {
+				DesignationDTO designationDTO = new DesignationDTO();
+				if (designation2.getBand() < designation.getBand() || (designation2.getBand() <= designation.getBand() && designation2.getLevel() > designation.getLevel())) {
+					designationDTO.setId(designation2.getId());
+					designationDTO.setName(designation2.getName());
+					designationDTOs.add(designationDTO);
+				}
+			}
+			return new Status(designationDTOs);
+		} catch (Exception e) {
+			return new Status(0, e.toString());
+		}
+
+	}
+}

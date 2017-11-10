@@ -107,6 +107,8 @@ public class Employee implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="designationId")
 	private Designation designation;
+	
+	private int reportTo;
 
 	public Employee() {
 		
@@ -328,6 +330,12 @@ public class Employee implements Serializable {
 
 	public void setDesignation(Designation designation) {
 		this.designation = designation;
+	}
+	public int getReportTo() {
+		return reportTo;
+	}
+	public void setReportTo(int reportTo) {
+		this.reportTo = reportTo;
 	}
 
 }

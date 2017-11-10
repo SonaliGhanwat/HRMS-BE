@@ -73,7 +73,7 @@ public class EmployeeAttendanceController {
 		
 	@Transactional @RequestMapping(value = "/createExcel", headers = "Content-Type=*/*",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 
-	public @ResponseBody Status addEmployeeAttendance(@RequestParam("employeeAttendanceExcelFile") MultipartFile employeeAttendanceExcelFile) {
+	public @ResponseBody Status addEmployeeAttendance(@RequestParam(value="employeeAttendanceExcelFile") MultipartFile employeeAttendanceExcelFile) {
 		try {
 			List<EmployeeAttendanceDto> employeeAttendanceDtos = EmployeeAttendanceFactory.setEmployeeAttendanceExcel(employeeAttendanceExcelFile);
 			

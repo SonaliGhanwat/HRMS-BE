@@ -1,11 +1,15 @@
 package com.nextech.hrms.daoImpl;
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.nextech.hrms.dao.EmployeeDao;
+import com.nextech.hrms.model.Designation;
 import com.nextech.hrms.model.Employee;
+import com.nextech.hrms.model.Employeeattendance;
 
 @Repository
 
@@ -40,6 +44,15 @@ public class EmployeeDaoImpl extends SuperDaoImpl<Employee> implements EmployeeD
 		  criteria.add(Restrictions.eq("emailid",emailId));
 		  Employee employee = criteria.list().size() > 0 ? (Employee) criteria.list().get(0) : null;
 		  return employee;
+	}
+
+	@Override
+	public List<Employee> getDesignationById(long id) throws Exception {
+		session = sessionFactory.openSession();
+		 Criteria criteria = session.createCriteria(Employee.class);
+		  criteria.add(Restrictions.eq("designation.id",id));
+		  List<Employee> employees =criteria.list();
+		  return employees;
 	}
 
 }
