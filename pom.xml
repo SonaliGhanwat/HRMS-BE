@@ -94,7 +94,7 @@
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>1.9.10</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>3.9</version>
@@ -103,13 +103,13 @@
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
 			<version>3.10</version>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>3.9</version>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml-schemas</artifactId>
 			<version>3.9</version>
@@ -129,51 +129,51 @@
 			<groupId>org.apache.poi</groupId>
 			<artifactId>openxml4j</artifactId>
 			<version>1.0-beta</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
 			<version>3.7</version>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>3.9</version>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
     <groupId>org.apache.poi</groupId>
     <artifactId>poi-ooxml</artifactId>
     <version>3.8-beta4</version>
 </dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-examples -->
+		https://mvnrepository.com/artifact/org.apache.poi/poi-examples
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-examples</artifactId>
 			<version>3.9</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-excelant -->
+		https://mvnrepository.com/artifact/org.apache.poi/poi-excelant
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-excelant</artifactId>
 			<version>3.9</version>
-		</dependency>
+		</dependency> -->
 		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml-schemas -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml-schemas</artifactId>
 			<version>3.9</version>
-		</dependency>
+		</dependency> -->
 		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-scratchpad -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-scratchpad</artifactId>
 			<version>3.9</version>
-		</dependency>
+		</dependency> -->
 		<!-- https://mvnrepository.com/artifact/org.apache.xmlbeans/xmlbeans -->
 		<dependency>
 			<groupId>org.apache.xmlbeans</groupId>
@@ -186,5 +186,11 @@
 			<version>3.1.0</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-ooxml</artifactId>
+    <version>3.9</version>
+</dependency>
 	</dependencies>
 </project>

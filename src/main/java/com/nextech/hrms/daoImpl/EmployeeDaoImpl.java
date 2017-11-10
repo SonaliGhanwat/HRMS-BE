@@ -47,12 +47,13 @@ public class EmployeeDaoImpl extends SuperDaoImpl<Employee> implements EmployeeD
 	}
 
 	@Override
-	public List<Employee> getDesignationById(long id) throws Exception {
-		session = sessionFactory.openSession();
-		 Criteria criteria = session.createCriteria(Employee.class);
-		  criteria.add(Restrictions.eq("designation.id",id));
-		  List<Employee> employees =criteria.list();
-		  return employees;
-	}
+	
+		public List<Employee> getDesignationById(long id) throws Exception {
+			session = sessionFactory.openSession();
+			Criteria criteria = session.createCriteria(Employee.class);
+			criteria.add(Restrictions.eq("designation.id", id));
+			return criteria.list().size() > 0 ? (List<Employee>)criteria.list() : null;
+		}
+	
 
 }

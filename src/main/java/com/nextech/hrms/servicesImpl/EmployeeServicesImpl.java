@@ -98,8 +98,7 @@ public class EmployeeServicesImpl extends CRUDServiceImpl<Employee> implements E
 	}
 
 	@Override
-	public List<Employee> getDesignationById(long id) throws Exception {
-		// TODO Auto-generated method stub
+	public List<Employee>  getDesignationById(long id) throws Exception {
 		return employeeDao.getDesignationById(id);
 	}
 }

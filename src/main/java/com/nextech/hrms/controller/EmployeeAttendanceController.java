@@ -2,7 +2,6 @@ package com.nextech.hrms.controller;
 
 import java.sql.SQLException;
 import java.sql.Time;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.nextech.hrms.Dto.EmployeeAttendanceDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeAttendanceFactory;
-import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.Employeeleave;
-import com.nextech.hrms.model.Holiday;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.model.Employeeattendance;
 import com.nextech.hrms.services.EmployeeAttendanceServices;

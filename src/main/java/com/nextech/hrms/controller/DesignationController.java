@@ -21,8 +21,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nextech.hrms.Dto.DesignationDTO;
+import com.nextech.hrms.Dto.EmployeeDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.model.Designation;
+import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.DesignationService;
 import com.nextech.hrms.services.EmployeeServices;
@@ -119,24 +121,29 @@ public class DesignationController {
 		} catch (Exception e) {
 			return new Status(0, e.toString());
 		}
-
 	}
 
 	@RequestMapping(value = "reportTo/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
 	public @ResponseBody Status getDesignationById(@PathVariable("id") long id) {
 		try {
-			List<DesignationDTO> designationDTOs = new ArrayList<DesignationDTO>();
+			List<EmployeeDto> employeeDtos = new ArrayList<EmployeeDto>();
 			Designation designation = designationService.getEntityById(Designation.class, id);
 			List<Designation> designations = designationService.getEntityList(Designation.class);
 			for (Designation designation2 : designations) {
-				DesignationDTO designationDTO = new DesignationDTO();
 				if (designation2.getBand() < designation.getBand() || (designation2.getBand() <= designation.getBand() && designation2.getLevel() > designation.getLevel())) {
-					designationDTO.setId(designation2.getId());
-					designationDTO.setName(designation2.getName());
-					designationDTOs.add(designationDTO);
+			        List<Employee> employees = employeeServices.getDesignationById(designation2.getId());
+			        if(employees != null){
+			        	for (Employee employee : employees) {
+				        	EmployeeDto employeeDto = new EmployeeDto();
+				        	employeeDto.setId(employee.getId());
+				        	employeeDto.setFirstName(employee.getFirstName());
+				        	employeeDto.setLastName(employee.getLastName());
+							employeeDtos.add(employeeDto);
+						}	 
+			        }
 				}
 			}
-			return new Status(designationDTOs);
+			return new Status(employeeDtos);
 		} catch (Exception e) {
 			return new Status(0, e.toString());
 		}
