@@ -10,6 +10,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nextech.hrms.Dto.DesignationDTO;
+import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.model.Designation;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.DesignationService;
@@ -30,6 +32,9 @@ public class DesignationController {
 	
 	@Autowired
 	DesignationService designationService;
+	
+	@Autowired
+	private MessageSource messageSource;
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
 	public @ResponseBody Status addDesignation(@Valid @RequestBody Designation designation,
@@ -106,32 +111,6 @@ public class DesignationController {
 		} catch (Exception e) {
 			return new Status(0, e.toString());
 		}
-
-	}
-	@RequestMapping(value = "reportTo/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
-	public @ResponseBody Status getDesignationById(@PathVariable("id") long id) {
-
-		try {
-			List<DesignationDTO> designationDTOs  = new ArrayList<DesignationDTO>();
-			Designation designation = designationService.getEntityById(Designation.class,id);
-			List<Designation> designations= designationService.getEntityList(Designation.class);
-			if(designation.getBand()==5&&designation.getLevel()==1){
-				for (Designation designation2 : designations) {
-					DesignationDTO designationDTO =  new DesignationDTO();
-					if(!designation2.getName().equals("Trainee")){
-						designationDTO.setId(designation2.getId());
-						designationDTO.setName(designation2.getName());
-						designationDTOs.add(designationDTO);	
-					}
-				}
-				return new Status(designationDTOs);
-			}
-			
-		
-		} catch (Exception e) {
-			return new Status(0, e.toString());
-		}
-		return null;
 
 	}
 }

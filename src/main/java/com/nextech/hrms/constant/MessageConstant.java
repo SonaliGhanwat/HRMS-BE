@@ -26,5 +26,9 @@ public class MessageConstant {
 	public static String LeaveType_Delete_Successfully="leaveTypeDelete";
 	public static String LeaveType_Update_Successfully="leaveTypeUpdate";
 	public static String LeaveType_DOES_NOT_EXISTS="leaveTypeExit";
+	public static String DESIGNATION_BAND_ONE="designationBandOne";
+	public static String DESIGNATION_BAND_TWO="designationBandTwo";
+	public static String DESIGNATION_BAND_THREE="designationBandThree";
+	public static String DESIGNATION_BAND_FOUR="designationBandFour";
 
 }
