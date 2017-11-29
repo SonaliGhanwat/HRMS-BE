@@ -137,7 +137,8 @@ public class EmployeeDailyTaskController {
 	public @ResponseBody Status updateEntity(@RequestBody EmployeeDailyTaskDto employeeDailyTaskDto) {
 
 		try {
-			calculateTotalTime(employeeDailyTaskDto);
+			employeeDailyTaskDto.setTakenTime(calculateTotalTime(employeeDailyTaskDto));
+			//calculateTotalTime(employeeDailyTaskDto);
 			employeeDailyTaskServices.updateEntity(EmployeeDailyTaskFactory.setEmployeeDailyTaskUpdate(employeeDailyTaskDto));
 			return new Status(1, messageSource.getMessage(MessageConstant.EmployeeDailyTask_Update_Successfully, null,null));
 		} catch (Exception e) {

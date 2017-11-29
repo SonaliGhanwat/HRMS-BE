@@ -40,8 +40,8 @@ public class EmployeeFactory {
 		employee.setUpdatedDate(employeeDto.getUpdatedDate());
 		employee.setIsActive(true);
 		return employee;
-		
 	}
+
 	public static EmployeeDto setEmployeeList(Employee employee)throws Exception{
 		EmployeeDto employeeDto = new EmployeeDto();
 		employeeDto.setId(employee.getId());
@@ -66,6 +66,7 @@ public class EmployeeFactory {
 		return employeeDto;
 		
 	}
+	
 	public  static Employee setEmployeeUpdate(EmployeeDto employeeDto)throws Exception {
 		
 		Employee employee = new Employee();
@@ -90,7 +91,8 @@ public class EmployeeFactory {
 		employee.setIsActive(true);
 		return employee;
 
-	}
+	}	
+	
 	public static List<EmployeeDto> setEmployeeExcel(MultipartFile employeeExcelFile)throws Exception{
 		List<EmployeeDto> employeeDtos = new ArrayList<>();
 		
@@ -119,6 +121,5 @@ public class EmployeeFactory {
 	        	}
 	        }
 			return employeeDtos;
-			
 		}
 }

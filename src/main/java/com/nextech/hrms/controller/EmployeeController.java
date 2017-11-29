@@ -2,8 +2,6 @@ package com.nextech.hrms.controller;
 
 import java.util.List;
 
-import javax.persistence.PersistenceException;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.nextech.hrms.Dto.EmployeeAttendanceDto;
 import com.nextech.hrms.Dto.EmployeeDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeFactory;
@@ -44,47 +41,26 @@ public class EmployeeController {
 	public @ResponseBody Status addEmployee(
 			@Valid @RequestBody EmployeeDto employeeDto/*BindingResult bindingResult*/)
 			throws Exception {
-		/*try {
-			if (bindingResult.hasErrors()) {
-				return new Status(0, bindingResult.getFieldError()
-						.getDefaultMessage());
-			}*/
+		if (employeeServices.getEmployeeByUserId(employeeDto.getUserid()) == null) {
 
-			Employee employee1 = employeeServices.getEmployeeByUserId(employeeDto
-					.getUserid());
-			Employee employee2 = employeeServices
-					.getEmployeeByphoneNumber(employeeDto.getPhoneNumber());
-			Employee employee3 = employeeServices.getEmpolyeeByEmailid(employeeDto
-					.getEmailid());
-			if (employee1 == null) {
-			} else {
-				return new Status(1, "UserId Already Exist");
-			}
-			if (employee2 == null) {
-			} else {
-				return new Status(1, "Phone Number Already Exist");
-			}
-			if (employee3 == null) {
-			} else {
-				return new Status(1, "EmailId Already Exist");
-			}
+		} else {
+			return new Status(1, messageSource.getMessage(
+					MessageConstant.USER_ID, null, null));
+		}
+		if (employeeServices.getEmpolyeeByEmailid(employeeDto.getEmailid()) == null) {
+		} else {
+			return new Status(1, messageSource.getMessage(
+					MessageConstant.EMAIL_ALREADY_EXIT, null, null));
+		}
+		if (employeeServices.getEmployeeByphoneNumber(employeeDto.getPhoneNumber()) == null) {
+		} else {
+			return new Status(1, messageSource.getMessage(
+					MessageConstant.CONTACT_NUMBER_EXIT, null, null));
+		}
 			employeeDto.setIsActive(true);
 			employeeServices.addEntity(EmployeeFactory.setEmployee(employeeDto));
-			return new Status(0, "Employee added Successfully !");
-		/*} catch (ConstraintViolationException cve) {
-			System.out.println("Inside ConstraintViolationException");
-			cve.printStackTrace();
-			return new Status(0, cve.getCause().getMessage());
-		} catch (PersistenceException pe) {
-			System.out.println("Inside PersistenceException");
-			pe.printStackTrace();
-			return new Status(0, pe.getCause().getMessage());*/
-		/*} catch (Exception e) {
-			System.out.println("Inside Exception");
-			e.printStackTrace();
-			return new Status(0, e.getCause().getMessage());
-		}
-*/
+			return new Status(0, messageSource.getMessage
+					(MessageConstant.Employee_Added_Successfully,null,null));
 	}
 
 	@Transactional @RequestMapping(value = "/createExcel", headers = "Content-Type=*/*",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -100,7 +76,6 @@ public class EmployeeController {
 			e.printStackTrace();
 			return new Status(0, e.getCause().getMessage());
 		}
-
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET,headers = "Accept=application/json")
@@ -112,7 +87,6 @@ public class EmployeeController {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			
 		}
 		return  employeeDto;
 	}

@@ -2,9 +2,7 @@ package com.nextech.hrms.controller;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +58,7 @@ public class EmployeeLeaveController {
 		try {
 			Holiday holiday = holidayServices.getHolidayBYDate(employeeLeaveDto.getFromDate());
 			if(holiday!=null){
-				return new Status(1,"Please dont apply holiday leve for leave");
+				return new Status(1,"Please dont apply holiday leave for leave");
 			}else{
 			Employeeleave employeeleave1 = employeeLeaveServices.getEmpolyeeleaveByIdandDate(employeeLeaveDto.getEmployee().getId(), employeeLeaveDto.getFromDate());
 			if(employeeleave1==null){
@@ -204,16 +202,16 @@ public class EmployeeLeaveController {
 	}
 	
 	@RequestMapping(value = "/leaveMonth/{id}/{yearMonth}", method = RequestMethod.GET)
-	public @ResponseBody Status getMonthlyEmployeeLeaveByEmployeeId(@PathVariable("id") long empId,@PathVariable("yearMonth") String date) {
-		
+	public @ResponseBody List<Employeeleave> getMonthlyEmployeeLeaveByEmployeeId(@PathVariable("id") long empId,@PathVariable("yearMonth") String date) {
+		List<Employeeleave> employeeleaves = null;
 		try {
-			List<Employeeleave> employeeleaves = null;
+			
 			 employeeleaves = employeeLeaveServices.getMonthlyEmployeeLeaveByEmployeeId(empId,YearUtil.convertToDate(date));
 		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new Status(1,"Employee Leave By Id and Month");
+		return employeeleaves;
 	}
 	
 	@RequestMapping(value = "/getEmployeeLeave/{Date}", method = RequestMethod.GET)

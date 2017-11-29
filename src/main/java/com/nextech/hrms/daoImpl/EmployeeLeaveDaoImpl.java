@@ -92,6 +92,7 @@ public class EmployeeLeaveDaoImpl extends SuperDaoImpl<Employeeleave> implements
 		 query.setParameter("month", month);
 		 //query.setParameter("year1", year1);
 		 int totalCount=0;
+		 List<EmployeeLeaveDTO> employeeLeaveDTOs = new ArrayList<EmployeeLeaveDTO>();
 		 List<Employeeleave> employeeleaves = query.list();
 		 for (Employeeleave employeeleave1 : employeeleaves) {
 			 SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
@@ -104,7 +105,11 @@ public class EmployeeLeaveDaoImpl extends SuperDaoImpl<Employeeleave> implements
 			 query1.setParameter("day1", day1);
 			 totalCount=totalCount+day1-day;
 		}
-		 System.out.println("Total Leave Count MONTH :"+totalCount);
+		 EmployeeLeaveDTO employeeLeaveDTO= new EmployeeLeaveDTO();
+			employeeLeaveDTO.setTotalCount(totalCount);
+			employeeLeaveDTOs.add(employeeLeaveDTO);
+		 System.out.println("Total Leave Count YEAR:"+totalCount);
+		
 			return employeeleaves;
 	}
 

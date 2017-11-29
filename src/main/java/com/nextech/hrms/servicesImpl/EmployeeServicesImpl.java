@@ -101,4 +101,6 @@ public class EmployeeServicesImpl extends CRUDServiceImpl<Employee> implements E
 	public List<Employee>  getDesignationById(long id) throws Exception {
 		return employeeDao.getDesignationById(id);
 	}
+
+	
 }

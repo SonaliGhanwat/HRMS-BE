@@ -31,7 +31,7 @@ public class Employeetype implements Serializable {
 
 	private boolean isActive;
 
-	@Column(name="no_of_leves")
+	@Column(name="no_of_leaves")
 	private int noOfLeves;
 
 	private String type;
