@@ -151,7 +151,6 @@ public class EmployeeAttendanceController {
 			employeeAttendanceServices.updateEntity(EmployeeAttendanceFactory.setEmployeeAttendanceUpdate(employeeAttendanceDto));
 		} catch (Exception e) {
 			e.printStackTrace();
-
 		}
 		return new Status(1, messageSource.getMessage(MessageConstant.EmployeeAttendance_Update_Successfully, null,null));
 	}
