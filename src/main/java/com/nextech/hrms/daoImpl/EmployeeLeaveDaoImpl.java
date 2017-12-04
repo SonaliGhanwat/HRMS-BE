@@ -103,13 +103,12 @@ public class EmployeeLeaveDaoImpl extends SuperDaoImpl<Employeeleave> implements
 			 query1.setParameter("employeeid", empId);
 			 query1.setParameter("day", day);
 			 query1.setParameter("day1", day1);
-			 totalCount=totalCount+day1-day;
+			 totalCount=totalCount+day1-day;  
 		}
 		 EmployeeLeaveDTO employeeLeaveDTO= new EmployeeLeaveDTO();
 			employeeLeaveDTO.setTotalCount(totalCount);
 			employeeLeaveDTOs.add(employeeLeaveDTO);
-		 System.out.println("Total Leave Count YEAR:"+totalCount);
-		
+		 System.out.println("Total Leave Count YEAR :"+totalCount);
 			return employeeleaves;
 	}
 

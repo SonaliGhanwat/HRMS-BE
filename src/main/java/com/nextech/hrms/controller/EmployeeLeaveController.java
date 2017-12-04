@@ -151,7 +151,6 @@ public class EmployeeLeaveController {
 				 employeeLeaveDTO.setTotalCount(totalCount);
 				 employeeLeaveDTO.setPendingLeave(totalLeave);
 				 employeeLeaveDTOs.add(employeeLeaveDTO);
-				 
 			}
 			
 		} catch (Exception e) {
