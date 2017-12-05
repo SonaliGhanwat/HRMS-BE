@@ -12,9 +12,9 @@ public interface EmployeeLeaveServices extends CRUDService<Employeeleave>{
 	
 	public Employeeleave getEmpolyeeleaveByIdandDate(long empId,Date date)throws Exception;
 	
-	public List<EmployeeLeaveDTO> getYearlyEmployeeLeaveByEmployeeId(long empId) throws Exception;
-	
 	public List<Employeeleave> getMonthlyEmployeeLeaveByEmployeeId(long empId,Date date)throws Exception;
+	
+	public List<EmployeeLeaveDTO> getYearlyEmployeeLeaveByEmployeeId(long empId) throws Exception;
 	
 	public List<Employeeleave> getEmployeeLeaveByCurrentDate(Date date) throws Exception;	
 	

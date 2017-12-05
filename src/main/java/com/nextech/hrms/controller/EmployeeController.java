@@ -45,7 +45,7 @@ public class EmployeeController {
 
 		} else {
 			return new Status(1, messageSource.getMessage(
-					MessageConstant.USER_ID, null, null));
+					MessageConstant.USER_ID_EXIT, null, null));
 		}
 		if (employeeServices.getEmpolyeeByEmailid(employeeDto.getEmailid()) == null) {
 		} else {

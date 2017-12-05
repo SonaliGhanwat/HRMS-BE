@@ -38,6 +38,7 @@ public class EmployeeLeaveDaoImpl extends SuperDaoImpl<Employeeleave> implements
 		  return employeeleave;
 	}
 
+
 	@Override
 	public List<EmployeeLeaveDTO> getYearlyEmployeeLeaveByEmployeeId(long empId)
 			throws Exception {

@@ -188,6 +188,7 @@ public class EmployeeLeaveController {
 		return new Status(1, messageSource.getMessage(MessageConstant.EmployeeLeave_Update_Successfully, null,null));
 	}
 	
+	
 	@RequestMapping(value = "/leaveYear/{id}", method = RequestMethod.GET)
 	public @ResponseBody List<EmployeeLeaveDTO> getYearlyEmployeeLeaveByEmployeeId(@PathVariable("id") long empId) {
 		List<EmployeeLeaveDTO> employeeleaves = null;
@@ -212,7 +213,6 @@ public class EmployeeLeaveController {
 		}
 		return employeeleaves;
 	}
-	
 	@RequestMapping(value = "/getEmployeeLeave/{Date}", method = RequestMethod.GET)
 	public @ResponseBody List<Employeeleave> getEmployeeAttendanceByIdandMonth( @PathVariable("Date") String date) {
 		List<Employeeleave> employeeleaveList = null;

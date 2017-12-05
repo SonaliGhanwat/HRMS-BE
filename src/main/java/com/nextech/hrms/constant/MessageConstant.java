@@ -30,7 +30,7 @@ public class MessageConstant {
 	public static String DESIGNATION_BAND_TWO="designationBandTwo";
 	public static String DESIGNATION_BAND_THREE="designationBandThree";
 	public static String DESIGNATION_BAND_FOUR="designationBandFour";
-	public static String USER_ID="userId";
+	public static String USER_ID_EXIT="userIdexit";
 	public static String CONTACT_NUMBER_EXIT="contactNumberexit";
 	public static String EMAIL_ALREADY_EXIT="emailidexit";
 	public static String Phone_Number_Allready_Exit="phoneNumberExit";
