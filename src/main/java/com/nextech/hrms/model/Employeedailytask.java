@@ -35,6 +35,9 @@ public class Employeedailytask implements Serializable {
 	private boolean isActive;
 
 	private Time starttime;
+	
+	@Column(name="status")
+	private String status;
 
 	@Column(name="taken_time")
 	private long takenTime;
@@ -144,5 +147,14 @@ public class Employeedailytask implements Serializable {
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
 	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
 
 }

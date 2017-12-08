@@ -24,7 +24,7 @@
 	</servlet-mapping>
 	<filter>
 		<filter-name>cors</filter-name>
-		<filter-class>com.nextech.erp.filter.NexTechCORSFilter</filter-class>
+		<filter-class>com.nextech.hrms.filter.NexTechCORSFilter</filter-class>
 	</filter>
 
 	<filter-mapping>

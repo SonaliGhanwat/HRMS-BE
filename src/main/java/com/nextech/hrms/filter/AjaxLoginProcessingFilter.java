@@ -1,4 +1,4 @@
-/*package com.nextech.erp.filter;
+package com.nextech.hrms.filter;
 
 import java.util.Date;
 
@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.services.EmployeeServices;
 public class AjaxLoginProcessingFilter extends HandlerInterceptorAdapter {
@@ -41,7 +42,7 @@ public class AjaxLoginProcessingFilter extends HandlerInterceptorAdapter {
 //						Page page = pageservice.getPageByUrl(url);
 						if(employee != null && employee.getPassword()!= null){
 						//	String str = string[string.length - 1];
-							//Long time = new Long(messageSource.getMessage(ERPConstants.SESSIONTIMEOUT,null, null));
+							Long time = new Long(messageSource.getMessage(MessageConstant.SESSIONTIMEOUT,null, null));
 //							System.out.println(new Long(str) + time > new Date().getTime());
 //							System.out.println(new Long(str) + time );
 //							System.out.println(new Date().getTime());
@@ -91,4 +92,3 @@ public class AjaxLoginProcessingFilter extends HandlerInterceptorAdapter {
 		return httpServletResponse;
 	}
 }
-*/

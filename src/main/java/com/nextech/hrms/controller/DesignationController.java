@@ -138,6 +138,7 @@ public class DesignationController {
 				        	employeeDto.setId(employee.getId());
 				        	employeeDto.setFirstName(employee.getFirstName());
 				        	employeeDto.setLastName(employee.getLastName());
+				        	employeeDto.setUserid(employee.getUserid());
 							employeeDtos.add(employeeDto);
 						}	 
 			        }

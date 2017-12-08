@@ -27,6 +27,7 @@ public class EmployeeDailyTaskFactory {
 		employeedailytask.setStarttime(employeeDailyTaskDto.getStarttime());
 		employeedailytask.setEndtime(employeeDailyTaskDto.getEndtime());
 		employeedailytask.setTakenTime(employeeDailyTaskDto.getTakenTime());
+		employeedailytask.setStatus(employeeDailyTaskDto.getStatus());
 		employeedailytask.setCreatedDate(employeeDailyTaskDto.getCreatedDate());
 		employeedailytask.setUpdatedDate(employeeDailyTaskDto.getUpdatedDate());
 		employeedailytask.setIsActive(true);
@@ -42,6 +43,7 @@ public class EmployeeDailyTaskFactory {
 		employeeDailyTaskDto.setStarttime(employeedailytask.getStarttime());
 		employeeDailyTaskDto.setEndtime(employeedailytask.getEndtime());
 		employeeDailyTaskDto.setTakenTime(employeedailytask.getTakenTime());
+		employeeDailyTaskDto.setStatus(employeedailytask.getStatus());
 		employeeDailyTaskDto.setCreatedDate(employeedailytask.getCreatedDate());
 		employeeDailyTaskDto.setUpdatedDate(employeedailytask.getUpdatedDate());
 		employeeDailyTaskDto.setIsActive(true);
@@ -58,6 +60,7 @@ public class EmployeeDailyTaskFactory {
 		employeedailytask.setStarttime(employeeDailyTaskDto.getStarttime());
 		employeedailytask.setEndtime(employeeDailyTaskDto.getEndtime());
 		employeedailytask.setTakenTime(employeeDailyTaskDto.getTakenTime());
+		employeedailytask.setStatus(employeeDailyTaskDto.getStatus());
 		employeedailytask.setCreatedDate(employeeDailyTaskDto.getCreatedDate());
 		employeedailytask.setUpdatedDate(employeeDailyTaskDto.getUpdatedDate());
 		employeedailytask.setIsActive(true);

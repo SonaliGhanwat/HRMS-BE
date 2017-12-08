@@ -12,6 +12,7 @@ public class EmployeeDailyTaskDto extends AbstractDTO{
 	private Time estimationTime;
 	private Time starttime;
 	private Time endtime;
+	private String status;
 	private long takenTime;
 	public Employee getEmployee() {
 		return employee;
@@ -55,4 +56,11 @@ public class EmployeeDailyTaskDto extends AbstractDTO{
 	public void setTakenTime(long takenTime) {
 		this.takenTime = takenTime;
 	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
 }

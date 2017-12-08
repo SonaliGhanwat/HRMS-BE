@@ -1,7 +1,13 @@
 package com.nextech.hrms.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
+import javax.naming.AuthenticationException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
@@ -19,9 +25,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+
+
+
+
+
 import com.nextech.hrms.Dto.EmployeeDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeFactory;
+import com.nextech.hrms.filter.TokenFactory;
+import com.nextech.hrms.model.Authorization;
 import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.EmployeeServices;
@@ -109,6 +122,7 @@ public class EmployeeController {
  
 		Employee employeeDB = employeeServices.getEmployeeByUserId(emplyee.getUserid());
 		try {
+			
 			if(employeeDB ==null){
 				return  new Status(1,"Please Enetr Valid UserId");
 			}else if(!employeeDB.getPassword().equals(emplyee.getPassword())){
@@ -122,6 +136,44 @@ public class EmployeeController {
 
 		return null;
 	}
+
+	/*@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
+	public Status getEmployee(@RequestBody Employee employee, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		Employee employeeDB = employeeServices.getEmployeeByUserId(employee.getUserid());
+		try {
+			
+			if (employeeDB != null && authenticate(employee, employeeDB)) {
+				Authorization authorization = new Authorization();
+				authorization.setUserid(employee.getUserid());
+				authorization.setPassword(employee.getPassword());
+				authorization.setUpdatedDate(new Date());
+				String token = TokenFactory.createAccessJwtToken(employeeDB);
+				authorization.setToken(token);
+				response.addHeader("auth_token", token);
+				return new Status(0,"Login Successfully",token);
+			}
+			
+		}catch (Exception e) {
+			System.out.println("Inside Exception");
+			e.printStackTrace();
+			
+		}
+		return new Status(0, "Please enter correct credentials");
+
+	}
+	private boolean authenticate(Employee formUser, Employee dbUser) {
+		if (formUser.getUserid().equals(dbUser.getUserid())
+				&& formUser.getPassword().equals(dbUser.getPassword())) {
+			dbUser.getFirstName();
+			dbUser.getLastName();
+			return true;
+		} else {
+			return false;
+		}
+
+	}*/
+
 
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE ,headers = "Accept=application/json")
 	public @ResponseBody Status deleteEmployee(@PathVariable("id") long id) {
