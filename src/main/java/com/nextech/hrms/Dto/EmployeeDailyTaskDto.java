@@ -1,5 +1,6 @@
 package com.nextech.hrms.Dto;
 
+import java.sql.Blob;
 import java.sql.Time;
 import java.util.Date;
 
@@ -14,6 +15,7 @@ public class EmployeeDailyTaskDto extends AbstractDTO{
 	private Time endtime;
 	private String status;
 	private long takenTime;
+	private String description;
 	public Employee getEmployee() {
 		return employee;
 	}
@@ -62,5 +64,12 @@ public class EmployeeDailyTaskDto extends AbstractDTO{
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
 	
 }

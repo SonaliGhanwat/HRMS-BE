@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import java.sql.Blob;
 import java.sql.Time;
 import java.sql.Timestamp;
 
@@ -31,6 +32,9 @@ public class Employeedailytask implements Serializable {
 
 	@Column(name="estimation_time")
 	private Time estimationTime;
+	
+	@Column(name="description")
+	private String description;
 
 	private boolean isActive;
 
@@ -155,6 +159,15 @@ public class Employeedailytask implements Serializable {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
 	
 
 }
