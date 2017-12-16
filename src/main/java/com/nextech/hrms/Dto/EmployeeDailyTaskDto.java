@@ -1,6 +1,5 @@
 package com.nextech.hrms.Dto;
 
-import java.sql.Blob;
 import java.sql.Time;
 import java.util.Date;
 

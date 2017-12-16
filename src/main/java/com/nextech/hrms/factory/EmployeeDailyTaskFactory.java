@@ -30,7 +30,7 @@ public class EmployeeDailyTaskFactory {
 		employeedailytask.setStatus(employeeDailyTaskDto.getStatus());
 		employeedailytask.setCreatedDate(employeeDailyTaskDto.getCreatedDate());
 		employeedailytask.setUpdatedDate(employeeDailyTaskDto.getUpdatedDate());
-		employeedailytask.setDescription(employeeDailyTaskDto.getDescription());
+	    employeedailytask.setDescription(employeeDailyTaskDto.getDescription());
 		employeedailytask.setIsActive(true);
 		return employeedailytask;
 	}

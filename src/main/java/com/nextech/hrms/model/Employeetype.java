@@ -31,8 +31,14 @@ public class Employeetype implements Serializable {
 
 	private boolean isActive;
 
-	@Column(name="no_of_leaves")
-	private int noOfLeves;
+	@Column(name="total_leave")
+	private int totalLeave;
+	
+	@Column(name="seek_leave")
+	private int seekLeave;
+	
+	@Column(name="paid_leave")
+	private int paidLeave;
 
 	private String type;
 
@@ -86,14 +92,6 @@ public class Employeetype implements Serializable {
 		this.isActive = isactive;
 	}
 
-	public int getNoOfLeves() {
-		return this.noOfLeves;
-	}
-
-	public void setNoOfLeves(int noOfLeves) {
-		this.noOfLeves = noOfLeves;
-	}
-
 	public String getType() {
 		return this.type;
 	}
@@ -116,6 +114,31 @@ public class Employeetype implements Serializable {
 
 	public void setUpdatedDate(Timestamp updatedDate) {
 		this.updatedDate = updatedDate;
+	}
+	
+
+	public int getTotalLeave() {
+		return totalLeave;
+	}
+
+	public void setTotalLeave(int totalLeave) {
+		this.totalLeave = totalLeave;
+	}
+
+	public int getSeekLeave() {
+		return seekLeave;
+	}
+
+	public void setSeekLeave(int seekLeave) {
+		this.seekLeave = seekLeave;
+	}
+
+	public int getPaidLeave() {
+		return paidLeave;
+	}
+
+	public void setPaidLeave(int paidLeave) {
+		this.paidLeave = paidLeave;
 	}
 
 	public List<Employee> getEmployees() {
