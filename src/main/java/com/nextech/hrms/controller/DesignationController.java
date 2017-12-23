@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nextech.hrms.Dto.DesignationDTO;
-import com.nextech.hrms.Dto.EmployeeDto;
+import com.nextech.hrms.dto.DesignationDTO;
+import com.nextech.hrms.dto.EmployeeDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.model.Designation;
 import com.nextech.hrms.model.Employee;

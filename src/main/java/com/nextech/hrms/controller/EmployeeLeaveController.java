@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nextech.hrms.util.YearUtil;
-import com.nextech.hrms.Dto.EmployeeAttendanceDto;
-import com.nextech.hrms.Dto.EmployeeLeaveDto;
+import com.nextech.hrms.dto.EmployeeAttendanceDto;
+import com.nextech.hrms.dto.EmployeeLeaveDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeAttendanceFactory;
 import com.nextech.hrms.factory.EmployeeLeaveFactory;

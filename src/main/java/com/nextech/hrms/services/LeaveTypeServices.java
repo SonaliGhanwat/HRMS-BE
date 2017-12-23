@@ -2,7 +2,7 @@ package com.nextech.hrms.services;
 
 import java.util.List;
 
-import com.nextech.hrms.Dto.LeaveTypeDto;
+import com.nextech.hrms.dto.LeaveTypeDto;
 import com.nextech.hrms.model.Leavetype;
 
 public interface LeaveTypeServices extends CRUDService<Leavetype> {

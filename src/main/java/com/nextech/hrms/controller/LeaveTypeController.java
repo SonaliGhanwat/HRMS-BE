@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.nextech.hrms.Dto.LeaveTypeDto;
-import com.nextech.hrms.Dto.UserTypeDto;
+import com.nextech.hrms.dto.LeaveTypeDto;
+import com.nextech.hrms.dto.UserTypeDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.LeaveTypeFactory;
 import com.nextech.hrms.factory.UserTypeFactory;

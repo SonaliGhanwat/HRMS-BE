@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.nextech.hrms.Dto.EmployeeAttendanceDto;
+import com.nextech.hrms.dto.EmployeeAttendanceDto;
 import com.nextech.hrms.controller.EmployeeAttendanceController;
 import com.nextech.hrms.dao.EmployeeAttendanceDao;
 import com.nextech.hrms.factory.EmployeeAttendanceFactory;

@@ -1,4 +1,4 @@
-package com.nextech.hrms.Dto;
+package com.nextech.hrms.dto;
 
 import java.sql.Time;
 import java.util.Date;

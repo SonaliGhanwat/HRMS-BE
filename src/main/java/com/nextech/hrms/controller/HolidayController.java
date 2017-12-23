@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.nextech.hrms.Dto.HolidayDto;
-import com.nextech.hrms.Dto.UserTypeDto;
+import com.nextech.hrms.dto.HolidayDto;
+import com.nextech.hrms.dto.UserTypeDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.HolidayFactory;
 import com.nextech.hrms.model.Status;

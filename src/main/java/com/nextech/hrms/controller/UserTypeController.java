@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.nextech.hrms.Dto.UserTypeDto;
+import com.nextech.hrms.dto.UserTypeDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.UserTypeFactory;
 import com.nextech.hrms.model.Status;

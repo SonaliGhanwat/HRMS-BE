@@ -1,4 +1,4 @@
-package com.nextech.hrms.Dto;
+package com.nextech.hrms.dto;
 
 public class LeaveTypeDto extends AbstractDTO {
 	private String name;
