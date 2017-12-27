@@ -1,7 +1,9 @@
 package com.nextech.hrms.controller;
+import java.sql.Date;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -20,17 +22,23 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.nextech.hrms.util.YearUtil;
 import com.nextech.hrms.Dto.EmployeeAttendanceDto;
+import com.nextech.hrms.Dto.EmployeeDto;
 import com.nextech.hrms.Dto.EmployeeLeaveDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeAttendanceFactory;
 import com.nextech.hrms.factory.EmployeeLeaveFactory;
+import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.EmployeeLeaveDTO;
 import com.nextech.hrms.model.Employeeleave;
+import com.nextech.hrms.model.Employeetype;
 import com.nextech.hrms.model.Holiday;
+import com.nextech.hrms.model.Leavetype;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.EmployeeAttendanceServices;
 import com.nextech.hrms.services.EmployeeLeaveServices;
+import com.nextech.hrms.services.EmployeeServices;
 import com.nextech.hrms.services.HolidayServices;
+import com.nextech.hrms.services.LeaveTypeServices;
 import com.nextech.hrms.util.DateUtil;
 
 
@@ -49,12 +57,20 @@ public class EmployeeLeaveController {
 	EmployeeAttendanceServices employeeAttendanceServices ;
 	
 	@Autowired
+	EmployeeServices  employeeServices;
+	
+	@Autowired
 	private MessageSource messageSource;
+	
+	@Autowired
+	LeaveTypeServices leaveTypeServices;
 
 	static final Logger logger = Logger.getLogger(EmployeeLeaveController.class);
 	
 	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody Status addEmployeeLeave(@RequestBody EmployeeLeaveDto employeeLeaveDto) {
+		List<Employeeleave> employeeleaves =  null;
+		EmployeeDto employeeDto = null;
 		try {
 			Holiday holiday = holidayServices.getHolidayBYDate(employeeLeaveDto.getFromDate());
 			if(holiday!=null){
@@ -72,6 +88,53 @@ public class EmployeeLeaveController {
 	            employeeAttendanceDto.setIntime(intime);
 	            employeeAttendanceDto.setOuttime(intime);
 				employeeAttendanceDto.setStatus("Leave");
+				 employeeDto = employeeServices.getEmployeeDtoByid(employeeLeaveDto.getEmployee().getId());
+				 Employeetype employeetype = employeeDto.getEmployeetype();
+				 int seekLeave = employeetype.getSeekLeave();
+				 int paidLeave = employeetype.getSeekLeave();
+				 int totalSeekLeave =0;
+				 int totalPaidleave =0;
+				 int totalseekCount=0;		
+				int  totalpaidCount=0;
+				 employeeleaves = employeeLeaveServices.getEmployeeLeaveByUserid(employeeLeaveDto.getEmployee().getId());
+				 Leavetype leavetype =  leaveTypeServices.getEntityById(Leavetype.class, employeeLeaveDto.getLeavetype().getId());
+				 for (Employeeleave employeeleave : employeeleaves) {
+				if(employeeleave.getLeavetype().getName().equals("seek leave")){
+					 SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+					  int day = Integer.valueOf(dayFormat.format(employeeleave.getFromDate()));
+					  SimpleDateFormat dayFormat1 = new SimpleDateFormat("dd");
+					  int day1 = Integer.valueOf(dayFormat1.format(employeeleave.getToDate()));
+					 totalseekCount=totalseekCount+day1-day;
+					totalSeekLeave = totalSeekLeave+totalseekCount;
+				}
+				if(employeeleave.getLeavetype().getName().equals("paid leave")){
+					SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+					  int day = Integer.valueOf(dayFormat.format(employeeleave.getFromDate()));
+					  SimpleDateFormat dayFormat1 = new SimpleDateFormat("dd");
+					  int day1 = Integer.valueOf(dayFormat1.format(employeeleave.getToDate()));
+					 totalpaidCount=totalpaidCount+day1-day;
+					totalPaidleave = totalPaidleave+totalpaidCount;
+				}
+				}
+				 
+				 SimpleDateFormat dayFormat = new SimpleDateFormat("MM");
+				  int month = Integer.valueOf(dayFormat.format(employeeDto.getDateOfJoining()));
+				  if(month<=3){
+					  
+					  if(leavetype.getName().equals("seek leave")){
+					  if(totalSeekLeave<=seekLeave){
+					  }else{
+						  return new Status(1,"your seek leave is over");
+					  }
+					  }
+					  if(leavetype.getName().equals("paid leave")){
+					  if(totalPaidleave<=paidLeave){
+					  }else{
+						  return new Status(1,"your paid leave is over ");
+					  }
+					  }
+				  }
+				 
 				employeeAttendanceServices.addEntity(EmployeeAttendanceFactory.setEmployeeAttendance(employeeAttendanceDto));
 		}else{
 			return new Status(1, "You have allready added leave");
@@ -151,6 +214,7 @@ public class EmployeeLeaveController {
 				 employeeLeaveDTO.setTotalCount(totalCount);
 				 employeeLeaveDTO.setPendingLeave(totalLeave);
 				 employeeLeaveDTOs.add(employeeLeaveDTO);
+			
 			}
 			
 		} catch (Exception e) {
@@ -226,6 +290,7 @@ public class EmployeeLeaveController {
 		}
 		return  employeeleaveList;
 	}
+	
 }
 
 

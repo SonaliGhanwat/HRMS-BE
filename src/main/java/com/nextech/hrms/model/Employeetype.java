@@ -47,7 +47,7 @@ public class Employeetype implements Serializable {
 
 	@Column(name="updated_date")
 	private Timestamp updatedDate;
-
+	
 	//bi-directional many-to-one association to Employee
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employeetype", cascade = CascadeType.ALL)

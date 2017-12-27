@@ -24,6 +24,7 @@ public interface EmployeeServices extends CRUDService<Employee> {
     
 	public List<Employee> getDesignationById(long id) throws Exception;	
 	
+	public Employee  getEmployeeByUserIdforLeave(long userId) throws Exception;
  
 
 

@@ -1,5 +1,8 @@
 package com.nextech.hrms.controller;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.persistence.PersistenceException;
@@ -18,8 +21,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nextech.hrms.Dto.EmployeeDto;
 import com.nextech.hrms.model.Employeetype;
 import com.nextech.hrms.model.Status;
+import com.nextech.hrms.services.EmployeeServices;
 import com.nextech.hrms.services.EmployeetypeService;
 
 @RestController
@@ -27,6 +32,9 @@ import com.nextech.hrms.services.EmployeetypeService;
 public class EmployeetypeController {
 	@Autowired
 	EmployeetypeService employeetypeService;
+	
+	@Autowired
+	EmployeeServices employeeServices;
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
 	public @ResponseBody Status addEmployeetype(@Valid @RequestBody Employeetype employeetype,
@@ -105,4 +113,6 @@ public class EmployeetypeController {
 		}
 
 	}
+	
 }
+

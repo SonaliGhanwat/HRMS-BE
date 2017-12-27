@@ -13,4 +13,6 @@ public interface EmployeeDao extends SuperDao<Employee>{
 	public Employee getEmpolyeeByEmailid(String emailId)throws Exception;
 	
 	public List<Employee> getDesignationById(long id) throws Exception;	
+	
+	public Employee  getEmployeeByUserIdforLeave(long userId) throws Exception;
 }

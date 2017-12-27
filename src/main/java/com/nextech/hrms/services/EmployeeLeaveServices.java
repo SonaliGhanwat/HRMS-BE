@@ -29,6 +29,8 @@ public interface EmployeeLeaveServices extends CRUDService<Employeeleave>{
 	public List<Employeeleave> getEmployeeLeaveList(Date date) throws Exception;
 	
 	public List<Employeeleave> getEmployeeLeaveByUserid(long empId) throws Exception;
+	
+	public List<Employeeleave> getEmployeeLeaveByLeaveTypeid(long leaveid) throws Exception;
 
 	
 }

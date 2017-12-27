@@ -104,6 +104,13 @@ public class EmployeeLeaveServicesImpl extends CRUDServiceImpl<Employeeleave> im
 		return employeeLeaveDao.getEmployeeLeaveByUserid(empId);
 	}
 
+	@Override
+	public List<Employeeleave> getEmployeeLeaveByLeaveTypeid(long leaveid)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return employeeLeaveDao.getEmployeeLeaveByLeaveTypeid(leaveid);
+	}
+
 
 
 	

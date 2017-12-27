@@ -54,6 +54,17 @@ public class EmployeeDaoImpl extends SuperDaoImpl<Employee> implements EmployeeD
 			criteria.add(Restrictions.eq("designation.id", id));
 			return criteria.list().size() > 0 ? (List<Employee>)criteria.list() : null;
 		}
+
+	@Override
+	public Employee getEmployeeByUserIdforLeave(long userId) throws Exception {
+		session = sessionFactory.openSession();
+		Criteria criteria = session.createCriteria(Employee.class);
+		criteria.add(Restrictions.eq("isActive", true));
+		criteria.add(Restrictions.eq("userid", userId));
+		Employee employee= criteria.list().size() > 0 ? (Employee) criteria.list().get(0): null;
+		session.close();
+		return employee;
+	}
 	
 
 }
