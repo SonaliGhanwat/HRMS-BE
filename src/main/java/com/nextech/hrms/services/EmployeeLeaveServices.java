@@ -2,7 +2,7 @@ package com.nextech.hrms.services;
 import java.util.Date;
 import java.util.List;
 
-import com.nextech.hrms.Dto.EmployeeLeaveDto;
+import com.nextech.hrms.dto.EmployeeLeaveDto;
 import com.nextech.hrms.model.EmployeeLeaveDTO;
 import com.nextech.hrms.model.Employeeleave;
 import com.nextech.hrms.model.Holiday;

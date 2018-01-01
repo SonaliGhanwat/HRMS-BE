@@ -25,12 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-
-
-
-
-
-import com.nextech.hrms.Dto.EmployeeDto;
+import com.nextech.hrms.dto.EmployeeDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeFactory;
 import com.nextech.hrms.filter.TokenFactory;
@@ -137,7 +132,7 @@ public class EmployeeController {
 		return null;
 	}
 
-	/*@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
+	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
 	public Status getEmployee(@RequestBody Employee employee, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		Employee employeeDB = employeeServices.getEmployeeByUserId(employee.getUserid());
@@ -172,7 +167,7 @@ public class EmployeeController {
 			return false;
 		}
 
-	}*/
+	}
 
 
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE ,headers = "Accept=application/json")
@@ -180,7 +175,9 @@ public class EmployeeController {
 		EmployeeDto employeeDto = null;
 
 		try {
+			
 			employeeDto = employeeServices.getEmployeeDtoByid(id);
+			employeeDto.setIsActive(false);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

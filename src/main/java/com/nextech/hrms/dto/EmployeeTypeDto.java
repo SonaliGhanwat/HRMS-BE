@@ -1,15 +1,16 @@
-package com.nextech.hrms.Dto;
+package com.nextech.hrms.dto;
 
-public class EmployeeTypeDto extends AbstractDTO{
-	private String type;
+public class EmployeeTypeDto extends AbstractDTO {
+
+	private String Type;
 	private int seekLeave;
-	private int PaidLeave;
+	private int paidLeave;
 	private int totalLeave;
 	public String getType() {
-		return type;
+		return Type;
 	}
 	public void setType(String type) {
-		this.type = type;
+		Type = type;
 	}
 	public int getSeekLeave() {
 		return seekLeave;
@@ -18,10 +19,10 @@ public class EmployeeTypeDto extends AbstractDTO{
 		this.seekLeave = seekLeave;
 	}
 	public int getPaidLeave() {
-		return PaidLeave;
+		return paidLeave;
 	}
 	public void setPaidLeave(int paidLeave) {
-		PaidLeave = paidLeave;
+		this.paidLeave = paidLeave;
 	}
 	public int getTotalLeave() {
 		return totalLeave;
@@ -29,4 +30,5 @@ public class EmployeeTypeDto extends AbstractDTO{
 	public void setTotalLeave(int totalLeave) {
 		this.totalLeave = totalLeave;
 	}
+	
 }

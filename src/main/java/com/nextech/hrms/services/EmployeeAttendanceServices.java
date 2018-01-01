@@ -1,12 +1,7 @@
 package com.nextech.hrms.services;
 import java.util.Date;
 import java.util.List;
-
-
-
-
-
-import com.nextech.hrms.Dto.EmployeeAttendanceDto;
+import com.nextech.hrms.dto.EmployeeAttendanceDto;
 import com.nextech.hrms.model.Employeeattendance;
 
 

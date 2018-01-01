@@ -12,7 +12,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.nextech.hrms.Dto.EmployeeDto;
+import com.nextech.hrms.dto.EmployeeDto;
 import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.Usertype;
 

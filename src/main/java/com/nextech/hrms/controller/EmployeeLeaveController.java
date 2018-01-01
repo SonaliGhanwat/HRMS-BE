@@ -21,9 +21,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nextech.hrms.util.YearUtil;
-import com.nextech.hrms.Dto.EmployeeAttendanceDto;
-import com.nextech.hrms.Dto.EmployeeDto;
-import com.nextech.hrms.Dto.EmployeeLeaveDto;
+
+import com.nextech.hrms.dto.EmployeeAttendanceDto;
+import com.nextech.hrms.dto.EmployeeDto;
+import com.nextech.hrms.dto.EmployeeLeaveDto;
+
+import com.nextech.hrms.dto.EmployeeAttendanceDto;
+import com.nextech.hrms.dto.EmployeeLeaveDto;
+
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeAttendanceFactory;
 import com.nextech.hrms.factory.EmployeeLeaveFactory;
@@ -79,7 +84,7 @@ public class EmployeeLeaveController {
 			Employeeleave employeeleave1 = employeeLeaveServices.getEmpolyeeleaveByIdandDate(employeeLeaveDto.getEmployee().getId(), employeeLeaveDto.getFromDate());
 			if(employeeleave1==null){
 				employeeLeaveDto.setIsActive(true);
-				employeeLeaveServices.addEntity(EmployeeLeaveFactory.setEmployeeleave(employeeLeaveDto));
+				
 				EmployeeAttendanceDto employeeAttendanceDto = new EmployeeAttendanceDto();
 				employeeAttendanceDto.setEmployee(employeeLeaveDto.getEmployee());
 				employeeAttendanceDto.setDate(employeeLeaveDto.getFromDate());
@@ -95,7 +100,7 @@ public class EmployeeLeaveController {
 				 int totalSeekLeave =0;
 				 int totalPaidleave =0;
 				 int totalseekCount=0;		
-				int  totalpaidCount=0;
+				 int totalpaidCount=0;
 				 employeeleaves = employeeLeaveServices.getEmployeeLeaveByUserid(employeeLeaveDto.getEmployee().getId());
 				 Leavetype leavetype =  leaveTypeServices.getEntityById(Leavetype.class, employeeLeaveDto.getLeavetype().getId());
 				 for (Employeeleave employeeleave : employeeleaves) {
@@ -120,7 +125,7 @@ public class EmployeeLeaveController {
 				 SimpleDateFormat dayFormat = new SimpleDateFormat("MM");
 				  int month = Integer.valueOf(dayFormat.format(employeeDto.getDateOfJoining()));
 				  if(month<=3){
-					  
+					 // int leaveAllocate = seekLeave/3;
 					  if(leavetype.getName().equals("seek leave")){
 					  if(totalSeekLeave<=seekLeave){
 					  }else{
@@ -133,8 +138,21 @@ public class EmployeeLeaveController {
 						  return new Status(1,"your paid leave is over ");
 					  }
 					  }
+				  }if(month<=6){
+					  if(leavetype.getName().equals("seek leave")){
+						  if(totalSeekLeave<=seekLeave){
+						  }else{
+							  return new Status(1,"your seek leave is over");
+						  }
+					  }
+					  if(leavetype.getName().equals("paid leave")){
+						  if(totalPaidleave<=paidLeave){
+					  }else{
+						  return new Status(1,"your paid leave is over");
+					  }
 				  }
-				 
+				  }
+				  employeeLeaveServices.addEntity(EmployeeLeaveFactory.setEmployeeleave(employeeLeaveDto));
 				employeeAttendanceServices.addEntity(EmployeeAttendanceFactory.setEmployeeAttendance(employeeAttendanceDto));
 		}else{
 			return new Status(1, "You have allready added leave");

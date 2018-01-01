@@ -1,4 +1,4 @@
-package com.nextech.hrms.Dto;
+package com.nextech.hrms.dto;
 
 import java.util.Date;
 
@@ -19,10 +19,11 @@ public class EmployeeDto extends AbstractDTO {
 	private String address;
 	private String department;
 	private String salary;
+	private int reportTo;
 	private Usertype usertype;
 	private Employeetype employeetype;
 	private Designation designation;
-	private int reportTo;
+	
 	public String getUserid() {
 		return userid;
 	}
@@ -95,6 +96,12 @@ public class EmployeeDto extends AbstractDTO {
 	public void setUsertype(Usertype usertype) {
 		this.usertype = usertype;
 	}
+	public int getReportTo() {
+		return reportTo;
+	}
+	public void setReportTo(int reportTo) {
+		this.reportTo = reportTo;
+	}
 	public Employeetype getEmployeetype() {
 		return employeetype;
 	}
@@ -107,11 +114,6 @@ public class EmployeeDto extends AbstractDTO {
 	public void setDesignation(Designation designation) {
 		this.designation = designation;
 	}
-	public int getReportTo() {
-		return reportTo;
-	}
-	public void setReportTo(int reportTo) {
-		this.reportTo = reportTo;
-	}
+	
 
 }

@@ -1,6 +1,6 @@
-package com.nextech.hrms.Dto;
+package com.nextech.hrms.dto;
 
-public class DesignationDTO {
+public class DesignationDTO extends AbstractDTO{
 	
 	private long id;
 	private String name;

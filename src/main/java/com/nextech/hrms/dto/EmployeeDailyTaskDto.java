@@ -1,4 +1,4 @@
-package com.nextech.hrms.Dto;
+package com.nextech.hrms.dto;
 
 import java.sql.Time;
 import java.util.Date;
@@ -12,8 +12,8 @@ public class EmployeeDailyTaskDto extends AbstractDTO{
 	private Time estimationTime;
 	private Time starttime;
 	private Time endtime;
-	private String status;
 	private long takenTime;
+	private String status;
 	private String description;
 	public Employee getEmployee() {
 		return employee;
@@ -69,6 +69,5 @@ public class EmployeeDailyTaskDto extends AbstractDTO{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
 	
 }

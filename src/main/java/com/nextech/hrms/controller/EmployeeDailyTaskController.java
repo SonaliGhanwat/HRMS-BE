@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.nextech.hrms.Dto.EmployeeDailyTaskDto;
+import com.nextech.hrms.dto.EmployeeDailyTaskDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeDailyTaskFactory;
 import com.nextech.hrms.model.Employeeattendance;

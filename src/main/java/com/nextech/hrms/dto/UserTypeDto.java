@@ -1,4 +1,4 @@
-package com.nextech.hrms.Dto;
+package com.nextech.hrms.dto;
 
 public class UserTypeDto extends AbstractDTO {
 	private String description;

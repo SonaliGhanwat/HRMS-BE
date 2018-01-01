@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.nextech.hrms.Dto.LeaveTypeDto;
-import com.nextech.hrms.Dto.UserTypeDto;
+import com.nextech.hrms.dto.LeaveTypeDto;
+import com.nextech.hrms.dto.UserTypeDto;
 import com.nextech.hrms.dao.LeaveTypeDao;
 import com.nextech.hrms.factory.LeaveTypeFactory;
 import com.nextech.hrms.factory.UserTypeFactory;

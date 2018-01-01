@@ -6,9 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.nextech.hrms.Dto.EmployeeAttendanceDto;
-import com.nextech.hrms.Dto.EmployeeDailyTaskDto;
-import com.nextech.hrms.Dto.EmployeeDto;
+import com.nextech.hrms.dto.EmployeeAttendanceDto;
+import com.nextech.hrms.dto.EmployeeDailyTaskDto;
+import com.nextech.hrms.dto.EmployeeDto;
 import com.nextech.hrms.dao.EmployeeDao;
 import com.nextech.hrms.factory.EmployeeAttendanceFactory;
 import com.nextech.hrms.factory.EmployeeDailyTaskFactory;

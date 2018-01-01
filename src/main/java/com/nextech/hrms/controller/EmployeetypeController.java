@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nextech.hrms.Dto.EmployeeDto;
+import com.nextech.hrms.dto.EmployeeDto;
 import com.nextech.hrms.model.Employeetype;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.EmployeeServices;

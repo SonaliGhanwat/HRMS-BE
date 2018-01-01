@@ -1,6 +1,6 @@
 package com.nextech.hrms.factory;
 
-import com.nextech.hrms.Dto.LeaveTypeDto;
+import com.nextech.hrms.dto.LeaveTypeDto;
 import com.nextech.hrms.model.Leavetype;
 
 public class LeaveTypeFactory {

@@ -2,7 +2,7 @@ package com.nextech.hrms.services;
 
 import java.util.List;
 
-import com.nextech.hrms.Dto.EmployeeDto;
+import com.nextech.hrms.dto.EmployeeDto;
 import com.nextech.hrms.model.Employee;
 
 public interface EmployeeServices extends CRUDService<Employee> {
