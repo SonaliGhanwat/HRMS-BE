@@ -66,7 +66,7 @@ public class EmployeeServicesImpl extends CRUDServiceImpl<Employee> implements E
 	public EmployeeDto getEmployeeDtoByid(long id) throws Exception {
 		Employee employee =  employeeDao.getById(Employee.class, id);
 		EmployeeDto employeeDto = EmployeeFactory.setEmployeeList(employee);
-		//employee.setIsActive(false);
+		employee.setIsActive(false);
 		employeeDao.update(employee);
 		return employeeDto;
 		

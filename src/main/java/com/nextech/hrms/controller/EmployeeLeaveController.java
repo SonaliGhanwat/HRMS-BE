@@ -83,8 +83,7 @@ public class EmployeeLeaveController {
 			}else{
 			Employeeleave employeeleave1 = employeeLeaveServices.getEmpolyeeleaveByIdandDate(employeeLeaveDto.getEmployee().getId(), employeeLeaveDto.getFromDate());
 			if(employeeleave1==null){
-				employeeLeaveDto.setIsActive(true);
-				
+				employeeLeaveDto.setIsActive(true);				
 				EmployeeAttendanceDto employeeAttendanceDto = new EmployeeAttendanceDto();
 				employeeAttendanceDto.setEmployee(employeeLeaveDto.getEmployee());
 				employeeAttendanceDto.setDate(employeeLeaveDto.getFromDate());
