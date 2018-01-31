@@ -92,7 +92,6 @@ public class EmployeeServicesImpl extends CRUDServiceImpl<Employee> implements E
 			if (employee1 == null) {
 				employeeDao.add(EmployeeFactory.setEmployee(employeeDto));
 			}
-		
 		}
 		
 	}
@@ -107,5 +106,11 @@ public class EmployeeServicesImpl extends CRUDServiceImpl<Employee> implements E
 		return employeeDao.getEmployeeByUserIdforLeave(userId);
 	}
 
-	
+	@Override
+	public EmployeeDto getEmployeeDtoByidforLeave(long id) throws Exception {
+		Employee employee =  employeeDao.getById(Employee.class, id);
+		EmployeeDto employeeDto = EmployeeFactory.setEmployeeList(employee);
+		employeeDao.update(employee);
+		return employeeDto;
+	}	
 }

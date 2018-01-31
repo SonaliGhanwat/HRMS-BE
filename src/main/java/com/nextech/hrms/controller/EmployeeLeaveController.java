@@ -92,7 +92,7 @@ public class EmployeeLeaveController {
 	            employeeAttendanceDto.setIntime(intime);
 	            employeeAttendanceDto.setOuttime(intime);
 				employeeAttendanceDto.setStatus("Leave");
-				 employeeDto = employeeServices.getEmployeeDtoByid(employeeLeaveDto.getEmployee().getId());
+				 employeeDto = employeeServices.getEmployeeDtoByidforLeave(employeeLeaveDto.getEmployee().getId());
 				 Employeetype employeetype = employeeDto.getEmployeetype();
 				 int seekLeave = employeetype.getSeekLeave();
 				 int paidLeave = employeetype.getSeekLeave();

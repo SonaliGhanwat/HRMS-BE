@@ -131,8 +131,9 @@ public class EmployeeController {
 
 		return null;
 	}
+	
 
-	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
+	/*@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
 	public Status getEmployee(@RequestBody Employee employee, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		Employee employeeDB = employeeServices.getEmployeeByUserId(employee.getUserid());
@@ -168,7 +169,7 @@ public class EmployeeController {
 		}
 
 	}
-
+*/
 
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE ,headers = "Accept=application/json")
 	public @ResponseBody Status deleteEmployee(@PathVariable("id") long id) {
