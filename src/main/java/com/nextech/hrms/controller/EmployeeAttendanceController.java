@@ -4,10 +4,16 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,18 +26,25 @@ import org.springframework.web.multipart.MultipartFile;
 import com.nextech.hrms.dto.EmployeeAttendanceDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeAttendanceFactory;
+import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.Employeeleave;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.model.Employeeattendance;
 import com.nextech.hrms.services.EmployeeAttendanceServices;
 import com.nextech.hrms.services.EmployeeLeaveServices;
+import com.nextech.hrms.services.EmployeeServices;
 import com.nextech.hrms.util.DateUtil;
 import com.nextech.hrms.util.YearUtil;
 
 @RestController
 @RequestMapping("/employeeattendance")
-public class EmployeeAttendanceController {
+public class EmployeeAttendanceController extends HttpServlet {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2611998980344339996L;
+
 	@Autowired
 	EmployeeAttendanceServices employeeAttendanceServices;
 	
@@ -41,6 +54,10 @@ public class EmployeeAttendanceController {
 	
 	@Autowired
 	private MessageSource messageSource;
+	
+	@Autowired
+	EmployeeServices employeeServices;
+
 	
 	@RequestMapping(value = "/create", method = RequestMethod.POST,headers = "Accept=application/json")
 	public @ResponseBody Status addEmployeeAttendance(@RequestBody EmployeeAttendanceDto employeeAttendanceDto) {
@@ -55,10 +72,12 @@ public class EmployeeAttendanceController {
 				employeeAttendanceDto.setTotaltime(calculateTotalTime(employeeAttendanceDto));
 				employeeAttendanceDto.setStatus(getEmployeeAttendanceStatus(employeeAttendanceDto));
 				employeeAttendanceServices.addEntity(EmployeeAttendanceFactory.setEmployeeAttendance(employeeAttendanceDto));
+				  //System.out.println("JSESSIONID:"+ cookie);
 			} else {
 				return new Status(1, "You have allready added attenadnce.");
 			}
 			return new Status(0, "Employee Attendance added Successfully !");
+			
 		} 
 		}catch (Exception e) {
 			System.out.println("Inside Exception");
@@ -113,15 +132,23 @@ public class EmployeeAttendanceController {
 		return  employeeattendanceList; // TODO Use proper message to indicate correct reason user
 	}
 	@RequestMapping(value = "/list", method = RequestMethod.GET,headers = "Accept=application/json")
-	public @ResponseBody List<EmployeeAttendanceDto> getEmployee() {
+	public @ResponseBody List<EmployeeAttendanceDto> getEmployee(HttpServletRequest request) {
 
 		List<EmployeeAttendanceDto> employeeAttendanceDtoList = null;
+		List<Employeeattendance> employeeattendances = null;
 		try {
+			
+			
+			/* HttpSession session=request.getSession(false);  
+		        String user=(String)session.getAttribute("name"); 
+		        Employee employee = employeeServices.getEmployeeByUserId(user);
+		        System.out.println("user:"+user);*/
 			employeeAttendanceDtoList = employeeAttendanceServices.getEmployeeAttendanceList(employeeAttendanceDtoList);
+			//employeeattendances = employeeAttendanceServices.getEmployeeattendanceByUserid(employee.getId());
+	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return employeeAttendanceDtoList;
 	}
 

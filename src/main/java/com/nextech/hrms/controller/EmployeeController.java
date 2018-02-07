@@ -6,8 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.naming.AuthenticationException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
@@ -17,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -90,7 +93,7 @@ public class EmployeeController {
 	public @ResponseBody EmployeeDto getEmployee(@PathVariable("id") long id) {
 		EmployeeDto employeeDto = null;
 		try {
-
+			
 			employeeDto = employeeServices.getEmployeeDto(id);
 
 		} catch (Exception e) {
@@ -100,10 +103,18 @@ public class EmployeeController {
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET,headers = "Accept=application/json")
-	public @ResponseBody List<EmployeeDto> getEmployee() {
+	public  @ResponseBody List<EmployeeDto> getEmployee(HttpServletRequest request) {
 
 		List<EmployeeDto> employeeDtoList = null;
 		try {
+			Cookie[] cookie = request.getCookies();
+			for(Cookie obj : cookie){
+					System.out.println("userid:"+obj.getName() + " : " + obj.getValue());
+					HttpSession session=request.getSession(false);  
+			        String user=(String)session.getAttribute("name"); 
+			        System.out.println("user:"+user);
+			}
+			
 			employeeDtoList = employeeServices.getEmployeeAttendanceList(employeeDtoList);
 
 		} catch (Exception e) {
@@ -113,18 +124,23 @@ public class EmployeeController {
 		return employeeDtoList;
 	}
 	@RequestMapping(value = "/login", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,headers = "Accept=application/json")
-	public @ResponseBody Status getEmployee(@RequestBody Employee emplyee) throws Exception {
- 
+	public @ResponseBody Status getEmployee(@RequestBody Employee emplyee,HttpServletRequest request,HttpServletResponse response ) throws Exception {
+
 		Employee employeeDB = employeeServices.getEmployeeByUserId(emplyee.getUserid());
-		try {
-			
+		
+		try {		   
+	            /*Cookie cookie = new Cookie("url",emplyee.getUserid());
+	            cookie.setMaxAge(60*60); //1 hour
+	    		response.addCookie(cookie);	 
+	    		String userid = cookie.getValue();*/
+	    		 HttpSession session=request.getSession();  
+	    		session.setAttribute("name",emplyee.getUserid());
 			if(employeeDB ==null){
 				return  new Status(1,"Please Enetr Valid UserId");
 			}else if(!employeeDB.getPassword().equals(emplyee.getPassword())){
 				return new Status(1,"Please Enter Valid Password");
 			}
 			return new Status(0,"Login Successfully");
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -147,15 +163,20 @@ public class EmployeeController {
 				String token = TokenFactory.createAccessJwtToken(employeeDB);
 				authorization.setToken(token);
 				response.addHeader("auth_token", token);
-				return new Status(0,"Login Successfully",token);
 			}
+			
 			
 		}catch (Exception e) {
 			System.out.println("Inside Exception");
 			e.printStackTrace();
 			
 		}
-		return new Status(0, "Please enter correct credentials");
+		if(employeeDB ==null){
+			return  new Status(1,"Please Enetr Valid UserId");
+		}else if(!employeeDB.getPassword().equals(employee.getPassword())){
+			return new Status(1,"Please Enter Valid Password");
+		}
+		return new Status(0,"Login Successfully");
 
 	}
 	private boolean authenticate(Employee formUser, Employee dbUser) {
@@ -168,8 +189,8 @@ public class EmployeeController {
 			return false;
 		}
 
-	}
-*/
+	}*/
+
 
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE ,headers = "Accept=application/json")
 	public @ResponseBody Status deleteEmployee(@PathVariable("id") long id) {

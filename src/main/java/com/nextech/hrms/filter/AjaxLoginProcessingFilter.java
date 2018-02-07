@@ -53,7 +53,7 @@ public class AjaxLoginProcessingFilter extends HandlerInterceptorAdapter {
 					e.printStackTrace();
 				}
 			} else {
-				//request.setAttribute("auth_token", true);
+				request.setAttribute("auth_token", true);
 				request.setAttribute("current_token", true);
 				return true;
 			}

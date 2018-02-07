@@ -15,7 +15,6 @@
 			<param-name>javax.faces.VALIDATE_EMPTY_FIELDS</param-name>
 			<param-value>false</param-value>
 		</init-param>
-
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
