@@ -36,7 +36,7 @@ public class AjaxLoginProcessingFilter extends HandlerInterceptorAdapter {
 			if (!url.contains("login")) {
 				try {
 					if(((HttpServletRequest) request).getHeader("auth_token") != null){
-						String token = TokenFactory.decrypt(((HttpServletRequest) request).getHeader("auth_token"), TokenFactory.getSecretKeySpec());
+					String token = TokenFactory.decrypt(((HttpServletRequest) request).getHeader("auth_token"), TokenFactory.getSecretKeySpec());
 						String[] string = token.split("-");
 						Employee employee = employeeServices.getEmployeeByUserId(string[0]);
 //						Page page = pageservice.getPageByUrl(url);

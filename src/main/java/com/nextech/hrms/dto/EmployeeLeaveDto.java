@@ -11,6 +11,7 @@ public class EmployeeLeaveDto extends AbstractDTO{
 	private Date fromDate;
 	private Date toDate;
 	private int totalCount;
+	private String status;
 	private int pendingLeave;
 	private Leavetype leavetype;
 	
@@ -59,6 +60,12 @@ public class EmployeeLeaveDto extends AbstractDTO{
 	}
 	public void setLeavetype(Leavetype leavetype) {
 		this.leavetype = leavetype;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 

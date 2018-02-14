@@ -43,7 +43,12 @@ public class EmployeeAttendanceController extends HttpServlet {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2611998980344339996L;
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 
+	 */
+	
 
 	@Autowired
 	EmployeeAttendanceServices employeeAttendanceServices;
@@ -132,32 +137,28 @@ public class EmployeeAttendanceController extends HttpServlet {
 		return  employeeattendanceList; // TODO Use proper message to indicate correct reason user
 	}
 	@RequestMapping(value = "/list", method = RequestMethod.GET,headers = "Accept=application/json")
-	public @ResponseBody List<Employeeattendance> getEmployee(HttpServletRequest request) {
+	public @ResponseBody List<EmployeeAttendanceDto> getEmployee(HttpServletRequest request) {
 
 		List<EmployeeAttendanceDto> employeeAttendanceDtoList = null;
 		List<Employeeattendance> employeeattendances = null;
 		try {
 			
 			/*Cookie[] cookie = request.getCookies();
-			
 			for(Cookie obj : cookie){
 				
-					System.out.println("userid:"+obj.getName() + " : " + obj.getValue());
-					HttpSession session=request.getSession();  
-			        String user=(String)session.getAttribute("name"); 
-			        System.out.println("user:"+user);
+					System.out.println("userid:"+obj.getName() + " : " + obj.getValue());	
 			}*/
-			    HttpSession session=request.getSession();  
+			   /*HttpSession session=request.getSession();  
 		        String user=(String)session.getAttribute("name"); 
 		        Employee employee = employeeServices.getEmployeeByUserId(user);
-		        System.out.println("user:"+user);
-			//employeeAttendanceDtoList = employeeAttendanceServices.getEmployeeAttendanceList(employeeAttendanceDtoList);
-			employeeattendances = employeeAttendanceServices.getEmployeeattendanceByUserid(employee.getId());
+		        System.out.println("user:"+user);*/
+			employeeAttendanceDtoList = employeeAttendanceServices.getEmployeeAttendanceList(employeeAttendanceDtoList);
+			//employeeattendances = employeeAttendanceServices.getEmployeeattendanceByUserid(employee.getId());
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return employeeattendances;
+		return employeeAttendanceDtoList;
 	}
 
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE,headers = "Accept=application/json")

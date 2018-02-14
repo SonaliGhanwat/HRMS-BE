@@ -33,6 +33,8 @@ public class Employeeleave implements Serializable {
 	@Column(name="updated_date")
 	private Timestamp updatedDate;
 
+	private String status;
+	
 	//bi-directional many-to-one association to Employee
 	@ManyToOne
 	@JoinColumn(name="employeeid")
@@ -123,6 +125,14 @@ public class Employeeleave implements Serializable {
 
 	public void setLeavetype(Leavetype leavetype) {
 		this.leavetype = leavetype;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

@@ -111,6 +111,12 @@ public class EmployeeLeaveServicesImpl extends CRUDServiceImpl<Employeeleave> im
 		return employeeLeaveDao.getEmployeeLeaveByLeaveTypeid(leaveid);
 	}
 
+	@Override
+	public List<Employeeleave> getEmployeeLeaveByStatus(String status)
+			throws Exception {
+		return employeeLeaveDao.getEmployeeLeaveByStatus(status);
+	}
+
 
 
 	

@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.naming.AuthenticationException;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -39,7 +40,9 @@ import com.nextech.hrms.services.EmployeeServices;
 
 @Controller
 @RequestMapping("/employee")
-public class EmployeeController {
+public class EmployeeController extends HttpServlet {
+
+	private static final long serialVersionUID = 1L;
 
 	@Autowired
 	EmployeeServices employeeServices;
@@ -50,7 +53,7 @@ public class EmployeeController {
 	static final Logger logger = Logger.getLogger(EmployeeController.class);
 	@RequestMapping(value = "/create", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,headers = "Accept=application/json")
 	public @ResponseBody Status addEmployee(
-			@Valid @RequestBody EmployeeDto employeeDto/*BindingResult bindingResult*/)
+			@Valid @RequestBody EmployeeDto employeeDto,HttpServletRequest request,HttpServletResponse response)
 			throws Exception {
 		if (employeeServices.getEmployeeByUserId(employeeDto.getUserid()) == null) {
 
@@ -104,27 +107,25 @@ public class EmployeeController {
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET,headers = "Accept=application/json")
 	public  @ResponseBody List<EmployeeDto> getEmployee(HttpServletRequest request,HttpServletResponse response) {
-
 		List<EmployeeDto> employeeDtoList = null;
 	    Employee employees = null;
 		try {
-			//eraseCookie(request, response);
-			Cookie[] cookie = request.getCookies();
-			for(Cookie obj : cookie){
+			//eraseCookie(request, response); 			
+			/*Cookie[] cookie = request.getCookies();
+			for(int i=0;i<cookie.length;i++){
 				
-					System.out.println("userid:"+obj.getName() + " : " + obj.getValue());	
-			}
-			    HttpSession session=request.getSession(false);  
+					System.out.println("userid:"+cookie[i].getName() + " : " + cookie[i].getValue());	
+			}*/
+			  
+			    /*HttpSession session=request.getSession();  
 		        String user=(String)session.getAttribute("name"); 
 		        Employee employee = employeeServices.getEmployeeByUserId(user);
-		        System.out.println("user:"+user);
-		       
+		        System.out.println("user:"+user);		  */     
 		        employeeDtoList = employeeServices.getEmployeeAttendanceList(employeeDtoList);
-
+		       
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return employeeDtoList;
 	}
 	@RequestMapping(value = "/login", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,headers = "Accept=application/json")
@@ -133,20 +134,24 @@ public class EmployeeController {
 		Employee employeeDB = employeeServices.getEmployeeByUserId(emplyee.getUserid());
 		
 		try {		
-			   eraseCookie(request, response);   
-	            Cookie cookie = new Cookie("url",emplyee.getUserid());
-	            cookie.setMaxAge(60*60); //1 hour
+			  eraseCookie(request, response);   
+			
+	            Cookie cookie = new Cookie("cookie",emplyee.getUserid());
+	            //cookie.setMaxAge(60*60); //1 hour
 	    		response.addCookie(cookie);	 
-	    	     String userid = cookie.getValue();
-	    		request.setAttribute("url", true);
+	    		String userid = cookie.getValue();
+	    		request.setAttribute("cookie", true);
+	    		
 	    		/*Cookie[] cookies = request.getCookies();
 	    	    if (cookies != null)
 	    	        for (Cookie cookie1 : cookies) {
 	    	        	cookie1.setMaxAge(60*60);
-	    	            response.addCookie(cookie);
-	    	        }*/
-	    		HttpSession session=request.getSession();  
-	    		session.setAttribute("name",emplyee.getUserid());
+	    	        	String userid = cookie.getValue();
+	    	        	cookie1.setValue(userid);
+	    	            response.addCookie(cookie1);
+	    	        }
+	    	    HttpSession session=request.getSession();  
+	    		session.setAttribute("name",emplyee.getUserid());*/
 			if(employeeDB ==null){
 				return  new Status(1,"Please Enetr Valid UserId");
 			}else if(!employeeDB.getPassword().equals(emplyee.getPassword())){
@@ -223,7 +228,7 @@ public class EmployeeController {
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.PUT,headers = "Accept=application/json")
-	public @ResponseBody Status updateEntity(@Valid @RequestBody EmployeeDto employeeDto,BindingResult bindingResult) {
+	public @ResponseBody Status updateEntity(@Valid @RequestBody EmployeeDto employeeDto,BindingResult bindingResult,HttpServletRequest request,HttpServletResponse response,@CookieValue("cookie") String fooCookie) {
 		try {
 			employeeDto.setIsActive(true);
 			employeeServices.updateEntity(EmployeeFactory.setEmployeeUpdate(employeeDto));
@@ -235,15 +240,25 @@ public class EmployeeController {
 		return new Status(1,messageSource.getMessage(
 				MessageConstant.Employee_Update_Successfully,null,null));
 	}
-	private void eraseCookie(HttpServletRequest req, HttpServletResponse resp) {
-	    Cookie[] cookies = req.getCookies();
+	
+	/*public static Cookie addCookie(Employee emplyee,HttpServletRequest request,HttpServletResponse response) {
+		  Cookie cookie = new Cookie("cookie",emplyee.getUserid());
+          //cookie.setMaxAge(60*60); //1 hour
+  		response.addCookie(cookie);	 
+  		request.setAttribute("cookie", true);
+	    return cookie;
+	}*/
+	private  Cookie[] eraseCookie(HttpServletRequest request, HttpServletResponse response) {
+		
+	    Cookie[] cookies = request.getCookies();
 	    if (cookies != null)
-	        for (Cookie cookie : cookies) {
-	            cookie.setValue("");
-	            cookie.setPath("/");
-	            cookie.setMaxAge(0);
-	            resp.addCookie(cookie);
+	        for (Cookie cookie1 : cookies) {
+	            cookie1.setValue("");
+	            cookie1.setPath("/");
+	            cookie1.setMaxAge(0);
+	            response.addCookie(cookie1);
 	        }
-	    
+	    return cookies;
 	}
+	
 }

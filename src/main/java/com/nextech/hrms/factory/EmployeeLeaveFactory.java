@@ -27,6 +27,8 @@ public class EmployeeLeaveFactory {
 		employeeleave.setFromDate(employeeLeaveDto.getFromDate());
 		employeeleave.setToDate(employeeLeaveDto.getToDate());
 		employeeleave.setLeavetype(employeeLeaveDto.getLeavetype());
+		String status = "New Request For Leave";
+		employeeleave.setStatus(status);
 		employeeleave.setCreatedDate(employeeLeaveDto.getCreatedDate());
 		employeeleave.setUpdatedDate(employeeLeaveDto.getUpdatedDate());
 		employeeleave.setIsActive(true);
@@ -40,6 +42,7 @@ public class EmployeeLeaveFactory {
 		employeeLeaveDto.setSubject(employeeleave.getSubject());
 		employeeLeaveDto.setFromDate(employeeleave.getFromDate());
 		employeeLeaveDto.setToDate(employeeleave.getToDate());
+		employeeLeaveDto.setStatus(employeeleave.getStatus());
 		employeeLeaveDto.setLeavetype(employeeleave.getLeavetype());
 		employeeLeaveDto.setCreatedDate(employeeleave.getCreatedDate());
 		employeeLeaveDto.setUpdatedDate(employeeleave.getUpdatedDate());
@@ -54,6 +57,7 @@ public class EmployeeLeaveFactory {
 		employeeleave.setSubject(employeeLeaveDto.getSubject());
 		employeeleave.setFromDate(employeeLeaveDto.getFromDate());
 		employeeleave.setToDate(employeeLeaveDto.getToDate());
+		employeeleave.setStatus(employeeLeaveDto.getStatus());
 		employeeleave.setLeavetype(employeeLeaveDto.getLeavetype());
 		employeeleave.setCreatedDate(employeeLeaveDto.getCreatedDate());
 		employeeleave.setUpdatedDate(employeeLeaveDto.getUpdatedDate());

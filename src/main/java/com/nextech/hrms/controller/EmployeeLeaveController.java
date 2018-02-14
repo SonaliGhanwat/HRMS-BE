@@ -123,7 +123,7 @@ public class EmployeeLeaveController {
 				 
 				 SimpleDateFormat dayFormat = new SimpleDateFormat("MM");
 				  int month = Integer.valueOf(dayFormat.format(employeeDto.getDateOfJoining()));
-				  if(month<=3){
+				  if(month<=4){
 					 // int leaveAllocate = seekLeave/3;
 					  if(leavetype.getName().equals("seek leave")){
 					  if(totalSeekLeave<=seekLeave){
@@ -137,7 +137,20 @@ public class EmployeeLeaveController {
 						  return new Status(1,"your paid leave is over ");
 					  }
 					  }
-				  }if(month<=6){
+				  }if(month<=8){
+					  if(leavetype.getName().equals("seek leave")){
+						  if(totalSeekLeave<=seekLeave){
+						  }else{
+							  return new Status(1,"your seek leave is over");
+						  }
+					  }
+					  if(leavetype.getName().equals("paid leave")){
+						  if(totalPaidleave<=paidLeave){
+					  }else{
+						  return new Status(1,"your paid leave is over");
+					  }
+				  }
+				  }if(month<=12){
 					  if(leavetype.getName().equals("seek leave")){
 						  if(totalSeekLeave<=seekLeave){
 						  }else{
@@ -308,6 +321,19 @@ public class EmployeeLeaveController {
 		return  employeeleaveList;
 	}
 	
+	@RequestMapping(value = "/getEmployeeLeaveByStatus", method = RequestMethod.GET)
+	public @ResponseBody List<Employeeleave> getEmployeeLeaveByAppliedLeave( ) {
+		List<Employeeleave> employeeleaveList = null;
+		String status = "New Request For Leave";
+		try {
+			employeeleaveList = employeeLeaveServices.getEmployeeLeaveByStatus(status);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		}
+		return  employeeleaveList;
+	}
 }
 
 
