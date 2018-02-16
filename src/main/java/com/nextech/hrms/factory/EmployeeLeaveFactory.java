@@ -65,6 +65,22 @@ public class EmployeeLeaveFactory {
 		return employeeleave;
 	}
 	
+	public static Employeeleave updateEmployeeleaveStatus(Employeeleave employeeleave2)throws Exception{
+		Employeeleave employeeleave = new Employeeleave();
+		employeeleave.setId(employeeleave2.getId());
+		employeeleave.setEmployee(employeeleave2.getEmployee());
+		employeeleave.setSubject(employeeleave2.getSubject());
+		employeeleave.setFromDate(employeeleave2.getFromDate());
+		employeeleave.setToDate(employeeleave2.getToDate());
+		employeeleave.setLeavetype(employeeleave2.getLeavetype());
+		
+		employeeleave.setCreatedDate(employeeleave2.getCreatedDate());
+		employeeleave.setUpdatedDate(employeeleave2.getUpdatedDate());
+		employeeleave.setIsActive(true);
+		return employeeleave;
+		
+	}
+	
 	public static List<EmployeeLeaveDto> setEmployeeLeaveExcel(MultipartFile employeeLeaveExcelFile)throws Exception{
 		List<EmployeeLeaveDto> employeeLeaveDtos = new ArrayList<>();
 		Workbook workbook = new XSSFWorkbook(employeeLeaveExcelFile.getInputStream());

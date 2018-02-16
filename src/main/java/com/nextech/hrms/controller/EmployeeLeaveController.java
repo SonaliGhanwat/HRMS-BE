@@ -21,17 +21,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nextech.hrms.util.YearUtil;
-
 import com.nextech.hrms.dto.EmployeeAttendanceDto;
 import com.nextech.hrms.dto.EmployeeDto;
 import com.nextech.hrms.dto.EmployeeLeaveDto;
-
 import com.nextech.hrms.dto.EmployeeAttendanceDto;
 import com.nextech.hrms.dto.EmployeeLeaveDto;
-
+import com.nextech.hrms.dto.EmployeeLeaveStatusDto;
+import com.nextech.hrms.dto.HolidayDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeAttendanceFactory;
 import com.nextech.hrms.factory.EmployeeLeaveFactory;
+import com.nextech.hrms.factory.HolidayFactory;
 import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.EmployeeLeaveDTO;
 import com.nextech.hrms.model.Employeeleave;
@@ -334,6 +334,25 @@ public class EmployeeLeaveController {
 		}
 		return  employeeleaveList;
 	}
+	
+	@RequestMapping(value = "/statusUpdate", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody Status addEmployeeLeaveStatus(@RequestBody EmployeeLeaveStatusDto employeeLeaveStatusDto) {
+
+		
+		try {
+			for (EmployeeLeaveDto employeeLeaveDto : employeeLeaveStatusDto.getEmpLeaveDtos()) {
+				employeeLeaveDto.setId(employeeLeaveDto.getId());
+				Employeeleave employeeleave = employeeLeaveServices.getEntityById(Employeeleave.class, employeeLeaveDto.getId());
+				employeeleave.setStatus(employeeLeaveStatusDto.getStatus());
+				employeeLeaveServices.updateEntity(employeeleave);
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		 return new Status(1, "Status Update Successfully");
+	}
+	
 }
 
 

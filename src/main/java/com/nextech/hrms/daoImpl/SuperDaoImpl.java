@@ -52,13 +52,13 @@ public class SuperDaoImpl<T> implements SuperDao<T>{
 
 	@Override
 	public boolean delete(Class<T> z,long id) throws Exception {
+		
 		session = sessionFactory.openSession();
 		Object o = session.load(z, id);
-		tx = session.getTransaction();
 		session.beginTransaction();
 		session.delete(o);
-		tx.commit();
 		return true;
+		
 	}
 
 	@Override
