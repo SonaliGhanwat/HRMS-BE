@@ -112,5 +112,11 @@ public class EmployeeServicesImpl extends CRUDServiceImpl<Employee> implements E
 		EmployeeDto employeeDto = EmployeeFactory.setEmployeeList(employee);
 		employeeDao.update(employee);
 		return employeeDto;
+	}
+
+	@Override
+	public List<Employee> getEmployeeByReportTo(int id) throws Exception {
+		// TODO Auto-generated method stub
+		return employeeDao.getEmployeeByReportTo(id);
 	}	
 }

@@ -165,5 +165,16 @@ public class EmployeeLeaveDaoImpl extends SuperDaoImpl<Employeeleave> implements
 		  List<Employeeleave> employeeleaves =criteria.list();
 		  return employeeleaves;
 	}
+
+
+	@Override
+	public List<Employeeleave> getEmployeeLeaveByEmployeeId(long empId)
+			throws Exception {
+		session = sessionFactory.openSession();
+		 Criteria criteria = session.createCriteria(Employeeleave.class);
+		  criteria.add(Restrictions.eq("employee.id", empId));
+		  List<Employeeleave> employeeleaves =criteria.list();
+		  return employeeleaves;
+	}
 	
 }

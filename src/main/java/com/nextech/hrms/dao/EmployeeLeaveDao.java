@@ -23,4 +23,6 @@ public interface EmployeeLeaveDao extends SuperDao<Employeeleave>{
 	public List<Employeeleave> getEmployeeLeaveByLeaveTypeid(long leaveid) throws Exception;
 	
 	public List<Employeeleave> getEmployeeLeaveByStatus(String status)  throws Exception;
+	
+	public List<Employeeleave> getEmployeeLeaveByEmployeeId(long empId)  throws Exception;
 }

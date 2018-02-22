@@ -3,6 +3,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.nextech.hrms.dto.EmployeeLeaveDto;
+import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.EmployeeLeaveDTO;
 import com.nextech.hrms.model.Employeeleave;
 import com.nextech.hrms.model.Holiday;
@@ -33,6 +34,8 @@ public interface EmployeeLeaveServices extends CRUDService<Employeeleave>{
 	public List<Employeeleave> getEmployeeLeaveByLeaveTypeid(long leaveid) throws Exception;
 	
 	public List<Employeeleave> getEmployeeLeaveByStatus(String status)  throws Exception;
+	
+	public List<Employeeleave> getEmployeeLeaveByEmployeeId(long empId)  throws Exception;
 
 
 	

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -105,8 +106,10 @@ public class EmployeeController extends HttpServlet {
 		return  employeeDto;
 	}
 
-	@RequestMapping(value = "/list", method = RequestMethod.GET,headers = "Accept=application/json")
-	public  @ResponseBody List<EmployeeDto> getEmployee(HttpServletRequest request,HttpServletResponse response) {
+	
+	@RequestMapping(value = "/list/{userId}", method = RequestMethod.GET,headers = "Accept=application/json")
+	public  @ResponseBody List<EmployeeDto> getEmployee(@PathVariable("userId") String userId,HttpServletRequest request,HttpServletResponse response ) {
+				
 		List<EmployeeDto> employeeDtoList = null;
 	    Employee employees = null;
 		try {
@@ -115,13 +118,14 @@ public class EmployeeController extends HttpServlet {
 			for(int i=0;i<cookie.length;i++){
 				
 					System.out.println("userid:"+cookie[i].getName() + " : " + cookie[i].getValue());	
-			}*/
+			}
 			  
-			    /*HttpSession session=request.getSession();  
+			   HttpSession session=request.getSession();  
 		        String user=(String)session.getAttribute("name"); 
 		        Employee employee = employeeServices.getEmployeeByUserId(user);
-		        System.out.println("user:"+user);		  */     
+		        System.out.println("user:"+user);		 */
 		        employeeDtoList = employeeServices.getEmployeeAttendanceList(employeeDtoList);
+		       
 		       
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -137,21 +141,22 @@ public class EmployeeController extends HttpServlet {
 			  eraseCookie(request, response);   
 			
 	            Cookie cookie = new Cookie("cookie",emplyee.getUserid());
-	            //cookie.setMaxAge(60*60); //1 hour
+	            cookie.setMaxAge(60*60); //1 hour
 	    		response.addCookie(cookie);	 
 	    		String userid = cookie.getValue();
 	    		request.setAttribute("cookie", true);
-	    		
+	    		 response.setHeader("cookie", userid);
+	    		 response.addHeader("cookie", userid);
 	    		/*Cookie[] cookies = request.getCookies();
 	    	    if (cookies != null)
 	    	        for (Cookie cookie1 : cookies) {
 	    	        	cookie1.setMaxAge(60*60);
-	    	        	String userid = cookie.getValue();
+	    	        	//String userid = cookie.getValue();
 	    	        	cookie1.setValue(userid);
 	    	            response.addCookie(cookie1);
-	    	        }
+	    	        }*/
 	    	    HttpSession session=request.getSession();  
-	    		session.setAttribute("name",emplyee.getUserid());*/
+	    		session.setAttribute("name",emplyee.getUserid());
 			if(employeeDB ==null){
 				return  new Status(1,"Please Enetr Valid UserId");
 			}else if(!employeeDB.getPassword().equals(emplyee.getPassword())){
@@ -228,7 +233,7 @@ public class EmployeeController extends HttpServlet {
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.PUT,headers = "Accept=application/json")
-	public @ResponseBody Status updateEntity(@Valid @RequestBody EmployeeDto employeeDto,BindingResult bindingResult,HttpServletRequest request,HttpServletResponse response,@CookieValue("cookie") String fooCookie) {
+	public @ResponseBody Status updateEntity(@Valid @RequestBody EmployeeDto employeeDto,BindingResult bindingResult,HttpServletRequest request,HttpServletResponse response) {
 		try {
 			employeeDto.setIsActive(true);
 			employeeServices.updateEntity(EmployeeFactory.setEmployeeUpdate(employeeDto));

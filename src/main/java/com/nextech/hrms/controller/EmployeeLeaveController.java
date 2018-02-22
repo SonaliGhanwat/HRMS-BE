@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -164,7 +167,7 @@ public class EmployeeLeaveController {
 					  }
 				  }
 				  }
-				  employeeLeaveServices.addEntity(EmployeeLeaveFactory.setEmployeeleave(employeeLeaveDto));
+				employeeLeaveServices.addEntity(EmployeeLeaveFactory.setEmployeeleave(employeeLeaveDto));
 				employeeAttendanceServices.addEntity(EmployeeAttendanceFactory.setEmployeeAttendance(employeeAttendanceDto));
 		}else{
 			return new Status(1, "You have allready added leave");
@@ -313,33 +316,43 @@ public class EmployeeLeaveController {
 		try {
 			employeeleaveList = employeeLeaveServices
 					.getEmployeeLeaveByCurrentDate(DateUtil.convertToDate(date));
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			//return new Status(1,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS, null,null));
 		}
 		return  employeeleaveList;
 	}
-	
-	@RequestMapping(value = "/getEmployeeLeaveByStatus", method = RequestMethod.GET)
-	public @ResponseBody List<Employeeleave> getEmployeeLeaveByAppliedLeave( ) {
-		List<Employeeleave> employeeleaveList = null;
-		String status = "New Request For Leave";
+		
+	@RequestMapping(value = "/getEmployeeLeaveByStatus/{userId}", method = RequestMethod.GET)
+	public @ResponseBody List<Employeeleave> getEmployeeLeaveByAppliedLeave(@PathVariable("userId") String userId,HttpServletRequest request ) {
+		List<Employeeleave> employeeleaveList = new ArrayList<Employeeleave>();
+		//String status = "New Request For Leave";
+		List<Employeeleave> employeeleaves =null;
 		try {
-			employeeleaveList = employeeLeaveServices.getEmployeeLeaveByStatus(status);
-
+			/*employeeleaveList = employeeLeaveServices.getEmployeeLeaveByStatus(status);
+			HttpSession session=request.getSession();  
+	        String user=(String)session.getAttribute("name"); 
+	        user="vishal123";*/
+	        Employee employee = employeeServices.getEmployeeByUserId(userId);
+	        List<Employee> employees = employeeServices.getEmployeeByReportTo((int) employee.getId());
+	        for (Employee employee2 : employees) {
+	        	 employeeleaves =  employeeLeaveServices.getEmployeeLeaveByEmployeeId(employee2.getId());
+	        	for (Employeeleave employeeleave2 : employeeleaves) {
+	        		if(employeeleave2.getStatus().equals("New Request For Leave")){
+		        		employeeleaveList.add(employeeleave2);
+		        	}
+				}
+	        }       
 		} catch (Exception e) {
-			e.printStackTrace();
-			
+			e.printStackTrace();			
 		}
 		return  employeeleaveList;
 	}
 	
 	@RequestMapping(value = "/statusUpdate", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody Status addEmployeeLeaveStatus(@RequestBody EmployeeLeaveStatusDto employeeLeaveStatusDto) {
-
-		
+	public @ResponseBody Status addEmployeeLeaveStatus(@RequestBody  EmployeeLeaveStatusDto employeeLeaveStatusDto, HttpServletRequest request ) {
 		try {
+		
 			for (EmployeeLeaveDto employeeLeaveDto : employeeLeaveStatusDto.getEmpLeaveDtos()) {
 				employeeLeaveDto.setId(employeeLeaveDto.getId());
 				Employeeleave employeeleave = employeeLeaveServices.getEntityById(Employeeleave.class, employeeLeaveDto.getId());
