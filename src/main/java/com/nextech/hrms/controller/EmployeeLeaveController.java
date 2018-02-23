@@ -222,7 +222,7 @@ public class EmployeeLeaveController {
 		return employeeLeaveDtolist;
 	}
 
-	@RequestMapping(value = "/getLeaveByUserid/{EmpId}", method = RequestMethod.GET,headers = "Accept=application/json")
+	/*@RequestMapping(value = "/getLeaveByUserid/{EmpId}", method = RequestMethod.GET,headers = "Accept=application/json")
 	public @ResponseBody List<EmployeeLeaveDto> getEmployeeLeaveByUserId( @PathVariable("EmpId") long empId) {
 		 List<EmployeeLeaveDto> employeeLeaveDTOs = new ArrayList<EmployeeLeaveDto>();
 		 List<Employeeleave> employeeleaves =  null;
@@ -230,7 +230,7 @@ public class EmployeeLeaveController {
 			employeeleaves = employeeLeaveServices.getEmployeeLeaveByUserid(empId);
 			int totalCount=0;
 			int totalLeave=12;
-			/*int count = 0;*/
+			int count = 0;
 			for (Employeeleave employeeleave : employeeleaves) {
 				
 				EmployeeLeaveDto employeeLeaveDTO= new EmployeeLeaveDto();
@@ -257,7 +257,7 @@ public class EmployeeLeaveController {
 		return  employeeLeaveDTOs; 
 	}
 
-
+*/
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody
 	Status deleteEmployee(@PathVariable("id") long id) {
@@ -323,32 +323,48 @@ public class EmployeeLeaveController {
 		return  employeeleaveList;
 	}
 		
+
 	@RequestMapping(value = "/getEmployeeLeaveByStatus/{userId}", method = RequestMethod.GET)
-	public @ResponseBody List<Employeeleave> getEmployeeLeaveByAppliedLeave(@PathVariable("userId") String userId,HttpServletRequest request ) {
-		List<Employeeleave> employeeleaveList = new ArrayList<Employeeleave>();
+	public @ResponseBody Status getEmployeeLeaveByAppliedLeave(@PathVariable("userId") String userId,HttpServletRequest request ) {
+		List<EmployeeLeaveDto> employeeleaveList = new ArrayList<EmployeeLeaveDto>();
 		//String status = "New Request For Leave";
 		List<Employeeleave> employeeleaves =null;
 		try {
-			/*employeeleaveList = employeeLeaveServices.getEmployeeLeaveByStatus(status);
-			HttpSession session=request.getSession();  
-	        String user=(String)session.getAttribute("name"); 
-	        user="vishal123";*/
+		
+			//int totalLeave=12;
 	        Employee employee = employeeServices.getEmployeeByUserId(userId);
 	        List<Employee> employees = employeeServices.getEmployeeByReportTo((int) employee.getId());
 	        for (Employee employee2 : employees) {
 	        	 employeeleaves =  employeeLeaveServices.getEmployeeLeaveByEmployeeId(employee2.getId());
 	        	for (Employeeleave employeeleave2 : employeeleaves) {
+	        		int totalCount=0;
 	        		if(employeeleave2.getStatus().equals("New Request For Leave")){
-		        		employeeleaveList.add(employeeleave2);
+	        			EmployeeLeaveDto employeeLeaveDTO= new EmployeeLeaveDto();
+	   				 SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+	   				  int day = Integer.valueOf(dayFormat.format(employeeleave2.getFromDate()));
+	   				  SimpleDateFormat dayFormat1 = new SimpleDateFormat("dd");
+	   				  int day1 = Integer.valueOf(dayFormat1.format(employeeleave2.getToDate()));
+	   				 totalCount=totalCount+day1-day;
+	   				// totalLeave = totalLeave-totalCount;
+	   				 employeeLeaveDTO.setId(employeeleave2.getId());
+	   				 employeeLeaveDTO.setToDate(employeeleave2.getToDate());
+	   				 employeeLeaveDTO.setFromDate(employeeleave2.getFromDate());
+	   				 employeeLeaveDTO.setSubject(employeeleave2.getSubject());
+	   				 employeeLeaveDTO.setEmployee(employeeleave2.getEmployee());
+	   				 employeeLeaveDTO.setTotalCount(totalCount);
+	   				// employeeLeaveDTO.setPendingLeave(totalLeave);
+	   				employeeleaveList.add(employeeLeaveDTO);
+		        		//employeeleaveList.add(employeeleave2);
 		        	}
 				}
 	        }       
+	      
 		} catch (Exception e) {
-			e.printStackTrace();			
+			e.printStackTrace();	
+			  return new Status(1,"Employee does not exits") ;
 		}
-		return  employeeleaveList;
+		return new Status(0,"",employeeleaveList) ;
 	}
-	
 	@RequestMapping(value = "/statusUpdate", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody Status addEmployeeLeaveStatus(@RequestBody  EmployeeLeaveStatusDto employeeLeaveStatusDto, HttpServletRequest request ) {
 		try {

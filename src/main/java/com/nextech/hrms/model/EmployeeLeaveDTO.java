@@ -1,5 +1,8 @@
 package com.nextech.hrms.model;
-public class EmployeeLeaveDTO {
+
+import com.nextech.hrms.dto.AbstractDTO;
+
+public class EmployeeLeaveDTO  {
 	private int totalCount;
 	
 	private int pendingLeave;

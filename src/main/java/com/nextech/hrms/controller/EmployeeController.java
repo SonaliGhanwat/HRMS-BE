@@ -154,9 +154,9 @@ public class EmployeeController extends HttpServlet {
 	    	        	//String userid = cookie.getValue();
 	    	        	cookie1.setValue(userid);
 	    	            response.addCookie(cookie1);
-	    	        }*/
+	    	        }
 	    	    HttpSession session=request.getSession();  
-	    		session.setAttribute("name",emplyee.getUserid());
+	    		session.setAttribute("name",emplyee.getUserid());*/
 			if(employeeDB ==null){
 				return  new Status(1,"Please Enetr Valid UserId");
 			}else if(!employeeDB.getPassword().equals(emplyee.getPassword())){
