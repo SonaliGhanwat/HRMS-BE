@@ -6,6 +6,8 @@ import javax.persistence.*;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import com.nextech.hrms.model.Notificationuserassociation;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -107,6 +109,10 @@ public class Employee implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="designationId")
 	private Designation designation;
+	
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL)
+	private List<Notificationuserassociation> notificationuserassociations;
 	
 	private int reportTo;
 
@@ -309,6 +315,28 @@ public class Employee implements Serializable {
 		employeeleave.setEmployee(null);
 
 		return employeeleave;
+	}
+	
+	public List<Notificationuserassociation> getNotificationuserassociations() {
+		return this.notificationuserassociations;
+	}
+
+	public void setNotificationuserassociations(List<Notificationuserassociation> notificationuserassociations) {
+		this.notificationuserassociations = notificationuserassociations;
+	}
+
+	public Notificationuserassociation addNotificationuserassociation(Notificationuserassociation notificationuserassociation) {
+		getNotificationuserassociations().add(notificationuserassociation);
+		notificationuserassociation.setEmployee(this);
+
+		return notificationuserassociation;
+	}
+
+	public Notificationuserassociation removeNotificationuserassociation(Notificationuserassociation notificationuserassociation) {
+		getNotificationuserassociations().remove(notificationuserassociation);
+		notificationuserassociation.setEmployee(null);
+
+		return notificationuserassociation;
 	}
 	/*public long getCreatedBy() {
 		return createdBy;

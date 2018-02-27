@@ -7,6 +7,9 @@ public class AbstractDTO {
 	private Timestamp createdDate;
 	private Timestamp updatedDate;
 	private boolean isIsActive;
+	private long createdBy;
+	private long updatedBy;
+	
 	public long getId() {
 		return id;
 	}
@@ -31,4 +34,18 @@ public class AbstractDTO {
 	public void setIsActive(boolean isIsActive) {
 		this.isIsActive = isIsActive;
 	}
+	public long getCreatedBy() {
+		return createdBy;
+	}
+	public void setCreatedBy(long createdBy) {
+		this.createdBy = createdBy;
+	}
+	public long getUpdatedBy() {
+		return updatedBy;
+	}
+	public void setUpdatedBy(long updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+	
+	
 }

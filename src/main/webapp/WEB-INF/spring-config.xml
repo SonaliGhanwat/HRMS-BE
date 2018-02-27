@@ -31,6 +31,8 @@
 				<value>com.nextech.hrms.model.Designation</value>
 				<value>com.nextech.hrms.model.Employeetype</value>
 				<value>com.nextech.hrms.model.Leavetype</value> 
+				<value>com.nextech.hrms.model.Notification</value>
+				<value>com.nextech.hrms.model.Notificationuserassociation</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
@@ -57,6 +59,7 @@
 		<property name="basenames">
 			<list>
 				<value>classpath:message</value>
+				
 			</list>
 		</property>
 		<property name="defaultEncoding" value="UTF-8" />

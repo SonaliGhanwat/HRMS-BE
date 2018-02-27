@@ -1,0 +1,36 @@
+<html>
+
+<head>
+<style>
+table {
+   font-family: arial, sans-serif;
+
+   width: 100%;
+}
+
+td, th {
+   border: 1px solid #dddddd;
+   text-align: left;
+   padding-left: 10px;
+}
+th
+{
+background: rgb(120, 129, 178);
+   color: white;
+}
+</style>
+</head>
+<body>
+    <p style="font-weight: bold;">Dear ${firstName}</p>
+    <p>GREETING FROM E K ELECTRONICS PVT LTD!</p>
+     <div>Email Id:${email}</div>
+      <div>Contact Number:${contactNumber}</div>
+     <p>In case of any further assistance or clarification on this issue, please reply back to this email.</p>
+    <p>Assuring you of our best services always,</p>
+    <div>Yours sincerely</div>
+    <div>${signature}</div>
+    <div>${location}</div>
+
+</body>
+
+</html>
