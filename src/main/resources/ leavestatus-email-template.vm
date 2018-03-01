@@ -21,10 +21,10 @@ background: rgb(120, 129, 178);
 </style>
 </head>
 <body>
-      <p style="font-weight: bold;">Subject: Leave of Absence</p>
+      <p style="font-weight: bold;">Subject: Leave Request ${status}</p>
     <p style="font-weight: bold;">Dear ${firstName} ${lastName},</p>
-    <p> I am <b>${firstName1} ${lastName1}</b>,I would like to request a formal leave of absence from my job. I plan to be away from ${fromDate}-${toDate}.</p>
-   <p> If approved, I would be glad to help with a plan to cover my workload in my absence. I would also be available to answer questions and provide assistance while I am away.</p>
+    <p>Your request for a leave of absence from ${fromDate} until ${toDate} has been ${status}.</p>
+   
     <div>Yours sincerely</div>
     
      <div style="font-weight: bold;">${firstName1} ${lastName1}</div><br>

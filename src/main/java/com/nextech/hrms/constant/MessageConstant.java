@@ -35,5 +35,6 @@ public class MessageConstant {
 	public static String EMAIL_ALREADY_EXIT="emailidexit";
 	public static String Phone_Number_Allready_Exit="phoneNumberExit";
 	public static String SESSIONTIMEOUT="sessionTimeout";
+	public static String USER_ADD_NOTIFICATION="useraddNotification";
 
 }

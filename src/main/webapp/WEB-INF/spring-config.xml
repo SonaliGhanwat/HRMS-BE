@@ -59,6 +59,7 @@
 		<property name="basenames">
 			<list>
 				<value>classpath:message</value>
+				<value>classpath:email</value>
 				
 			</list>
 		</property>

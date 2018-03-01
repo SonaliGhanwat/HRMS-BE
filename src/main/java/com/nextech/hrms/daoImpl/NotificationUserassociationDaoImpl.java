@@ -27,7 +27,7 @@ public class NotificationUserassociationDaoImpl extends
 			long employeeId) throws Exception {
 		
 		session = sessionFactory.openSession();
-		 Criteria criteria = session.createCriteria(Employeeattendance.class);
+		 Criteria criteria = session.createCriteria(Notificationuserassociation.class);
 		  criteria.add(Restrictions.eq("employee",employeeId));
 		  List<Notificationuserassociation> notificationuserassociations =criteria.list();
 		  return notificationuserassociations;
@@ -37,8 +37,8 @@ public class NotificationUserassociationDaoImpl extends
 	public List<Notificationuserassociation> getNotificationuserassociationBynotificationId(
 			long notificationId) throws Exception {
 		session = sessionFactory.openSession();
-		 Criteria criteria = session.createCriteria(Employeeattendance.class);
-		  criteria.add(Restrictions.eq("notification",notificationId));
+		 Criteria criteria = session.createCriteria(Notificationuserassociation.class);
+		  criteria.add(Restrictions.eq("notification.id",notificationId));
 		  List<Notificationuserassociation> notificationuserassociations =criteria.list();
 		  return notificationuserassociations;
 	}

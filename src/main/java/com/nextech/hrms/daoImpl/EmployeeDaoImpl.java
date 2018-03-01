@@ -2,6 +2,13 @@ package com.nextech.hrms.daoImpl;
 
 import java.util.List;
 
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -72,6 +79,14 @@ public class EmployeeDaoImpl extends SuperDaoImpl<Employee> implements EmployeeD
 		session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(Employee.class);
 		criteria.add(Restrictions.eq("reportTo", id));
+		return criteria.list().size() > 0 ? (List<Employee>)criteria.list() : null;
+	}
+
+	@Override
+	public List<Employee> getMultipleUsersById(List<Long> ids) throws Exception {
+		session = sessionFactory.openSession();
+		Criteria criteria = session.createCriteria(Employee.class);
+		criteria.add(Restrictions.in("id", ids));
 		return criteria.list().size() > 0 ? (List<Employee>)criteria.list() : null;
 	}
 	

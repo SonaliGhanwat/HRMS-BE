@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nextech.hrms.dao.NotificationUserassociationDao;
+import com.nextech.hrms.factory.LeaveTypeFactory;
 import com.nextech.hrms.factory.NotificationUserAssRequestResponseFactory;
+import com.nextech.hrms.model.Leavetype;
 import com.nextech.hrms.model.Notificationuserassociation;
+import com.nextech.hrms.dto.LeaveTypeDto;
 import com.nextech.hrms.dto.NotificationUserAssociatinsDTO;
 import com.nextech.hrms.services.NotificationUserAssociationService;
 @Service
@@ -65,11 +68,8 @@ public class NotificationUserAssociationServiceImpl extends CRUDServiceImpl<Noti
 	public NotificationUserAssociatinsDTO getNotificationUserById(long id)
 			throws Exception {
 		
-		Notificationuserassociation notificationuserassociation = notificationUserassociationDao.getById(Notificationuserassociation.class, id);
-		if (notificationuserassociation==null) {
-			return null;
-		}
-		NotificationUserAssociatinsDTO notificationUserAssociatinsDTO = NotificationUserAssRequestResponseFactory.setNotifiactionDTO(notificationuserassociation);
+		Notificationuserassociation  notificationuserassociation =  notificationUserassociationDao.getById(Notificationuserassociation.class, id);
+		NotificationUserAssociatinsDTO notificationUserAssociatinsDTO =NotificationUserAssRequestResponseFactory.setNotifiactionDTO(notificationuserassociation);
 		return notificationUserAssociatinsDTO;
 	}
 

@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -23,18 +24,29 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.nextech.hrms.util.YearUtil;
-import com.nextech.hrms.dto.EmployeeAttendanceDto;
+
+
+
+
+
+
+
+import com.nextech.hrms.services.MailService;
+import com.nextech.hrms.dto.Mail;
 import com.nextech.hrms.dto.EmployeeDto;
-import com.nextech.hrms.dto.EmployeeLeaveDto;
+import com.nextech.hrms.services.NotificationService;
+import com.nextech.hrms.services.NotificationUserAssociationService;
+import com.nextech.hrms.util.YearUtil;
 import com.nextech.hrms.dto.EmployeeAttendanceDto;
 import com.nextech.hrms.dto.EmployeeLeaveDto;
 import com.nextech.hrms.dto.EmployeeLeaveStatusDto;
 import com.nextech.hrms.dto.HolidayDto;
+import com.nextech.hrms.dto.NotificationDTO;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeAttendanceFactory;
 import com.nextech.hrms.factory.EmployeeLeaveFactory;
 import com.nextech.hrms.factory.HolidayFactory;
+import com.nextech.hrms.factory.MailResponseRequestFactory;
 import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.EmployeeLeaveDTO;
 import com.nextech.hrms.model.Employeeleave;
@@ -71,7 +83,16 @@ public class EmployeeLeaveController {
 	private MessageSource messageSource;
 	
 	@Autowired
+	NotificationUserAssociationService notificationUserAssService;
+
+	@Autowired
+	NotificationService notificationService;
+	
+	@Autowired
 	LeaveTypeServices leaveTypeServices;
+	
+	@Autowired
+	MailService mailService;
 
 	static final Logger logger = Logger.getLogger(EmployeeLeaveController.class);
 	
@@ -169,7 +190,11 @@ public class EmployeeLeaveController {
 				  }
 				employeeLeaveServices.addEntity(EmployeeLeaveFactory.setEmployeeleave(employeeLeaveDto));
 				employeeAttendanceServices.addEntity(EmployeeAttendanceFactory.setEmployeeAttendance(employeeAttendanceDto));
-		}else{
+				
+				NotificationDTO notificationDTO = notificationService.getNotificationByCode("Apply Leave");
+				emailNotificationUser(employeeLeaveDto, notificationDTO);
+				
+			}else{
 			return new Status(1, "You have allready added leave");
 		}
 			return new Status(0, "Employee Leave added Successfully !");
@@ -179,8 +204,19 @@ public class EmployeeLeaveController {
 			return new Status(0, e.toString());
 		}
 	}
-
-
+	private void emailNotificationUser(EmployeeLeaveDto employeeLeaveDto,
+			NotificationDTO notificationDTO) throws Exception {
+		Employee employee = employeeServices.getEntityById(Employee.class, employeeLeaveDto.getEmployee().getId());
+		Employee employee2 = employeeServices.getEntityById(Employee.class, employee.getReportTo());
+		Mail mail = mailService.setMailCCBCCAndTO(notificationDTO);
+		String mailSubject  = mailService.getSubject(notificationDTO);
+		//String userEmailTo = mail.getMailTo() + "," + employee2.getEmailid();
+		mail.setMailSubject(mailSubject);
+		mail.setMailTo(employee2.getEmailid());
+		mail.setModel(MailResponseRequestFactory.setMailDetailsUser(employee,employeeLeaveDto, employee2));
+		//mailService.sendEmailWithoutPdF(mail, notificationDTO);
+		
+	}
 	@Transactional @RequestMapping(value = "/createExcel", headers = "Content-Type=*/*",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody Status addEmployeeLeave(@RequestParam("employeeLeaveExcelFile") MultipartFile employeeLeaveExcelFile) {
 		try {
@@ -375,12 +411,33 @@ public class EmployeeLeaveController {
 				employeeleave.setStatus(employeeLeaveStatusDto.getStatus());
 				employeeLeaveServices.updateEntity(employeeleave);
 				
+				NotificationDTO notificationDTO = notificationService.getNotificationByCode("Approval Response");
+				emailLeaveStatusApprovalResponse(employeeLeaveStatusDto, notificationDTO,employeeLeaveDto);
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		 return new Status(1, "Status Update Successfully");
 	}
+	private void emailLeaveStatusApprovalResponse(EmployeeLeaveStatusDto employeeLeaveStatusDto,
+			NotificationDTO notificationDTO,EmployeeLeaveDto employeeLeaveDto) throws Exception {
+		Employeeleave employeeleave = employeeLeaveServices.getEntityById(Employeeleave.class, employeeLeaveDto.getId());
+		employeeLeaveDto.setFromDate(employeeleave.getFromDate());
+		employeeLeaveDto.setToDate(employeeleave.getToDate());
+		employeeLeaveDto.setStatus(employeeLeaveStatusDto.getStatus());
+		Employee employee = employeeServices.getEntityById(Employee.class, employeeleave.getEmployee().getId());
+		Employee employee2 = employeeServices.getEntityById(Employee.class, employee.getReportTo());
+		Mail mail = mailService.setMailCCBCCAndTO(notificationDTO);
+		String mailSubject  = mailService.getSubject(notificationDTO);
+		//String userEmailTo = mail.getMailTo() + "," + employee2.getEmailid();
+		mail.setMailSubject(mailSubject);
+		mail.setMailTo(employee.getEmailid());
+		mail.setModel(MailResponseRequestFactory.setMailDetailsUser(employee,employeeLeaveDto, employee2));
+		mailService.sendEmailWithoutPdF(mail, notificationDTO);
+		
+	}
+	
 	
 }
 

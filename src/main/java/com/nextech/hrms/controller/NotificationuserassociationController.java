@@ -20,8 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.nextech.hrms.factory.NotificationUserAssRequestResponseFactory;
-import com.nextech.hrms.dto.NotificationUserAssociatinsDTO;
+import com.nextech.hrms.model.Notificationuserassociation;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.NotificationUserAssociationService;
 
@@ -36,15 +35,11 @@ public class NotificationuserassociationController {
 	static Logger logger = Logger.getLogger(NotificationuserassociationController.class);
 	
 	@Transactional @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
-	public @ResponseBody Status addNotificationUserAsso(@Valid @RequestBody NotificationUserAssociatinsDTO notificationUserAssociatinsDTO,
+	public @ResponseBody Status addNotificationUserAsso(@Valid @RequestBody Notificationuserassociation notificationuserassociation,
 			BindingResult bindingResult,HttpServletRequest request,HttpServletResponse response) {
 		try {
-			if (bindingResult.hasErrors()) {
-				return new Status(0, bindingResult.getFieldError()
-						.getDefaultMessage());
-			}
-			notificationUserAssociatinsDTO.setCreatedBy(Long.parseLong(request.getAttribute("current_user").toString()));
-			notificationservice.addEntity(NotificationUserAssRequestResponseFactory.setNotificationUserAss(notificationUserAssociatinsDTO));
+			notificationuserassociation.setIsactive(true);
+			notificationservice.addEntity(notificationuserassociation);
 			return new Status(1, "Notification added Successfully !");
 		} catch (ConstraintViolationException cve) {
 			logger.error(cve);
@@ -62,50 +57,48 @@ public class NotificationuserassociationController {
 	}
 
 	@Transactional @RequestMapping(value = "/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
-	public @ResponseBody Status getNotificationUserAsso(@PathVariable("id") long id) {
-		NotificationUserAssociatinsDTO notification = null;
+	public @ResponseBody Notificationuserassociation getNotificationUserAsso(@PathVariable("id") long id) {
+		Notificationuserassociation notification = null;
 		try {
-			notification = notificationservice.getNotificationUserById(id);
-			if(notification==null){
-				logger.error("There  is no any notification user association");
+			notification = notificationservice.getEntityById(Notificationuserassociation.class, id);
+			/*if(notification==null){
 				return new Status(1,"There is no any notification user assocition");
-			}
+			}*/
 		} catch (Exception e) {
 			logger.error(e);
 			e.printStackTrace();
 		}
-		return new Status(1,"",notification);
+		return notification;
 	}
 
 	@Transactional @RequestMapping(value = "/update", method = RequestMethod.PUT, headers = "Accept=application/json")
-	public @ResponseBody Status updateNotificationUserAsso(@RequestBody NotificationUserAssociatinsDTO notificationUserAssociatinsDTO,
+	public @ResponseBody Status updateNotificationUserAsso(@RequestBody Notificationuserassociation notificationuserassociation,
 			HttpServletRequest request, HttpServletResponse response) {
 		try {
-			notificationUserAssociatinsDTO.setUpdatedBy(Long.parseLong(request.getAttribute("current_user").toString()));
-			notificationservice.updateEntity(NotificationUserAssRequestResponseFactory.setNotificationUserAss(notificationUserAssociatinsDTO));
+			
+			notificationservice.updateEntity(notificationuserassociation);
 			return new Status(1, "Notification update Successfully !");
 		} catch (Exception e) {
-			logger.error(e);
+			
 			return new Status(0, e.toString());
 		}
 	}
 
 	@Transactional @RequestMapping(value = "/list", method = RequestMethod.GET, headers = "Accept=application/json")
-	public @ResponseBody Status getNotificationUserAssoList() {
+	public @ResponseBody List<Notificationuserassociation> getNotificationUserAssoList() {
 
-		List<NotificationUserAssociatinsDTO> notificationList = null;
+		List<Notificationuserassociation> notificationList = null;
 		try {
-			notificationList = notificationservice.getNotificationUserAssoList();
-			if(notificationList==null){
+			notificationList = notificationservice.getEntityList(Notificationuserassociation.class);
+			/*if(notificationList==null){
 				
 				return new Status(1,"There is no any user notification list");
-			}
+			}*/
 
 		} catch (Exception e) {
 			logger.error(e);
 		}
-
-		return new Status(1,"",notificationList);
+		return notificationList;
 	}
 
 	@Transactional @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
@@ -115,7 +108,7 @@ public class NotificationuserassociationController {
 			notificationservice.deleteNotificationUserAsso(id);
 			return new Status(1, "Notification deleted Successfully !");
 		} catch (Exception e) {
-			logger.error(e);
+			
 			return new Status(0, e.toString());
 		}
 
