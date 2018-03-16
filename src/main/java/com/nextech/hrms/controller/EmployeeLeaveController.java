@@ -213,8 +213,8 @@ public class EmployeeLeaveController {
 		//String userEmailTo = mail.getMailTo() + "," + employee2.getEmailid();
 		mail.setMailSubject(mailSubject);
 		mail.setMailTo(employee2.getEmailid());
-		mail.setModel(MailResponseRequestFactory.setMailDetailsUser(employee,employeeLeaveDto, employee2));
-		//mailService.sendEmailWithoutPdF(mail, notificationDTO);
+		mail.setModel(MailResponseRequestFactory.setMailDetailsUser(employee,employeeLeaveDto, employee2,notificationDTO));
+		mailService.sendEmailWithoutPdF(mail, notificationDTO);
 		
 	}
 	@Transactional @RequestMapping(value = "/createExcel", headers = "Content-Type=*/*",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -312,11 +312,9 @@ public class EmployeeLeaveController {
 	public @ResponseBody Status updateEntity(@RequestBody EmployeeLeaveDto employeeLeaveDto) {
 
 		try {
-			employeeLeaveServices.updateEntity(EmployeeLeaveFactory.setEmployeeLeaveUpdate(employeeLeaveDto));
-			
+			employeeLeaveServices.updateEntity(EmployeeLeaveFactory.setEmployeeLeaveUpdate(employeeLeaveDto));			
 		} catch (Exception e) {
-			e.printStackTrace();
-			
+			e.printStackTrace();			
 		}
 		return new Status(1, messageSource.getMessage(MessageConstant.EmployeeLeave_Update_Successfully, null,null));
 	}
@@ -337,10 +335,8 @@ public class EmployeeLeaveController {
 	@RequestMapping(value = "/leaveMonth/{id}/{yearMonth}", method = RequestMethod.GET)
 	public @ResponseBody List<Employeeleave> getMonthlyEmployeeLeaveByEmployeeId(@PathVariable("id") long empId,@PathVariable("yearMonth") String date) {
 		List<Employeeleave> employeeleaves = null;
-		try {
-			
-			 employeeleaves = employeeLeaveServices.getMonthlyEmployeeLeaveByEmployeeId(empId,YearUtil.convertToDate(date));
-		
+		try {			
+			 employeeleaves = employeeLeaveServices.getMonthlyEmployeeLeaveByEmployeeId(empId,YearUtil.convertToDate(date));		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -433,7 +429,7 @@ public class EmployeeLeaveController {
 		//String userEmailTo = mail.getMailTo() + "," + employee2.getEmailid();
 		mail.setMailSubject(mailSubject);
 		mail.setMailTo(employee.getEmailid());
-		mail.setModel(MailResponseRequestFactory.setMailDetailsUser(employee,employeeLeaveDto, employee2));
+		mail.setModel(MailResponseRequestFactory.setMailDetailsUser(employee,employeeLeaveDto, employee2,notificationDTO));
 		mailService.sendEmailWithoutPdF(mail, notificationDTO);
 		
 	}

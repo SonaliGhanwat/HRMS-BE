@@ -246,6 +246,26 @@ public class EmployeeController extends HttpServlet {
 				MessageConstant.Employee_Update_Successfully,null,null));
 	}
 	
+	@RequestMapping(value = "/resetpassword", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,headers = "Accept=application/json")
+	public @ResponseBody Status resetPassword(@RequestBody Employee employee,HttpServletRequest request,HttpServletResponse response ) throws Exception {
+
+		Employee employeeDB = employeeServices.getEmployeeByUserId(employee.getUserid());
+		
+		try {		
+			if(employeeDB ==null){
+				return  new Status(1,"Please Enetr Valid UserId");
+			}
+			   
+			   employeeDB.setPassword(employee.getPassword());
+               employeeServices.updateEntity(employeeDB);			
+			return new Status(0,"Your Password has been reset Successfully");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
 	/*public static Cookie addCookie(Employee emplyee,HttpServletRequest request,HttpServletResponse response) {
 		  Cookie cookie = new Cookie("cookie",emplyee.getUserid());
           //cookie.setMaxAge(60*60); //1 hour
