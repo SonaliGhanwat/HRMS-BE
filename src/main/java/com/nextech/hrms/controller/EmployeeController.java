@@ -158,9 +158,9 @@ public class EmployeeController extends HttpServlet {
 	    	    HttpSession session=request.getSession();  
 	    		session.setAttribute("name",emplyee.getUserid());*/
 			if(employeeDB ==null){
-				return  new Status(1,"Please Enetr Valid UserId");
+				return  new Status(1,"Please Enter Valid UserId");
 			}else if(!employeeDB.getPassword().equals(emplyee.getPassword())){
-				return new Status(1,"Please Enter Valid Password");
+				return new Status(2,"Please Enter Valid Password");
 			}
 			return new Status(0,"Login Successfully",cookie);
 		} catch (Exception e) {
