@@ -29,7 +29,7 @@ public class EmployeeDaoImpl extends SuperDaoImpl<Employee> implements EmployeeD
 			criteria.add(Restrictions.eq("isActive", true));
 			criteria.add(Restrictions.eq("userid", userId));
 			Employee employee= criteria.list().size() > 0 ? (Employee) criteria.list().get(0): null;
-			session.close();
+			//session.close();
 			return employee;
 	}
 

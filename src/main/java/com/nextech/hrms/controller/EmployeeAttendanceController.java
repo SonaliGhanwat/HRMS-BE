@@ -136,29 +136,23 @@ public class EmployeeAttendanceController extends HttpServlet {
 		}
 		return  employeeattendanceList; // TODO Use proper message to indicate correct reason user
 	}
-	@RequestMapping(value = "/list", method = RequestMethod.GET,headers = "Accept=application/json")
-	public @ResponseBody List<EmployeeAttendanceDto> getEmployee(HttpServletRequest request) {
+	@RequestMapping(value = "/list/{userId}", method = RequestMethod.GET,headers = "Accept=application/json")
+	public @ResponseBody List<Employeeattendance> getEmployee(@PathVariable("userId") String userId ,HttpServletRequest request) {
 
-		List<EmployeeAttendanceDto> employeeAttendanceDtoList = null;
 		List<Employeeattendance> employeeattendances = null;
+		  Employee employee = null;
 		try {
+			employee = employeeServices.getEmployeeByUserId(userId);
+			employeeattendances = employeeAttendanceServices.getEmployeeattendanceByUserid(employee.getId());
+			//employeeAttendanceDtoList = employeeAttendanceServices.getEmployeeAttendanceList(employeeAttendanceDtoList);
+			if(employee.getUsertype().getId()==2 ||employee.getUsertype().getId()==4 ||employee.getUsertype().getId()==5){
+				return employeeattendances = employeeAttendanceServices.getEntityList(Employeeattendance.class);
+			}
 			
-			/*Cookie[] cookie = request.getCookies();
-			for(Cookie obj : cookie){
-				
-					System.out.println("userid:"+obj.getName() + " : " + obj.getValue());	
-			}*/
-			   /*HttpSession session=request.getSession();  
-		        String user=(String)session.getAttribute("name"); 
-		        Employee employee = employeeServices.getEmployeeByUserId(user);
-		        System.out.println("user:"+user);*/
-			employeeAttendanceDtoList = employeeAttendanceServices.getEmployeeAttendanceList(employeeAttendanceDtoList);
-			//employeeattendances = employeeAttendanceServices.getEmployeeattendanceByUserid(employee.getId());
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return employeeAttendanceDtoList;
+		return employeeattendances;
 	}
 
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE,headers = "Accept=application/json")

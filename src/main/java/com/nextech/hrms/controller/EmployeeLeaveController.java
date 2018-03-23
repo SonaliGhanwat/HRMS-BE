@@ -31,6 +31,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 
+
+
 import com.nextech.hrms.services.MailService;
 import com.nextech.hrms.dto.Mail;
 import com.nextech.hrms.dto.EmployeeDto;
@@ -49,6 +51,7 @@ import com.nextech.hrms.factory.HolidayFactory;
 import com.nextech.hrms.factory.MailResponseRequestFactory;
 import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.EmployeeLeaveDTO;
+import com.nextech.hrms.model.Employeeattendance;
 import com.nextech.hrms.model.Employeeleave;
 import com.nextech.hrms.model.Employeetype;
 import com.nextech.hrms.model.Holiday;
@@ -244,18 +247,22 @@ public class EmployeeLeaveController {
 		return employeeLeaveDto;
 	}
 
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public @ResponseBody
-    List<EmployeeLeaveDto> getEmployee() {
+	@RequestMapping(value = "/list/{userId}", method = RequestMethod.GET)
+	public @ResponseBody List<Employeeleave> getEmployee(@PathVariable("userId") String userId) {
 
-		List<EmployeeLeaveDto> employeeLeaveDtolist = null;
+		List<Employeeleave> employeeleaves = null;
+		  Employee employee = null;
 		try {
-			employeeLeaveDtolist = employeeLeaveServices.getEmployeeLeaveDtoList();
+			employee = employeeServices.getEmployeeByUserId(userId);
+			employeeleaves = employeeLeaveServices.getEmployeeLeaveByUserid(employee.getId());
+			if(employee.getUsertype().getId()==2 ||employee.getUsertype().getId()==4 ||employee.getUsertype().getId()==5){
+				return employeeleaves = employeeLeaveServices.getEntityList(Employeeleave.class);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return employeeLeaveDtolist;
+		return employeeleaves;
 	}
 
 	/*@RequestMapping(value = "/getLeaveByUserid/{EmpId}", method = RequestMethod.GET,headers = "Accept=application/json")

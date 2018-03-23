@@ -21,12 +21,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.nextech.hrms.dto.EmployeeDailyTaskDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeDailyTaskFactory;
+import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.Employeeattendance;
 import com.nextech.hrms.model.Employeedailytask;
 import com.nextech.hrms.model.Employeeleave;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.EmployeeDailyTaskServices;
 import com.nextech.hrms.services.EmployeeLeaveServices;
+import com.nextech.hrms.services.EmployeeServices;
 import com.nextech.hrms.util.DateUtil;
 
 @Controller
@@ -39,6 +41,9 @@ public class EmployeeDailyTaskController {
 	
 	@Autowired
 	EmployeeLeaveServices employeeLeaveServices;
+	
+	@Autowired
+	EmployeeServices employeeServices;
 	
 	@Autowired
 	private MessageSource messageSource;
@@ -105,19 +110,22 @@ public class EmployeeDailyTaskController {
 		}
 		return  employeedailytasks; // TODO Use proper message to indicate correct reason user
 	}
-	@RequestMapping(value = "/list", method = RequestMethod.GET,headers = "Accept=application/json")
-	public @ResponseBody
-    List<EmployeeDailyTaskDto> getEmployee() {
+	@RequestMapping(value = "/list/{userId}", method = RequestMethod.GET,headers = "Accept=application/json")
+	public @ResponseBody List<Employeedailytask> getEmployee(@PathVariable("userId") String userId) {
 
-		List<EmployeeDailyTaskDto> employeeDailyTaskDtoList = null;
+		List<Employeedailytask> employeedailytasks = null;
+		 Employee employee = null;
 		try {
-			employeeDailyTaskDtoList = employeeDailyTaskServices.getEmployeeDailyTaskDtoList(employeeDailyTaskDtoList);
-
+			employee = employeeServices.getEmployeeByUserId(userId);
+			employeedailytasks = employeeDailyTaskServices.getEmployeeDailyTaskByUserid(employee.getId());
+			if(employee.getUsertype().getId()==2 ||employee.getUsertype().getId()==4 ||employee.getUsertype().getId()==5){
+				return employeedailytasks = employeeDailyTaskServices.getEntityList(Employeedailytask.class);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return employeeDailyTaskDtoList;
+		return employeedailytasks;
 	}
 
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE,headers = "Accept=application/json")

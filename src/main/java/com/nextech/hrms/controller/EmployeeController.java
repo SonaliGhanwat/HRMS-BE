@@ -111,7 +111,7 @@ public class EmployeeController extends HttpServlet {
 	public  @ResponseBody List<EmployeeDto> getEmployee(@PathVariable("userId") String userId,HttpServletRequest request,HttpServletResponse response ) {
 				
 		List<EmployeeDto> employeeDtoList = null;
-	    Employee employees = null;
+	    Employee employee = null;
 		try {
 			//eraseCookie(request, response); 			
 			/*Cookie[] cookie = request.getCookies();
@@ -124,6 +124,7 @@ public class EmployeeController extends HttpServlet {
 		        String user=(String)session.getAttribute("name"); 
 		        Employee employee = employeeServices.getEmployeeByUserId(user);
 		        System.out.println("user:"+user);		 */
+			employee = employeeServices.getEmployeeByUserId(userId);
 		        employeeDtoList = employeeServices.getEmployeeAttendanceList(employeeDtoList);
 		       
 		       
