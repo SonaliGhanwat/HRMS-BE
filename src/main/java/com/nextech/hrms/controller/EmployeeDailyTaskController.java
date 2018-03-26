@@ -110,7 +110,7 @@ public class EmployeeDailyTaskController {
 		}
 		return  employeedailytasks; // TODO Use proper message to indicate correct reason user
 	}
-	@RequestMapping(value = "/list/{userId}", method = RequestMethod.GET,headers = "Accept=application/json")
+	/*@RequestMapping(value = "/list/{userId}", method = RequestMethod.GET,headers = "Accept=application/json")
 	public @ResponseBody List<Employeedailytask> getEmployee(@PathVariable("userId") String userId) {
 
 		List<Employeedailytask> employeedailytasks = null;
@@ -126,6 +126,20 @@ public class EmployeeDailyTaskController {
 		}
 
 		return employeedailytasks;
+	}*/
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public @ResponseBody
+    List<EmployeeDailyTaskDto> getEmployee() {
+
+		List<EmployeeDailyTaskDto> employeeDailyTaskDtoList = null;
+		try {
+			employeeDailyTaskDtoList = employeeDailyTaskServices.getEmployeeDailyTaskDtoList(employeeDailyTaskDtoList);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return employeeDailyTaskDtoList;
 	}
 
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE,headers = "Accept=application/json")

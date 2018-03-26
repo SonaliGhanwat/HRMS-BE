@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 
+
 import com.nextech.hrms.services.MailService;
 import com.nextech.hrms.dto.Mail;
 import com.nextech.hrms.dto.EmployeeDto;
@@ -247,7 +248,7 @@ public class EmployeeLeaveController {
 		return employeeLeaveDto;
 	}
 
-	@RequestMapping(value = "/list/{userId}", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/list/{userId}", method = RequestMethod.GET)
 	public @ResponseBody List<Employeeleave> getEmployee(@PathVariable("userId") String userId) {
 
 		List<Employeeleave> employeeleaves = null;
@@ -263,6 +264,19 @@ public class EmployeeLeaveController {
 		}
 
 		return employeeleaves;
+	}*/
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public @ResponseBody
+    List<EmployeeLeaveDto> getEmployee() {
+
+		List<EmployeeLeaveDto> employeeLeaveDtolist = null;
+		try {
+			employeeLeaveDtolist = employeeLeaveServices.getEmployeeLeaveDtoList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return employeeLeaveDtolist;
 	}
 
 	/*@RequestMapping(value = "/getLeaveByUserid/{EmpId}", method = RequestMethod.GET,headers = "Accept=application/json")

@@ -136,7 +136,7 @@ public class EmployeeAttendanceController extends HttpServlet {
 		}
 		return  employeeattendanceList; // TODO Use proper message to indicate correct reason user
 	}
-	@RequestMapping(value = "/list/{userId}", method = RequestMethod.GET,headers = "Accept=application/json")
+	/*@RequestMapping(value = "/list/{userId}", method = RequestMethod.GET,headers = "Accept=application/json")
 	public @ResponseBody List<Employeeattendance> getEmployee(@PathVariable("userId") String userId ,HttpServletRequest request) {
 
 		List<Employeeattendance> employeeattendances = null;
@@ -154,7 +154,20 @@ public class EmployeeAttendanceController extends HttpServlet {
 		}
 		return employeeattendances;
 	}
+*/
+	
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public @ResponseBody List<EmployeeAttendanceDto> getEmployee() {
 
+		List<EmployeeAttendanceDto> employeeAttendanceDtoList = null;
+		try {
+			employeeAttendanceDtoList = employeeAttendanceServices.getEmployeeAttendanceList(employeeAttendanceDtoList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return employeeAttendanceDtoList;
+	}
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE,headers = "Accept=application/json")
 	public @ResponseBody Status deleteEmployee(@PathVariable("id") long id) {
 
