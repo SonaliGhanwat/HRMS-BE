@@ -419,30 +419,29 @@ public class EmployeeLeaveController {
 		return new Status(0,"",employeeleaveList) ;
 	}
 	@RequestMapping(value = "/statusUpdate", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody Status addEmployeeLeaveStatus(@RequestBody  EmployeeLeaveStatusDto employeeLeaveStatusDto, HttpServletRequest request ) {
+	public @ResponseBody Status addEmployeeLeaveStatus(@RequestBody  EmployeeLeaveDto employeeLeaveDto, HttpServletRequest request ) {
 		try {
 		
-			for (EmployeeLeaveDto employeeLeaveDto : employeeLeaveStatusDto.getEmpLeaveDtos()) {
-				employeeLeaveDto.setId(employeeLeaveDto.getId());
+			
 				Employeeleave employeeleave = employeeLeaveServices.getEntityById(Employeeleave.class, employeeLeaveDto.getId());
-				employeeleave.setStatus(employeeLeaveStatusDto.getStatus());
+				employeeleave.setStatus(employeeLeaveDto.getStatus());
 				employeeLeaveServices.updateEntity(employeeleave);
 				
 				NotificationDTO notificationDTO = notificationService.getNotificationByCode("Approval Response");
-				emailLeaveStatusApprovalResponse(employeeLeaveStatusDto, notificationDTO,employeeLeaveDto);
+				emailLeaveStatusApprovalResponse(employeeLeaveDto, notificationDTO);
 				
-			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		 return new Status(1, "Status Update Successfully");
 	}
-	private void emailLeaveStatusApprovalResponse(EmployeeLeaveStatusDto employeeLeaveStatusDto,
-			NotificationDTO notificationDTO,EmployeeLeaveDto employeeLeaveDto) throws Exception {
+	private void emailLeaveStatusApprovalResponse( EmployeeLeaveDto employeeLeaveDto,
+			NotificationDTO notificationDTO) throws Exception {
 		Employeeleave employeeleave = employeeLeaveServices.getEntityById(Employeeleave.class, employeeLeaveDto.getId());
 		employeeLeaveDto.setFromDate(employeeleave.getFromDate());
 		employeeLeaveDto.setToDate(employeeleave.getToDate());
-		employeeLeaveDto.setStatus(employeeLeaveStatusDto.getStatus());
+		employeeLeaveDto.setStatus(employeeLeaveDto.getStatus());
 		Employee employee = employeeServices.getEntityById(Employee.class, employeeleave.getEmployee().getId());
 		Employee employee2 = employeeServices.getEntityById(Employee.class, employee.getReportTo());
 		Mail mail = mailService.setMailCCBCCAndTO(notificationDTO);

@@ -98,11 +98,7 @@ public class EmployeeDailyTaskController {
 		List<Employeedailytask> employeedailytasks = null;
 		try {
 			employeedailytasks = employeeDailyTaskServices
-					.getEmployeeDailyTaskByUserid(empId);
-			/*if(employeeattendanceList!=null){
-				// TODO create constants for success status code and error status code and user everywhere
-				return new Status(0,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS,null,null));// TODO Use proper message to indicate correct reason user
-			}*/
+					.getEmployeeDailyTaskByUserid(empId);		
 
 		} catch (Exception e) {
 			e.printStackTrace();

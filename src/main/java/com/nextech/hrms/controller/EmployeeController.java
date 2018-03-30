@@ -107,8 +107,8 @@ public class EmployeeController extends HttpServlet {
 	}
 
 	
-	@RequestMapping(value = "/list/{userId}", method = RequestMethod.GET,headers = "Accept=application/json")
-	public  @ResponseBody List<EmployeeDto> getEmployee(@PathVariable("userId") String userId,HttpServletRequest request,HttpServletResponse response ) {
+	@RequestMapping(value = "/list", method = RequestMethod.GET,headers = "Accept=application/json")
+	public  @ResponseBody List<EmployeeDto> getEmployee(HttpServletRequest request,HttpServletResponse response ) {
 				
 		List<EmployeeDto> employeeDtoList = null;
 	    Employee employee = null;
@@ -119,12 +119,12 @@ public class EmployeeController extends HttpServlet {
 				
 					System.out.println("userid:"+cookie[i].getName() + " : " + cookie[i].getValue());	
 			}
-			  
+			
 			   HttpSession session=request.getSession();  
 		        String user=(String)session.getAttribute("name"); 
 		        Employee employee = employeeServices.getEmployeeByUserId(user);
 		        System.out.println("user:"+user);		 */
-			employee = employeeServices.getEmployeeByUserId(userId);
+			    //employee = employeeServices.getEmployeeByUserId(userId);
 		        employeeDtoList = employeeServices.getEmployeeAttendanceList(employeeDtoList);
 		       
 		       
@@ -139,15 +139,15 @@ public class EmployeeController extends HttpServlet {
 		Employee employeeDB = employeeServices.getEmployeeByUserId(emplyee.getUserid());
 		
 		try {		
-			  eraseCookie(request, response);   
+			  //eraseCookie(request, response);   
 			
 	            Cookie cookie = new Cookie("cookie",emplyee.getUserid());
 	            cookie.setMaxAge(60*60); //1 hour
 	    		response.addCookie(cookie);	 
 	    		String userid = cookie.getValue();
-	    		request.setAttribute("cookie", true);
-	    		 response.setHeader("cookie", userid);
-	    		 response.addHeader("cookie", userid);
+	    		//request.setAttribute("cookie", true);
+	    		 //response.setHeader("cookie", userid);
+	    		 //response.addHeader("cookie", userid);
 	    		/*Cookie[] cookies = request.getCookies();
 	    	    if (cookies != null)
 	    	        for (Cookie cookie1 : cookies) {
