@@ -1,7 +1,6 @@
 package com.nextech.hrms.controller;
 
 import java.sql.Time;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -21,8 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.nextech.hrms.dto.EmployeeDailyTaskDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeDailyTaskFactory;
-import com.nextech.hrms.model.Employee;
-import com.nextech.hrms.model.Employeeattendance;
 import com.nextech.hrms.model.Employeedailytask;
 import com.nextech.hrms.model.Employeeleave;
 import com.nextech.hrms.model.Status;
@@ -143,7 +140,7 @@ public class EmployeeDailyTaskController {
 	Status deleteEmployee(@PathVariable("id") long id) {
 
 		try {
-			EmployeeDailyTaskDto employeeDailyTaskDto = employeeDailyTaskServices.getEmployeeDailyTaskDtoByid(id);
+			employeeDailyTaskServices.getEmployeeDailyTaskDtoByid(id);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Status(0,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS, null,null));

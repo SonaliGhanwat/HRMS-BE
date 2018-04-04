@@ -1,6 +1,7 @@
 package com.nextech.hrms.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.Leavetype;
@@ -13,7 +14,10 @@ public class EmployeeLeaveDto extends AbstractDTO{
 	private int totalCount;
 	private String status;
 	private int pendingLeave;
+	private int seekLeave;
+	private int paidLeave;
 	private Leavetype leavetype;
+	private List<EmplyeeLeavePart> emplyeeLeaveParts;
 	
 	public Employee getEmployee() {
 		return employee;
@@ -66,6 +70,24 @@ public class EmployeeLeaveDto extends AbstractDTO{
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public int getSeekLeave() {
+		return seekLeave;
+	}
+	public void setSeekLeave(int seekLeave) {
+		this.seekLeave = seekLeave;
+	}
+	public int getPaidLeave() {
+		return paidLeave;
+	}
+	public void setPaidLeave(int paidLeave) {
+		this.paidLeave = paidLeave;
+	}
+	public List<EmplyeeLeavePart> getEmplyeeLeaveParts() {
+		return emplyeeLeaveParts;
+	}
+	public void setEmplyeeLeaveParts(List<EmplyeeLeavePart> emplyeeLeaveParts) {
+		this.emplyeeLeaveParts = emplyeeLeaveParts;
 	}
 
 

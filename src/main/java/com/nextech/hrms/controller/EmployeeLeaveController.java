@@ -4,12 +4,16 @@ import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -34,6 +38,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 
+
+
+
+
+
 import com.nextech.hrms.services.MailService;
 import com.nextech.hrms.dto.Mail;
 import com.nextech.hrms.dto.EmployeeDto;
@@ -43,6 +52,7 @@ import com.nextech.hrms.util.YearUtil;
 import com.nextech.hrms.dto.EmployeeAttendanceDto;
 import com.nextech.hrms.dto.EmployeeLeaveDto;
 import com.nextech.hrms.dto.EmployeeLeaveStatusDto;
+import com.nextech.hrms.dto.EmplyeeLeavePart;
 import com.nextech.hrms.dto.HolidayDto;
 import com.nextech.hrms.dto.NotificationDTO;
 import com.nextech.hrms.constant.MessageConstant;
@@ -279,32 +289,63 @@ public class EmployeeLeaveController {
 		return employeeLeaveDtolist;
 	}
 
-	/*@RequestMapping(value = "/getLeaveByUserid/{EmpId}", method = RequestMethod.GET,headers = "Accept=application/json")
-	public @ResponseBody List<EmployeeLeaveDto> getEmployeeLeaveByUserId( @PathVariable("EmpId") long empId) {
+	@RequestMapping(value = "/leaveBalanceReport", method = RequestMethod.GET,headers = "Accept=application/json")
+	public @ResponseBody List<EmployeeLeaveDto> getEmployeeLeaveByUserId( ) {
 		 List<EmployeeLeaveDto> employeeLeaveDTOs = new ArrayList<EmployeeLeaveDto>();
 		 List<Employeeleave> employeeleaves =  null;
 		try {
-			employeeleaves = employeeLeaveServices.getEmployeeLeaveByUserid(empId);
-			int totalCount=0;
-			int totalLeave=12;
-			int count = 0;
+			employeeleaves = employeeLeaveServices.getEntityList(Employeeleave.class);
+			HashMap<Long,List<EmplyeeLeavePart>> multplePRMAsso =  new HashMap<Long, List<EmplyeeLeavePart>>();
+	
 			for (Employeeleave employeeleave : employeeleaves) {
-				
-				EmployeeLeaveDto employeeLeaveDTO= new EmployeeLeaveDto();
-				 SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
-				  int day = Integer.valueOf(dayFormat.format(employeeleave.getFromDate()));
-				  SimpleDateFormat dayFormat1 = new SimpleDateFormat("dd");
-				  int day1 = Integer.valueOf(dayFormat1.format(employeeleave.getToDate()));
-				 totalCount=totalCount+day1-day;
-				 totalLeave = totalLeave-totalCount;
-				 employeeLeaveDTO.setToDate(employeeleave.getToDate());
-				 employeeLeaveDTO.setFromDate(employeeleave.getFromDate());
-				 employeeLeaveDTO.setSubject(employeeleave.getSubject());
-				 employeeLeaveDTO.setEmployee(employeeleave.getEmployee());
-				 employeeLeaveDTO.setTotalCount(totalCount);
-				 employeeLeaveDTO.setPendingLeave(totalLeave);
-				 employeeLeaveDTOs.add(employeeLeaveDTO);
+				int totalCount=0;
+				int totalLeave=0;
+				int totalSeekleave=0;
+				int totalPaidLeave=0;
+				int pendingLeave=0;
 			
+				List<Employeeleave> employeeleaves2  = employeeLeaveServices.getEmployeeLeaveByUserid(employeeleave.getId());
+				for (Employeeleave employeeleave2 : employeeleaves2) {	
+					totalLeave = employeeleave2.getEmployee().getEmployeetype().getTotalLeave();
+					if(employeeleave2.getLeavetype().getId()==1){
+				 SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+				  int day = Integer.valueOf(dayFormat.format(employeeleave2.getFromDate()));
+				  SimpleDateFormat dayFormat1 = new SimpleDateFormat("dd");
+				  int day1 = Integer.valueOf(dayFormat1.format(employeeleave2.getToDate()));
+				  totalSeekleave=totalSeekleave+day1-day;
+					}else{
+						 SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+						  int day = Integer.valueOf(dayFormat.format(employeeleave2.getFromDate()));
+						  SimpleDateFormat dayFormat1 = new SimpleDateFormat("dd");
+						  int day1 = Integer.valueOf(dayFormat1.format(employeeleave2.getToDate()));
+						  totalPaidLeave=totalPaidLeave+day1-day;
+					}
+
+					totalCount= totalSeekleave+totalPaidLeave;
+					pendingLeave = totalLeave-totalCount;
+				List<EmplyeeLeavePart> emplyeeLeaveParts = null;
+				if(multplePRMAsso.get(employeeleave2.getEmployee()) == null){
+					emplyeeLeaveParts = new ArrayList<EmplyeeLeavePart>();
+				}else{
+					emplyeeLeaveParts = multplePRMAsso.get(employeeleave2.getEmployee());
+				}
+				EmplyeeLeavePart emplyeeLeavePart = new EmplyeeLeavePart();
+				emplyeeLeavePart.setTotalCount(totalCount);
+				emplyeeLeavePart.setPaidLeave(totalPaidLeave);
+				emplyeeLeavePart.setSeekLeave(totalSeekleave);
+				emplyeeLeavePart.setPendingLeave(pendingLeave);
+				emplyeeLeaveParts.add(emplyeeLeavePart);
+				multplePRMAsso.put(employeeleave2.getEmployee().getId(), emplyeeLeaveParts);
+				
+				}
+			}
+			Set<Entry<Long, List<EmplyeeLeavePart>>> multplePRMAssoEntries =  multplePRMAsso.entrySet();
+			for(Entry<Long, List<EmplyeeLeavePart>> multplePRMAssoEntry : multplePRMAssoEntries){
+				EmployeeLeaveDto productRMAssociationModel = new EmployeeLeaveDto();
+				Employee employee = employeeServices.getEntityById(Employee.class, multplePRMAssoEntry.getKey());
+				productRMAssociationModel.setEmployee(employee);
+				productRMAssociationModel.setEmplyeeLeaveParts(multplePRMAssoEntry.getValue());
+				employeeLeaveDTOs.add(productRMAssociationModel);
 			}
 			
 		} catch (Exception e) {
@@ -314,7 +355,7 @@ public class EmployeeLeaveController {
 		return  employeeLeaveDTOs; 
 	}
 
-*/
+
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody
 	Status deleteEmployee(@PathVariable("id") long id) {
