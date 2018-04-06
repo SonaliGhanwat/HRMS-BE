@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.nextech.hrms.dto.EmployeeAttendanceDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeAttendanceFactory;
+import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.Employeeleave;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.model.Employeeattendance;
@@ -211,7 +212,7 @@ public class EmployeeAttendanceController extends HttpServlet {
 		return  employeeattendanceList; 
 	}
 	
-	@RequestMapping(value = "/getAttendance/{id}/{yearMonth}", method = RequestMethod.GET,headers = "Accept=application/json")
+	/*@RequestMapping(value = "/getAttendance/{id}/{yearMonth}", method = RequestMethod.GET,headers = "Accept=application/json")
 	public @ResponseBody List<Employeeattendance> calculateEmployeeAttendanceByIdandMonth(
 			@PathVariable("id") long empId, @PathVariable("yearMonth") String yearMonthString) {
 		List<Employeeattendance> employeeattendanceList = null;
@@ -219,6 +220,29 @@ public class EmployeeAttendanceController extends HttpServlet {
 		try {
 			employeeattendanceList = employeeAttendanceServices
 					.calculateEmployeeAttendanceByEmployeeIdandDate(empId,YearUtil.convertToDate(yearMonthString));
+
+			  count = String.valueOf(employeeattendanceList.size());
+			 System.out.println("Employee Attedance"+count);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+
+		return employeeattendanceList;
+
+	}*/
+	
+	@RequestMapping(value = "/getAttendance/{userid}/{yearMonth}", method = RequestMethod.GET,headers = "Accept=application/json")
+	public @ResponseBody List<Employeeattendance> calculateEmployeeAttendanceByIdandMonth(
+			@PathVariable("userid") String userid, @PathVariable("yearMonth") String yearMonthString) throws Exception {
+		List<Employeeattendance> employeeattendanceList = null;
+		String count="";
+		Employee employee = employeeServices.getEmployeeByUserId(userid);
+       
+		try {
+			employeeattendanceList = employeeAttendanceServices
+					.calculateEmployeeAttendanceByEmployeeIdandDate(employee.getId(),YearUtil.convertToDate(yearMonthString));
 
 			  count = String.valueOf(employeeattendanceList.size());
 			 System.out.println("Employee Attedance"+count);

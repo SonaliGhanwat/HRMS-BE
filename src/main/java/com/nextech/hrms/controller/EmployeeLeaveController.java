@@ -1,19 +1,12 @@
 package com.nextech.hrms.controller;
-import java.sql.Date;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.Map.Entry;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -27,22 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import com.nextech.hrms.services.MailService;
 import com.nextech.hrms.dto.Mail;
 import com.nextech.hrms.dto.EmployeeDto;
@@ -51,18 +28,14 @@ import com.nextech.hrms.services.NotificationUserAssociationService;
 import com.nextech.hrms.util.YearUtil;
 import com.nextech.hrms.dto.EmployeeAttendanceDto;
 import com.nextech.hrms.dto.EmployeeLeaveDto;
-import com.nextech.hrms.dto.EmployeeLeaveStatusDto;
 import com.nextech.hrms.dto.EmplyeeLeavePart;
-import com.nextech.hrms.dto.HolidayDto;
 import com.nextech.hrms.dto.NotificationDTO;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeAttendanceFactory;
 import com.nextech.hrms.factory.EmployeeLeaveFactory;
-import com.nextech.hrms.factory.HolidayFactory;
 import com.nextech.hrms.factory.MailResponseRequestFactory;
 import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.EmployeeLeaveDTO;
-import com.nextech.hrms.model.Employeeattendance;
 import com.nextech.hrms.model.Employeeleave;
 import com.nextech.hrms.model.Employeetype;
 import com.nextech.hrms.model.Holiday;
@@ -290,12 +263,12 @@ public class EmployeeLeaveController {
 	}
 
 	@RequestMapping(value = "/leaveBalanceReport", method = RequestMethod.GET,headers = "Accept=application/json")
-	public @ResponseBody List<EmployeeLeaveDto> getEmployeeLeaveByUserId( ) {
+	public @ResponseBody Status getEmployeeLeaveByUserId( ) {
 		 List<EmployeeLeaveDto> employeeLeaveDTOs = new ArrayList<EmployeeLeaveDto>();
 		 List<Employeeleave> employeeleaves =  null;
 		try {
 			employeeleaves = employeeLeaveServices.getEntityList(Employeeleave.class);
-			HashMap<Long,List<EmplyeeLeavePart>> multplePRMAsso =  new HashMap<Long, List<EmplyeeLeavePart>>();
+			HashMap<Long,List<EmplyeeLeavePart>> employeeLeavehash =  new HashMap<Long, List<EmplyeeLeavePart>>();
 	
 			for (Employeeleave employeeleave : employeeleaves) {
 				int totalCount=0;
@@ -324,10 +297,10 @@ public class EmployeeLeaveController {
 					totalCount= totalSeekleave+totalPaidLeave;
 					pendingLeave = totalLeave-totalCount;
 				List<EmplyeeLeavePart> emplyeeLeaveParts = null;
-				if(multplePRMAsso.get(employeeleave2.getEmployee()) == null){
+				if(employeeLeavehash.get(employeeleave2.getEmployee()) == null){
 					emplyeeLeaveParts = new ArrayList<EmplyeeLeavePart>();
 				}else{
-					emplyeeLeaveParts = multplePRMAsso.get(employeeleave2.getEmployee());
+					emplyeeLeaveParts = employeeLeavehash.get(employeeleave2.getEmployee());
 				}
 				EmplyeeLeavePart emplyeeLeavePart = new EmplyeeLeavePart();
 				emplyeeLeavePart.setTotalCount(totalCount);
@@ -335,24 +308,30 @@ public class EmployeeLeaveController {
 				emplyeeLeavePart.setSeekLeave(totalSeekleave);
 				emplyeeLeavePart.setPendingLeave(pendingLeave);
 				emplyeeLeaveParts.add(emplyeeLeavePart);
-				multplePRMAsso.put(employeeleave2.getEmployee().getId(), emplyeeLeaveParts);
+				employeeLeavehash.put(employeeleave2.getEmployee().getId(), emplyeeLeaveParts);
 				
 				}
 			}
-			Set<Entry<Long, List<EmplyeeLeavePart>>> multplePRMAssoEntries =  multplePRMAsso.entrySet();
-			for(Entry<Long, List<EmplyeeLeavePart>> multplePRMAssoEntry : multplePRMAssoEntries){
-				EmployeeLeaveDto productRMAssociationModel = new EmployeeLeaveDto();
-				Employee employee = employeeServices.getEntityById(Employee.class, multplePRMAssoEntry.getKey());
-				productRMAssociationModel.setEmployee(employee);
-				productRMAssociationModel.setEmplyeeLeaveParts(multplePRMAssoEntry.getValue());
-				employeeLeaveDTOs.add(productRMAssociationModel);
+			Set<Entry<Long, List<EmplyeeLeavePart>>> setEmployeePart =  employeeLeavehash.entrySet();
+			for(Entry<Long, List<EmplyeeLeavePart>> setEmployeeEntry : setEmployeePart){
+				EmployeeLeaveDto employeeLeaveDto = new EmployeeLeaveDto();
+				Employee employee = employeeServices.getEntityById(Employee.class, setEmployeeEntry.getKey());
+				employeeLeaveDto.setEmployee(employee);
+				employeeLeaveDto.setEmplyeeLeaveParts(setEmployeeEntry.getValue());
+			/*	for (EmplyeeLeavePart emplyeeLeavePart : employeeLeaveDto.getEmplyeeLeaveParts()) {
+					employeeLeaveDto.setTotalCount(emplyeeLeavePart.getTotalCount());
+					employeeLeaveDto.setPendingLeave(emplyeeLeavePart.getPendingLeave());
+					employeeLeaveDto.setSeekLeave(emplyeeLeavePart.getSeekLeave());
+					employeeLeaveDto.setPaidLeave(emplyeeLeavePart.getPaidLeave());
+				}*/
+				employeeLeaveDTOs.add(employeeLeaveDto);
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 
 		}
-		return  employeeLeaveDTOs; 
+		return new Status(1,"",employeeLeaveDTOs)  ; 
 	}
 
 
@@ -421,11 +400,9 @@ public class EmployeeLeaveController {
 	@RequestMapping(value = "/getEmployeeLeaveByStatus/{userId}", method = RequestMethod.GET)
 	public @ResponseBody Status getEmployeeLeaveByAppliedLeave(@PathVariable("userId") String userId,HttpServletRequest request ) {
 		List<EmployeeLeaveDto> employeeleaveList = new ArrayList<EmployeeLeaveDto>();
-		//String status = "New Request For Leave";
 		List<Employeeleave> employeeleaves =null;
 		try {
 		
-			//int totalLeave=12;
 	        Employee employee = employeeServices.getEmployeeByUserId(userId);
 	        List<Employee> employees = employeeServices.getEmployeeByReportTo((int) employee.getId());
 	        for (Employee employee2 : employees) {

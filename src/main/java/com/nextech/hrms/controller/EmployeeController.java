@@ -1,18 +1,11 @@
 package com.nextech.hrms.controller;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-
-import javax.naming.AuthenticationException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -20,8 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,12 +20,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.nextech.hrms.dto.EmployeeDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeFactory;
-import com.nextech.hrms.filter.TokenFactory;
-import com.nextech.hrms.model.Authorization;
 import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.EmployeeServices;
@@ -111,7 +99,7 @@ public class EmployeeController extends HttpServlet {
 	public  @ResponseBody List<EmployeeDto> getEmployee(HttpServletRequest request,HttpServletResponse response ) {
 				
 		List<EmployeeDto> employeeDtoList = null;
-	    Employee employee = null;
+	    //Employee employee = null;
 		try {
 			//eraseCookie(request, response); 			
 			/*Cookie[] cookie = request.getCookies();
@@ -144,7 +132,7 @@ public class EmployeeController extends HttpServlet {
 	            Cookie cookie = new Cookie("cookie",emplyee.getUserid());
 	            cookie.setMaxAge(60*60); //1 hour
 	    		response.addCookie(cookie);	 
-	    		String userid = cookie.getValue();
+	    		//String userid = cookie.getValue();
 	    		//request.setAttribute("cookie", true);
 	    		 //response.setHeader("cookie", userid);
 	    		 //response.addHeader("cookie", userid);
@@ -267,14 +255,8 @@ public class EmployeeController extends HttpServlet {
 		return null;
 	}
 	
-	/*public static Cookie addCookie(Employee emplyee,HttpServletRequest request,HttpServletResponse response) {
-		  Cookie cookie = new Cookie("cookie",emplyee.getUserid());
-          //cookie.setMaxAge(60*60); //1 hour
-  		response.addCookie(cookie);	 
-  		request.setAttribute("cookie", true);
-	    return cookie;
-	}*/
-	private  Cookie[] eraseCookie(HttpServletRequest request, HttpServletResponse response) {
+	
+	/*private  Cookie[] eraseCookie(HttpServletRequest request, HttpServletResponse response) {
 		
 	    Cookie[] cookies = request.getCookies();
 	    if (cookies != null)
@@ -286,5 +268,5 @@ public class EmployeeController extends HttpServlet {
 	        }
 	    return cookies;
 	}
-	
+	*/
 }

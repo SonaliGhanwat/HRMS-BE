@@ -13,9 +13,9 @@ public class EmployeeLeaveDto extends AbstractDTO{
 	private Date toDate;
 	private int totalCount;
 	private String status;
-	private int pendingLeave;
-	private int seekLeave;
-	private int paidLeave;
+	//private int pendingLeave;
+	//private int seekLeave;
+	//private int paidLeave;
 	private Leavetype leavetype;
 	private List<EmplyeeLeavePart> emplyeeLeaveParts;
 	
@@ -44,21 +44,7 @@ public class EmployeeLeaveDto extends AbstractDTO{
 	public void setToDate(Date toDate) {
 		this.toDate = toDate;
 	}
-	public int getPendingLeave() {
-		return pendingLeave;
-	}
-
-	public void setPendingLeave(int pendingLeave) {
-		this.pendingLeave = pendingLeave;
-	}
-
-	public int getTotalCount() {
-		return totalCount;
-	}
-
-	public void setTotalCount(int totalCount) {
-		this.totalCount = totalCount;
-	}
+	
 	public Leavetype getLeavetype() {
 		return leavetype;
 	}
@@ -71,17 +57,13 @@ public class EmployeeLeaveDto extends AbstractDTO{
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public int getSeekLeave() {
-		return seekLeave;
+	
+	
+	public int getTotalCount() {
+		return totalCount;
 	}
-	public void setSeekLeave(int seekLeave) {
-		this.seekLeave = seekLeave;
-	}
-	public int getPaidLeave() {
-		return paidLeave;
-	}
-	public void setPaidLeave(int paidLeave) {
-		this.paidLeave = paidLeave;
+	public void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
 	}
 	public List<EmplyeeLeavePart> getEmplyeeLeaveParts() {
 		return emplyeeLeaveParts;

@@ -1,7 +1,5 @@
 package com.nextech.hrms.dto;
 
-
-
 public class EmplyeeLeavePart {
 
 	private int totalCount;

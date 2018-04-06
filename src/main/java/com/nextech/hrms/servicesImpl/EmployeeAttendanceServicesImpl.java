@@ -96,5 +96,12 @@ public class EmployeeAttendanceServicesImpl extends CRUDServiceImpl<Employeeatte
 			throws Exception {
 		return employeeAttendanceDao.getEmployeeattendanceByUserid(empId);
 	}
+
+	@Override
+	public List<Employeeattendance> getEmployeeAttendanceByEmployeeIdandDate(
+			String userid, Date date) throws Exception {
+		return employeeAttendanceDao.getEmployeeAttendanceByEmployeeIdandDate(userid, date);
+		
+	}
 	
 }

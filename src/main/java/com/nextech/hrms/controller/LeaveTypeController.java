@@ -1,7 +1,6 @@
 package com.nextech.hrms.controller;
 
 import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -12,12 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.nextech.hrms.dto.LeaveTypeDto;
-import com.nextech.hrms.dto.UserTypeDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.LeaveTypeFactory;
-import com.nextech.hrms.factory.UserTypeFactory;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.LeaveTypeServices;
 

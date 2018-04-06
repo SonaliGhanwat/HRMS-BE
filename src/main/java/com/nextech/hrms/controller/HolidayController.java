@@ -2,7 +2,6 @@ package com.nextech.hrms.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
@@ -15,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.nextech.hrms.dto.HolidayDto;
-import com.nextech.hrms.dto.UserTypeDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.HolidayFactory;
 import com.nextech.hrms.model.Status;

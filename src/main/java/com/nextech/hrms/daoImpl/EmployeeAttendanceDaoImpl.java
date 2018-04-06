@@ -75,4 +75,23 @@ public class EmployeeAttendanceDaoImpl extends SuperDaoImpl<Employeeattendance> 
 		  List<Employeeattendance> employeeattendance =criteria.list();
 		  return employeeattendance;
 	}
+
+	@Override
+	public List<Employeeattendance> getEmployeeAttendanceByEmployeeIdandDate(
+			String userid, Date date) throws Exception {
+		session = sessionFactory.openSession();
+		 Criteria criteria = session.createCriteria(Employeeattendance.class);
+		 Employeeattendance employeeattendance = criteria.list().size() > 0 ? (Employeeattendance) criteria.list().get(0) : null;
+		 SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+		  int year = Integer.valueOf(yearFormat.format(date));
+
+		  SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+		  int month = Integer.valueOf(monthFormat .format(date));
+		  Query query = session.createQuery("from Employeeattendance where  userid=:userid and year(date)=:year and month(date)=:month");
+		  query.setParameter("userid", userid);
+		 query.setParameter("year", year);
+		 query.setParameter("month", month);
+		 List<Employeeattendance> employeeattendances = query.list();
+		  return employeeattendances;
+	}
 }
