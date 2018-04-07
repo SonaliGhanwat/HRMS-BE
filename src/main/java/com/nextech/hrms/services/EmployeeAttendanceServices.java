@@ -23,5 +23,5 @@ public interface EmployeeAttendanceServices extends CRUDService<Employeeattendan
     
     public List<Employeeattendance> getEmployeeattendanceByUserid(long empId) throws Exception;
     
-	public List<Employeeattendance> getEmployeeAttendanceByEmployeeIdandDate(String userid,Date date)throws Exception;
+	public List<Employeeattendance> getEmployeeAttendanceByEmployeeIdandDate(long empId,Date date)throws Exception;
 }
