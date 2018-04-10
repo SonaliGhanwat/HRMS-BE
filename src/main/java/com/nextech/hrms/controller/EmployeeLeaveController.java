@@ -6,11 +6,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.Map.Entry;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +24,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
 import com.nextech.hrms.services.MailService;
 import com.nextech.hrms.dto.Mail;
 import com.nextech.hrms.dto.EmployeeDto;
@@ -48,8 +55,9 @@ import com.nextech.hrms.services.HolidayServices;
 import com.nextech.hrms.services.LeaveTypeServices;
 import com.nextech.hrms.util.DateUtil;
 
-
-@Controller
+@EnableScheduling
+@Configuration
+@RestController
 @RequestMapping("/employeeleave")
 public class EmployeeLeaveController {
 	public long totaltime;
@@ -130,8 +138,7 @@ public class EmployeeLeaveController {
 					 totalpaidCount=totalpaidCount+day1-day;
 					totalPaidleave = totalPaidleave+totalpaidCount;
 				}
-				}
-				 
+				}			 
 				 SimpleDateFormat dayFormat = new SimpleDateFormat("MM");
 				  int month = Integer.valueOf(dayFormat.format(employeeDto.getDateOfJoining()));
 				  if(month<=4){
@@ -276,26 +283,34 @@ public class EmployeeLeaveController {
 				int totalSeekleave=0;
 				int totalPaidLeave=0;
 				int pendingLeave=0;
+				int remaningSeekLeave=0;
+				int remaningPaidLeave=0;
 			
 				List<Employeeleave> employeeleaves2  = employeeLeaveServices.getEmployeeLeaveByUserid(employeeleave.getId());
 				for (Employeeleave employeeleave2 : employeeleaves2) {	
 					totalLeave = employeeleave2.getEmployee().getEmployeetype().getTotalLeave();
+				int seekLeave = employeeleave2.getEmployee().getEmployeetype().getSeekLeave();
+				int paidLeave = employeeleave2.getEmployee().getEmployeetype().getPaidLeave();
+					
 					if(employeeleave2.getLeavetype().getId()==1){
 				 SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
 				  int day = Integer.valueOf(dayFormat.format(employeeleave2.getFromDate()));
 				  SimpleDateFormat dayFormat1 = new SimpleDateFormat("dd");
 				  int day1 = Integer.valueOf(dayFormat1.format(employeeleave2.getToDate()));
 				  totalSeekleave=totalSeekleave+day1-day;
+				  remaningSeekLeave = seekLeave-totalSeekleave;
 					}else{
 						 SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
 						  int day = Integer.valueOf(dayFormat.format(employeeleave2.getFromDate()));
 						  SimpleDateFormat dayFormat1 = new SimpleDateFormat("dd");
 						  int day1 = Integer.valueOf(dayFormat1.format(employeeleave2.getToDate()));
 						  totalPaidLeave=totalPaidLeave+day1-day;
+						  remaningPaidLeave = paidLeave-totalPaidLeave;
 					}
 
 					totalCount= totalSeekleave+totalPaidLeave;
 					pendingLeave = totalLeave-totalCount;
+					
 				List<EmplyeeLeavePart> emplyeeLeaveParts = null;
 				if(employeeLeavehash.get(employeeleave2.getEmployee()) == null){
 					emplyeeLeaveParts = new ArrayList<EmplyeeLeavePart>();
@@ -307,6 +322,8 @@ public class EmployeeLeaveController {
 				emplyeeLeavePart.setPaidLeave(totalPaidLeave);
 				emplyeeLeavePart.setSeekLeave(totalSeekleave);
 				emplyeeLeavePart.setPendingLeave(pendingLeave);
+				emplyeeLeavePart.setRemaningPaidLeave(remaningPaidLeave);
+				emplyeeLeavePart.setRemaningSeekLeave(remaningSeekLeave);
 				emplyeeLeaveParts.add(emplyeeLeavePart);
 				employeeLeavehash.put(employeeleave2.getEmployee().getId(), emplyeeLeaveParts);
 				
@@ -360,7 +377,72 @@ public class EmployeeLeaveController {
 		return new Status(1, messageSource.getMessage(MessageConstant.EmployeeLeave_Update_Successfully, null,null));
 	}
 	
-	
+	@RequestMapping(value = "/calculateLeaveByUserId/{userId}", method = RequestMethod.GET,headers = "Accept=application/json")
+	public @ResponseBody Status calculateLeaveByUserId(@PathVariable("userId") String userId ) {
+		List<Employeeleave> employeeleaves = null;
+		  Employee employee = null;
+		  List<EmployeeLeaveDto> employeeLeaveDtos =  new ArrayList<>();
+		try {
+			employee = employeeServices.getEmployeeByUserId(userId);
+			int totalCount=0;
+			int totalLeave=0;
+			int totalSeekleave=0;
+			int totalPaidLeave=0;
+			int pendingLeave=0;
+			int remaningSeekLeave=0;
+			int remaningPaidLeave=0;
+			   employeeleaves  = employeeLeaveServices.getEmployeeLeaveByUserid(employee.getId());
+				for (Employeeleave employeeleave : employeeleaves) {	
+					
+					totalLeave = employeeleave.getEmployee().getEmployeetype().getTotalLeave();
+				int seekLeave = employeeleave.getEmployee().getEmployeetype().getSeekLeave();
+				int paidLeave = employeeleave.getEmployee().getEmployeetype().getPaidLeave();
+					
+					if(employeeleave.getLeavetype().getId()==1){
+				 SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+				  int day = Integer.valueOf(dayFormat.format(employeeleave.getFromDate()));
+				  SimpleDateFormat dayFormat1 = new SimpleDateFormat("dd");
+				  int day1 = Integer.valueOf(dayFormat1.format(employeeleave.getToDate()));
+				  totalSeekleave=totalSeekleave+day1-day;
+				  remaningSeekLeave = seekLeave-totalSeekleave;
+				  remaningPaidLeave = paidLeave-totalPaidLeave;
+				  
+					}else{
+						 SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+						  int day = Integer.valueOf(dayFormat.format(employeeleave.getFromDate()));
+						  SimpleDateFormat dayFormat1 = new SimpleDateFormat("dd");
+						  int day1 = Integer.valueOf(dayFormat1.format(employeeleave.getToDate()));
+						  totalPaidLeave = totalPaidLeave+day1-day;
+						  remaningPaidLeave = paidLeave-totalPaidLeave;
+						  remaningSeekLeave = seekLeave-totalSeekleave;
+					}
+
+					totalCount= totalSeekleave+totalPaidLeave;
+					pendingLeave = totalLeave-totalCount;
+					EmployeeLeaveDto  employeeLeaveDto =  new EmployeeLeaveDto();
+				EmplyeeLeavePart emplyeeLeavePart = new EmplyeeLeavePart();			
+				List<EmplyeeLeavePart> emplyeeLeaveParts =  new ArrayList<EmplyeeLeavePart>();
+				emplyeeLeavePart.setTotalCount(totalCount);
+				emplyeeLeavePart.setPaidLeave(paidLeave);
+				emplyeeLeavePart.setSeekLeave(seekLeave);
+				emplyeeLeavePart.setPendingLeave(pendingLeave);
+				emplyeeLeavePart.setRemaningPaidLeave(remaningPaidLeave);
+				emplyeeLeavePart.setRemaningSeekLeave(remaningSeekLeave);
+				emplyeeLeaveParts.add(emplyeeLeavePart);
+				employeeLeaveDto.setEmplyeeLeaveParts(emplyeeLeaveParts);
+				employeeLeaveDto.setEmployee(employee);
+				employeeLeaveDtos.add(employeeLeaveDto);
+			    
+				
+				}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new Status(1,"",employeeLeaveDtos)  ; 
+	}
+
+
 	@RequestMapping(value = "/leaveYear/{id}", method = RequestMethod.GET)
 	public @ResponseBody List<EmployeeLeaveDTO> getYearlyEmployeeLeaveByEmployeeId(@PathVariable("id") long empId) {
 		List<EmployeeLeaveDTO> employeeleaves = null;
@@ -471,7 +553,10 @@ public class EmployeeLeaveController {
 		mailService.sendEmailWithoutPdF(mail, notificationDTO);
 		
 	}
-	
+	/* @Scheduled(initialDelay=10000, fixedRate=60000)
+		public void executeSchedular(){
+			System.out.println("Executed Scheduled method.");
+		}*/
 	
 }
 

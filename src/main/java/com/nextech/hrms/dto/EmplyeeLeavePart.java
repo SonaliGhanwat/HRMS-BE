@@ -6,6 +6,8 @@ public class EmplyeeLeavePart {
 	private int pendingLeave;
 	private int seekLeave;
 	private int paidLeave;
+	private int remaningSeekLeave;
+	private int remaningPaidLeave;
 	public int getTotalCount() {
 		return totalCount;
 	}
@@ -29,6 +31,18 @@ public class EmplyeeLeavePart {
 	}
 	public void setPaidLeave(int paidLeave) {
 		this.paidLeave = paidLeave;
+	}
+	public int getRemaningSeekLeave() {
+		return remaningSeekLeave;
+	}
+	public void setRemaningSeekLeave(int remaningSeekLeave) {
+		this.remaningSeekLeave = remaningSeekLeave;
+	}
+	public int getRemaningPaidLeave() {
+		return remaningPaidLeave;
+	}
+	public void setRemaningPaidLeave(int remaningPaidLeave) {
+		this.remaningPaidLeave = remaningPaidLeave;
 	}
 	
 }

@@ -2,18 +2,21 @@ package com.nextech.hrms.controller;
 
 import java.sql.SQLException;
 import java.sql.Time;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nextech.hrms.dto.EmployeeAttendanceDto;
-import com.nextech.hrms.dto.EmployeeDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeAttendanceFactory;
 import com.nextech.hrms.model.Employee;
@@ -279,7 +281,7 @@ public class EmployeeAttendanceController extends HttpServlet {
 	 */
 
 	@RequestMapping(value = "/getAttendance/{userid}/{yearMonth}", method = RequestMethod.GET, headers = "Accept=application/json")
-	public @ResponseBody List<Employeeattendance> calculateEmployeeAttendanceByIdandMonth(
+	public @ResponseBody Status calculateEmployeeAttendanceByIdandMonth(
 			@PathVariable("userid") String userid,
 			@PathVariable("yearMonth") String yearMonthString) throws Exception {
 		List<Employeeattendance> employeeattendanceList = null;
@@ -290,23 +292,26 @@ public class EmployeeAttendanceController extends HttpServlet {
 					.calculateEmployeeAttendanceByEmployeeIdandDate(
 							employee.getId(),
 							YearUtil.convertToDate(yearMonthString));
-
+			if(employeeattendanceList.size()==0){
+				return new Status(0,"There is no any attendance for this month"); 
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-
 		}
 
-		return employeeattendanceList;
+		return new Status(1,"",employeeattendanceList); 
 
 	}
-	//@Scheduled(initialDelay=600000, fixedRate=600000)
-	@RequestMapping(value = "/getAttendanceByDate/{Date}", method = RequestMethod.GET, headers = "Accept=application/json")
-	public @ResponseBody Status getEmployeeAttendanceByDate(
-			@PathVariable("Date") String date) {
+	 @Scheduled(initialDelay=600000, fixedRate=1*60*60*1000)
+	@RequestMapping(value = "/getAttendanceByDate", method = RequestMethod.GET, headers = "Accept=application/json")
+	public void getEmployeeAttendanceByDate() {
 		List<Employeeattendance> employeeattendanceList = null;
 		List<Employee> employees = null;
+		System.out.println("I am in sch");
 		try {
-
+			Date strDate = new Date();
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
+		    String date = dateFormat.format(strDate);  
 			employees = employeeServices.getEntityList(Employee.class);
 			for (Employee employeeDto : employees) {
 				employeeattendanceList = employeeAttendanceServices
@@ -321,7 +326,7 @@ public class EmployeeAttendanceController extends HttpServlet {
 					employeeAttendanceDto.setOuttime(intime);
 					 int year = Integer.parseInt(date.substring(0, 4));
 					    int month = Integer.parseInt(date.substring(5, 7));
-					    int day = Integer.parseInt(date.substring(9, 10));
+					    int day = Integer.parseInt(date.substring(8, 10));
 					    Calendar cal = new GregorianCalendar(year, month - 1, day);
 					    int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);					 
 					if (Calendar.SUNDAY == dayOfWeek || Calendar.SATURDAY == dayOfWeek) {
@@ -330,7 +335,7 @@ public class EmployeeAttendanceController extends HttpServlet {
 					} else {
 						employeeAttendanceDto.setStatus("Absent");
 					}
-					employeeAttendanceServices.addEntity(EmployeeAttendanceFactory.setEmployeeAttendance(employeeAttendanceDto));
+					//employeeAttendanceServices.addEntity(EmployeeAttendanceFactory.setEmployeeAttendance(employeeAttendanceDto));
 				}
 			}
 
@@ -338,7 +343,7 @@ public class EmployeeAttendanceController extends HttpServlet {
 			e.printStackTrace();
 
 		}
-		return new Status(1, "Employee Attendance Added");
+		
 	}
 
 	public String getEmployeeAttendanceStatus(
@@ -366,4 +371,9 @@ public class EmployeeAttendanceController extends HttpServlet {
 		long totalTime = outtime.getTime() - intime.getTime();
 		return (totalTime / (60 * 60 * 1000) % 24);
 	}
+	
+ /*@Scheduled(initialDelay=10000, fixedRate=60000)
+	public void executeSchedular(){
+		System.out.println("Executed Scheduled method.");
+	}*/
 }
