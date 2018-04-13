@@ -1,11 +1,13 @@
 package com.nextech.hrms.daoImpl;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -51,6 +53,23 @@ public class HolidayDaoImpl extends SuperDaoImpl<Holiday> implements HolidayDao{
 		  criteria.add(Restrictions.eq("holidayDate",date));
 		  Holiday holiday = criteria.list().size() > 0 ? (Holiday) criteria.list().get(0) : null;
 		  return holiday;
+	}
+	@Override
+	public List<Holiday> getHolidayListByYearandMonth(Date date)
+			throws Exception {
+		session = sessionFactory.openSession();
+		 Criteria criteria = session.createCriteria(Holiday.class);
+		 Holiday holiday = criteria.list().size() > 0 ? (Holiday) criteria.list().get(0) : null;
+		 SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+		  int year = Integer.valueOf(yearFormat.format(date));
+
+		  SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+		  int month = Integer.valueOf(monthFormat .format(date));
+		  Query query = session.createQuery("from Holiday where year(holiday_date)=:year and month(holiday_date)=:month");
+		 query.setParameter("year", year);
+		 query.setParameter("month", month);
+		 List<Holiday> holidays = query.list();
+		  return holidays;
 	}
 	
 

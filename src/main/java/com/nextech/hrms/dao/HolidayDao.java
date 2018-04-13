@@ -15,5 +15,7 @@ public interface HolidayDao extends SuperDao<Holiday> {
 	public List<Holiday> getHolidayList(Date date) throws Exception;
 
 	public Holiday getHolidayBYDate(Date date)throws Exception;
+	
+    public List<Holiday> getHolidayListByYearandMonth(Date date) throws Exception;
 
 }
