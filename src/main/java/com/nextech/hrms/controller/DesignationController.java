@@ -107,6 +107,19 @@ public class DesignationController {
 		return designations;
 	}
 
+	@RequestMapping(value = "designationList/{usertypeid}", method = RequestMethod.GET, headers = "Accept=application/json")
+	public @ResponseBody List<Designation> getDesignationListByUserTypeId(@PathVariable("usertypeid") long usertypeid) {
+		List<Designation> designations = null;
+		try {
+			designations = designationService.getDesignationByUserTypeid(usertypeid);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return designations;
+		
+	}
 	@RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
 	public @ResponseBody Status deleteDesignation(@PathVariable("id") long id) {
 

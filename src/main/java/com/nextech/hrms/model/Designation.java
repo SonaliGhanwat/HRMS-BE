@@ -44,6 +44,12 @@ public class Designation implements Serializable {
 	private Timestamp updatedDate;
 
 	//bi-directional many-to-one association to Employee
+	
+	
+	@ManyToOne
+	@JoinColumn(name="usertypeId")
+	private Usertype usertype;
+	
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "designation", cascade = CascadeType.ALL)
 	private List<Employee> employees;
@@ -147,6 +153,14 @@ public class Designation implements Serializable {
 		employee.setDesignation(null);
 
 		return employee;
+	}
+
+	public Usertype getUsertype() {
+		return usertype;
+	}
+
+	public void setUsertype(Usertype usertype) {
+		this.usertype = usertype;
 	}
 
 }

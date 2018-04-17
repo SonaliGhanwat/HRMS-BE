@@ -256,8 +256,7 @@ public class EmployeeLeaveController {
 		return employeeleaves;
 	}*/
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public @ResponseBody
-    List<EmployeeLeaveDto> getEmployee() {
+	public @ResponseBody List<EmployeeLeaveDto> getEmployee() {
 
 		List<EmployeeLeaveDto> employeeLeaveDtolist = null;
 		try {

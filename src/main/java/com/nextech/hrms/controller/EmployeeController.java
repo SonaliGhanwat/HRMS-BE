@@ -113,9 +113,7 @@ public class EmployeeController extends HttpServlet {
 		        Employee employee = employeeServices.getEmployeeByUserId(user);
 		        System.out.println("user:"+user);		 */
 			    //employee = employeeServices.getEmployeeByUserId(userId);
-		        employeeDtoList = employeeServices.getEmployeeAttendanceList(employeeDtoList);
-		       
-		       
+		        employeeDtoList = employeeServices.getEmployeeAttendanceList(employeeDtoList);       
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
