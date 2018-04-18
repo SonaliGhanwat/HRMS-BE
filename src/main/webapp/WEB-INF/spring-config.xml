@@ -33,6 +33,8 @@
 				<value>com.nextech.hrms.model.Leavetype</value> 
 				<value>com.nextech.hrms.model.Notification</value>
 				<value>com.nextech.hrms.model.Notificationuserassociation</value>
+				<value>com.nextech.hrms.model.Page</value>
+				<value>com.nextech.hrms.model.Usertypepageassociation</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

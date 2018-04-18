@@ -33,8 +33,7 @@ public class SuperDaoImpl<T> implements SuperDao<T>{
 	public T getById(Class<T> z,long id) throws Exception {
 		session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(z);
-		criteria.add(Restrictions.eq("isActive", true));
-		criteria.add(Restrictions.eq("id", id));
+		
 		T t= criteria.list().size() > 0 ? (T) criteria.list().get(0): null;
 		return t;
 	}
@@ -45,7 +44,7 @@ public class SuperDaoImpl<T> implements SuperDao<T>{
 		session = sessionFactory.openSession();
 		//@SuppressWarnings("deprecation")
 		Criteria criteria = session.createCriteria(z);
-		criteria.add(Restrictions.eq("isActive", true));
+		
 		List<T> list = criteria.list();
 		return list;
 	}
