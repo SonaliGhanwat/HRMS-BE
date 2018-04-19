@@ -51,7 +51,7 @@ public class UsertypepageassociationController {
 	static Logger logger = Logger.getLogger(UsertypepageassociationController.class);
 	
 
-	@RequestMapping(value = "/createMultiple", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
+	@RequestMapping(value = "/createMultiple", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody Status addMultipleUserTypePageAsso(
 			@Valid @RequestBody UserTypePageAssoDTO userTypePageAssoDTO,
 			BindingResult bindingResult,HttpServletRequest request,HttpServletResponse response) {
@@ -63,11 +63,12 @@ public class UsertypepageassociationController {
 			List<UserTypePageAssoPart> userTypePageAssoParts =	userTypePageAssoDTO.getUserTypePageAssoParts();
 			if(!userTypePageAssoParts.isEmpty()){
 			for (UserTypePageAssoPart userTypePageAssoPart : userTypePageAssoParts) {	
-			if (usertypepageassociationService.getUserTypePageAssoByPageIduserTypeId((userTypePageAssoPart.getPageId().getId()),userTypePageAssoDTO.getUsertypeId().getId()) == null){
-				Usertypepageassociation usertypepageassociation =	 UserTypePageAssoFactory.setUserTypePageAss(userTypePageAssoDTO);
-				 usertypepageassociation =  setMultiplePage(userTypePageAssoPart);
+			if (usertypepageassociationService.getUserTypePageAssoByPageIduserTypeId((userTypePageAssoPart.getPageId().getId()),userTypePageAssoDTO.getUsertypeId().getId()).isEmpty()){
+				 Usertypepageassociation usertypepageassociation =  setMultiplePage(userTypePageAssoPart);
+				 Page page  =  new Page();
+				 page.setId(userTypePageAssoPart.getPageId().getId());
+				 usertypepageassociation.setPage(page);
 					usertypepageassociation.setUsertype(userTypeService.getEntityById(Usertype.class, userTypePageAssoDTO.getUsertypeId().getId()));
-					usertypepageassociation.setCreatedBy(Long.parseLong(request.getAttribute("current_user").toString()));
 					usertypepageassociationService.addEntity(usertypepageassociation);
 			}else{
 				PageDTO pageDTO = pageService.getPageDTOById(userTypePageAssoPart.getPageId().getId());
