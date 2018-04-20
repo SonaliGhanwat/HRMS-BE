@@ -15,7 +15,7 @@ public class PageFactory {
 		page.setPageName(pageDTO.getPageName());
 		page.setSubmenu(pageDTO.getSubmenu());
 		page.setUrl(pageDTO.getUrl());
-		page.setIsactive(true);
+		page.setActive(true);
 		page.setCreatedBy(1);
 		return page;
 	}
@@ -28,7 +28,7 @@ public class PageFactory {
 		page.setPageName(pageDTO.getPageName());
 		page.setSubmenu(pageDTO.getSubmenu());
 		page.setUrl(pageDTO.getUrl());
-		page.setIsactive(true);
+		page.setActive(true);
 		page.setUpdatedBy(Long.parseLong(request.getAttribute("current_user").toString()));
 		return page;
 	}

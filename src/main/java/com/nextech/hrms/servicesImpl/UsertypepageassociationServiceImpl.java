@@ -70,7 +70,7 @@ public class UsertypepageassociationServiceImpl extends CRUDServiceImpl<Usertype
 		if(usertypepageassociation==null){
 			return null;
 		}
-		usertypepageassociation.setIsactive(false);
+		usertypepageassociation.setActive(false);
 		usertypepageassociationDao.update(usertypepageassociation);
 		UserTypePageAssoDTO userTypePageAssoDTO = UserTypePageAssoFactory.setUserTypePageDTO(usertypepageassociation);
 		return userTypePageAssoDTO;
@@ -93,7 +93,7 @@ public class UsertypepageassociationServiceImpl extends CRUDServiceImpl<Usertype
 	private Usertypepageassociation setMultiplePage(UserTypePageAssoPart userTypePageAssoPart) throws Exception {
 		Usertypepageassociation usertypepageassociation = new Usertypepageassociation();
 		usertypepageassociation.setPage(pageDao.getById(Page.class, userTypePageAssoPart.getPageId().getId()));
-		usertypepageassociation.setIsactive(true);
+		usertypepageassociation.setActive(true);
 		return usertypepageassociation;
 	}
 

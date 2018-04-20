@@ -50,7 +50,7 @@ public class PageServiceImpl extends CRUDServiceImpl<Page> implements PageServic
 		if(page==null){
 			return null;
 		}
-		page.setIsactive(false);
+		page.setActive(false);
 		pageDao.update(page);
 		PageDTO pageDTO = PageFactory.setPageList(page);
 		return pageDTO;

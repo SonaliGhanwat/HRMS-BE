@@ -37,7 +37,7 @@ public class Page implements Serializable {
 	@Size(min = 4, max = 255, message = "{description sholud be greater than 4 or less than 255 characters}")
 	private String description;
 
-	private boolean isactive;
+	private boolean isActive;
 
 	private String menu;
 
@@ -98,14 +98,13 @@ public class Page implements Serializable {
 		this.description = description;
 	}
 
-	public boolean getIsactive() {
-		return this.isactive;
+	
+	public boolean isActive() {
+		return isActive;
 	}
-
-	public void setIsactive(boolean isactive) {
-		this.isactive = isactive;
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
-
 	public String getMenu() {
 		return this.menu;
 	}

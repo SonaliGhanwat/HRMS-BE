@@ -125,7 +125,7 @@ public class PageController {
 		try {
 			Page page = pageservice.getEntityById(
 					Page.class, id);
-			page.setIsactive(false);
+			page.setActive(false);
 			pageservice.updateEntity(page);
 			return new Status(0, "Page deleted Successfully !");
 		} catch (Exception e) {

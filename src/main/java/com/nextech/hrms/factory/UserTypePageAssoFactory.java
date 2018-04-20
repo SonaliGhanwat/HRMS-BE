@@ -16,7 +16,7 @@ public class UserTypePageAssoFactory {
 		Usertype usertype = new Usertype();
 		usertype.setId(userTypePageAssoDTO.getUsertypeId().getId());
 		usertypepageassociation.setUsertype(usertype);
-		usertypepageassociation.setIsactive(true);
+		usertypepageassociation.setActive(true);
 		return usertypepageassociation;
 	}
 	public static  Usertypepageassociation setUserTypePageAssUpdate(UserTypePageAssoDTO userTypePageAssoDTO, HttpServletRequest request){
@@ -24,7 +24,7 @@ public class UserTypePageAssoFactory {
 		usertypepageassociation.setId(userTypePageAssoDTO.getId());
 		Usertype usertype = new Usertype();
 		usertype.setId(userTypePageAssoDTO.getUsertypeId().getId());
-		usertypepageassociation.setIsactive(true);
+		usertypepageassociation.setActive(true);
 		usertypepageassociation.setUpdatedBy(Long.parseLong(request.getAttribute("current_user").toString()));
 		return usertypepageassociation;
 	}

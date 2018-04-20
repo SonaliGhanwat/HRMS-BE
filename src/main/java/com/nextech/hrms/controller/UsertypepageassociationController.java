@@ -197,7 +197,7 @@ public class UsertypepageassociationController {
 	private Usertypepageassociation setMultiplePage(UserTypePageAssoPart userTypePageAssoPart) throws Exception {
 		Usertypepageassociation usertypepageassociation = new Usertypepageassociation();
 		usertypepageassociation.setPage(pageService.getEntityById(Page.class, userTypePageAssoPart.getPageId().getId()));
-		usertypepageassociation.setIsactive(true);
+		usertypepageassociation.setActive(true);
 		return usertypepageassociation;
 	}
 }

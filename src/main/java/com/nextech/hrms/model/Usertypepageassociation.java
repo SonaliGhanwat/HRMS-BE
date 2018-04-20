@@ -26,7 +26,7 @@ public class Usertypepageassociation implements Serializable {
 	@Column(name="created_date")
 	private Timestamp createdDate;
 
-	private boolean isactive;
+	private boolean isActive;
 
 	@Column(name="updated_by")
 	private long updatedBy;
@@ -75,14 +75,14 @@ public class Usertypepageassociation implements Serializable {
 		this.createdDate = createdDate;
 	}
 
-	public boolean getIsactive() {
-		return this.isactive;
-	}
+	
 
-	public void setIsactive(boolean isactive) {
-		this.isactive = isactive;
+	public boolean isActive() {
+		return isActive;
 	}
-
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
 	public long getUpdatedBy() {
 		return this.updatedBy;
 	}
