@@ -27,12 +27,12 @@ public class Status {
 		this.data = data;
 	}
 
-	public Status(int code, String message,Object data, Object user,Cookie cookie) {
+	public Status(int code, String message,Object data, Object user) {
 		this.code = code;
 		this.message = message;
 		this.data = data;
 		this.user= user;
-		this.cookie = cookie;
+//		this.cookie = cookie;
 	}
 	public int getCode() {
 		return code;

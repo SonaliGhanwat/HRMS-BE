@@ -45,7 +45,7 @@ public class EmployeeServicesImpl extends CRUDServiceImpl<Employee> implements E
 	@Override
 	public EmployeeDto getEmployeeDto(long id) throws Exception {
 		Employee  employee =  employeeDao.getById(Employee.class, id);
-		EmployeeDto employeeDto = EmployeeFactory.setEmployeeList(employee);
+		EmployeeDto employeeDto = EmployeeFactory.getEmployeeDTO(employee);
 		return employeeDto;
 	}
 
@@ -56,7 +56,7 @@ public class EmployeeServicesImpl extends CRUDServiceImpl<Employee> implements E
 		List<Employee> employeeList = null;
 		employeeList = employeeDao.getList(Employee.class);
 		for (Employee employee : employeeList) {
-			EmployeeDto employeeDto = EmployeeFactory.setEmployeeList(employee);
+			EmployeeDto employeeDto = EmployeeFactory.getEmployeeDTO(employee);
 			employeeDtos.add(employeeDto);
 		}
 		return employeeDtos;
@@ -65,7 +65,7 @@ public class EmployeeServicesImpl extends CRUDServiceImpl<Employee> implements E
 	@Override
 	public EmployeeDto getEmployeeDtoByid(long id) throws Exception {
 		Employee employee =  employeeDao.getById(Employee.class, id);
-		EmployeeDto employeeDto = EmployeeFactory.setEmployeeList(employee);
+		EmployeeDto employeeDto = EmployeeFactory.getEmployeeDTO(employee);
 		employee.setIsActive(false);
 		employeeDao.update(employee);
 		return employeeDto;
@@ -89,9 +89,9 @@ public class EmployeeServicesImpl extends CRUDServiceImpl<Employee> implements E
 			employeeDto.setSalary(employeeDto.getSalary());
 			employeeDto.setUsertype(employeeDto.getUsertype());
 			Employee employee1 = employeeDao.getEmployeeByUserId(employeeDto.getUserid());
-			if (employee1 == null) {
-				employeeDao.add(EmployeeFactory.setEmployee(employeeDto));
-			}
+//			if (employee1 == null) {
+//				employeeDao.add(EmployeeFactory.getEmployee(employeeDto));
+//			}
 		}
 		
 	}
@@ -109,7 +109,7 @@ public class EmployeeServicesImpl extends CRUDServiceImpl<Employee> implements E
 	@Override
 	public EmployeeDto getEmployeeDtoByidforLeave(long id) throws Exception {
 		Employee employee =  employeeDao.getById(Employee.class, id);
-		EmployeeDto employeeDto = EmployeeFactory.setEmployeeList(employee);
+		EmployeeDto employeeDto = EmployeeFactory.getEmployeeDTO(employee);
 		employeeDao.update(employee);
 		return employeeDto;
 	}

@@ -24,13 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-
-
-
-
-
-import com.nextech.hrms.model.Page;
+import com.nextech.hrms.dto.PageDTO;
 import com.nextech.hrms.dto.UserTypePageAssoDTO;
 import com.nextech.hrms.model.Usertype;
 import com.nextech.hrms.dto.EmployeeDto;
@@ -82,7 +76,7 @@ public class EmployeeController extends HttpServlet {
 					MessageConstant.CONTACT_NUMBER_EXIT, null, null));
 		}
 			employeeDto.setIsActive(true);
-			employeeServices.addEntity(EmployeeFactory.setEmployee(employeeDto));
+			employeeServices.addEntity(EmployeeFactory.getEmployeeModel(employeeDto));
 			return new Status(0, messageSource.getMessage
 					(MessageConstant.Employee_Added_Successfully,null,null));
 	}
@@ -181,48 +175,40 @@ public class EmployeeController extends HttpServlet {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,headers = "Accept=application/json")
 	public @ResponseBody Status getEmployee(@RequestBody Employee employee,HttpServletRequest request,HttpServletResponse response ) throws Exception {
-		Employee employee2 = employeeServices.getEmployeeByUserId(employee.getUserid());
-		
 		try {
-			
-			if (employee2 != null && authenticate(employee, employee2)) {
+			Employee employeeResult = employeeServices.getEmployeeByUserId(employee.getUserid());
+
+			if (employeeResult != null && authenticate(employee, employeeResult)) {
 				Usertype usertype = userTypeServices.getEntityById(
-						Usertype.class, employee2.getUsertype().getId());
-				List<UserTypePageAssoDTO> usertypepageassociations = usertypepageassociationService
+						Usertype.class, employeeResult.getUsertype().getId());
+				List<UserTypePageAssoDTO> userTypePageAssociations = usertypepageassociationService
 						.getPagesByUsertype(usertype.getId());
 				HashMap<String, Object> result = new HashMap<String, Object>();
-				List<Page> pages = new ArrayList<Page>();
-				if (!usertypepageassociations.isEmpty()) {
-					for (UserTypePageAssoDTO usertypepageassociation : usertypepageassociations) {
-						Page pageDTO = new Page();
-						pageDTO.setId(usertypepageassociation.getPage().getId());
-						pageDTO.setMenu(usertypepageassociation.getPage().getMenu());
-						pageDTO.setPageName(usertypepageassociation.getPage().getPageName());
-						pageDTO.setSubmenu(usertypepageassociation.getPage().getSubmenu());
-						pageDTO.setUrl(usertypepageassociation.getPage().getUrl());
-						pages.add(pageDTO);
+				List<PageDTO> pages = new ArrayList<PageDTO>();
+				if (!userTypePageAssociations.isEmpty()) {
+					for (UserTypePageAssoDTO usertypepageassociation : userTypePageAssociations) {
+						pages.add(usertypepageassociation.getPage());
 					}
-					result.put("pages", pages);
 				}
-				 Cookie cookie = new Cookie("cookie",employee.getUserid());
-		            cookie.setMaxAge(60*60); //1 hour
-		    		response.addCookie(cookie);	 
+				result.put("pages", pages);
+				result.put("user", EmployeeFactory.getEmployeeDTO(employeeResult));
+//				 Cookie cookie = new Cookie("cookie",employee.getUserid());
+//		            cookie.setMaxAge(60*60); //1 hour
+//		    		response.addCookie(cookie);	 
 		    		
 				String success = employee.getUserid() + " logged in Successfully";
-				return new Status(0,success, result, employee2,cookie);
+				return new Status(0,success, result, employeeResult);
+			}
+			if(employeeResult == null){
+				return  new Status(1,"Please enter valid User Id");
+			}else if(!employeeResult.getPassword().equals(employee.getPassword())){
+				return new Status(1,"Please enter valid Password");
 			}
 			
-			
 		}catch (Exception e) {
-			System.out.println("Inside Exception");
 			e.printStackTrace();
-			
 		}
-		if(employee2 ==null){
-			return  new Status(1,"Please Enetr Valid UserId");
-		}else if(!employee2.getPassword().equals(employee.getPassword())){
-			return new Status(1,"Please Enter Valid Password");
-		}
+		
 		return new Status(0,"Login Successfully");
 
 	}

@@ -46,7 +46,7 @@ public class UserTypeController {
 			Usertype usertype1 = userTypeServices.getUserTypeByIdandName(userTypeDto.getUsertypeName());
 			if(usertype1==null){
 				userTypeDto.setIsActive(true);
-			userTypeServices.addEntity(UserTypeFactory.setUserType(userTypeDto));
+			userTypeServices.addEntity(UserTypeFactory.getUserTypeModel(userTypeDto));
 			}else{
 				return new Status(1, " Usertype Name Already Exit");
 			}
@@ -98,11 +98,8 @@ public class UserTypeController {
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody
 	Status deleteEmployee(@PathVariable("id") long id) {
-		//UserTypeDto userTypeDto = null;
-
 		try {
 			    userTypeServices.getUserTypeDtoByid(id);
-           
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Status(1,messageSource.getMessage(MessageConstant.UserType_DOES_NOT_EXISTS, null,null));

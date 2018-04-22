@@ -20,7 +20,7 @@ public class EmployeeDto extends AbstractDTO {
 	private String department;
 	private String salary;
 	private int reportTo;
-	private Usertype usertype;
+	private UserTypeDto usertype;
 	private Employeetype employeetype;
 	private Designation designation;
 	
@@ -90,10 +90,10 @@ public class EmployeeDto extends AbstractDTO {
 	public void setSalary(String salary) {
 		this.salary = salary;
 	}
-	public Usertype getUsertype() {
+	public UserTypeDto getUsertype() {
 		return usertype;
 	}
-	public void setUsertype(Usertype usertype) {
+	public void setUsertype(UserTypeDto usertype) {
 		this.usertype = usertype;
 	}
 	public int getReportTo() {

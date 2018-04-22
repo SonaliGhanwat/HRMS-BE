@@ -11,6 +11,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.nextech.hrms.dto.AbstractDTO;
 import com.nextech.hrms.dto.EmployeeLeaveDto;
 import com.nextech.hrms.dto.UserTypeDto;
 import com.nextech.hrms.model.Employee;
@@ -18,7 +19,7 @@ import com.nextech.hrms.model.Usertype;
 
 public class UserTypeFactory {
 	
-	public static Usertype setUserType(UserTypeDto userTypeDto)throws Exception{
+	public static Usertype getUserTypeModel(UserTypeDto userTypeDto)throws Exception{
 		Usertype usertype = new Usertype();
 		usertype.setId(userTypeDto.getId());
 		usertype.setUsertypeName(userTypeDto.getUsertypeName());
@@ -29,7 +30,7 @@ public class UserTypeFactory {
 		return usertype;
 		
 	}
-	public static UserTypeDto setUserTypeList(Usertype usertype)throws Exception{
+	public static UserTypeDto getUserTypeDTO(Usertype usertype)throws Exception{
 		UserTypeDto userTypeDto = new UserTypeDto();
 		userTypeDto.setId(usertype.getId());
 		userTypeDto.setUsertypeName(usertype.getUsertypeName());
