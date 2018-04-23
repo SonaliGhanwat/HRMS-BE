@@ -44,21 +44,28 @@ public class EmployeeController extends HttpServlet {
 
 	@Autowired
 	EmployeeServices employeeServices;
-	
+
 	@Autowired
 	UserTypeServices userTypeServices;
-	
+
 	@Autowired
 	UsertypepageassociationService usertypepageassociationService;
-	
+
 	@Autowired
 	private MessageSource messageSource;
 
 	static final Logger logger = Logger.getLogger(EmployeeController.class);
-	@RequestMapping(value = "/create", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,headers = "Accept=application/json")
+
+	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
 	public @ResponseBody Status addEmployee(
-			@Valid @RequestBody EmployeeDto employeeDto,HttpServletRequest request,HttpServletResponse response)
+			@Valid @RequestBody EmployeeDto employeeDto,
+			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+		
+		/*TODO : Create a function in service class to check if Employee exists or not? 
+		 * Please write a query to get the result based on the userId, emailId, contact number 
+		 * and then return success or failure message to controller.*/
+		
 		if (employeeServices.getEmployeeByUserId(employeeDto.getUserid()) == null) {
 
 		} else {
@@ -70,115 +77,118 @@ public class EmployeeController extends HttpServlet {
 			return new Status(1, messageSource.getMessage(
 					MessageConstant.EMAIL_ALREADY_EXIT, null, null));
 		}
-		if (employeeServices.getEmployeeByphoneNumber(employeeDto.getPhoneNumber()) == null) {
+		if (employeeServices.getEmployeeByphoneNumber(employeeDto
+				.getPhoneNumber()) == null) {
 		} else {
 			return new Status(1, messageSource.getMessage(
 					MessageConstant.CONTACT_NUMBER_EXIT, null, null));
 		}
-			employeeDto.setIsActive(true);
-			employeeServices.addEntity(EmployeeFactory.getEmployeeModel(employeeDto));
-			return new Status(0, messageSource.getMessage
-					(MessageConstant.Employee_Added_Successfully,null,null));
+		employeeDto.setIsActive(true);
+		employeeServices.addEntity(EmployeeFactory
+				.getEmployeeModel(employeeDto));
+		return new Status(0, messageSource.getMessage(
+				MessageConstant.Employee_Added_Successfully, null, null));
 	}
 
-	@Transactional @RequestMapping(value = "/createExcel", headers = "Content-Type=*/*",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody Status addEmployee(@RequestParam("employeeExcelFile") MultipartFile employeeExcelFile)
+	@Transactional
+	@RequestMapping(value = "/createExcel", headers = "Content-Type=*/*", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody Status addEmployee(
+			@RequestParam("employeeExcelFile") MultipartFile employeeExcelFile)
 			throws Exception {
 		try {
-			List<EmployeeDto> employeeDtos =  EmployeeFactory.setEmployeeExcel(employeeExcelFile);
+			List<EmployeeDto> employeeDtos = EmployeeFactory
+					.setEmployeeExcel(employeeExcelFile);
 			employeeServices.addEmployeeExcel(employeeDtos);
-			return new Status(1, messageSource.getMessage
-					(MessageConstant.Employee_Added_Successfully,null,null));
+			return new Status(1, messageSource.getMessage(
+					MessageConstant.Employee_Added_Successfully, null, null));
 		} catch (Exception e) {
-			System.out.println("Inside Exception");
+			//TODO : Use log4j library to log error messages.
 			e.printStackTrace();
 			return new Status(0, e.getCause().getMessage());
 		}
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET,headers = "Accept=application/json")
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
 	public @ResponseBody EmployeeDto getEmployee(@PathVariable("id") long id) {
 		EmployeeDto employeeDto = null;
 		try {
-			
 			employeeDto = employeeServices.getEmployeeDto(id);
-
 		} catch (Exception e) {
+			//TODO : Use log4j library to log error messages.
 			e.printStackTrace();
 		}
-		return  employeeDto;
+		return employeeDto;
 	}
 
-	
-	@RequestMapping(value = "/list", method = RequestMethod.GET,headers = "Accept=application/json")
-	public  @ResponseBody List<EmployeeDto> getEmployee(HttpServletRequest request,HttpServletResponse response ) {
-				
+	@RequestMapping(value = "/list", method = RequestMethod.GET, headers = "Accept=application/json")
+	public @ResponseBody List<EmployeeDto> getEmployee(
+			HttpServletRequest request, HttpServletResponse response) {
+
 		List<EmployeeDto> employeeDtoList = null;
-	    //Employee employee = null;
+		// Employee employee = null;
 		try {
-			//eraseCookie(request, response); 			
-			/*Cookie[] cookie = request.getCookies();
-			for(int i=0;i<cookie.length;i++){
-				
-					System.out.println("userid:"+cookie[i].getName() + " : " + cookie[i].getValue());	
-			}
-			
-			   HttpSession session=request.getSession();  
-		        String user=(String)session.getAttribute("name"); 
-		        Employee employee = employeeServices.getEmployeeByUserId(user);
-		        System.out.println("user:"+user);		 */
-			    //employee = employeeServices.getEmployeeByUserId(userId);
-		        employeeDtoList = employeeServices.getEmployeeAttendanceList(employeeDtoList);       
+			// eraseCookie(request, response);
+			/*
+			 * Cookie[] cookie = request.getCookies(); for(int
+			 * i=0;i<cookie.length;i++){
+			 * 
+			 * System.out.println("userid:"+cookie[i].getName() + " : " +
+			 * cookie[i].getValue()); }
+			 * 
+			 * HttpSession session=request.getSession(); String
+			 * user=(String)session.getAttribute("name"); Employee employee =
+			 * employeeServices.getEmployeeByUserId(user);
+			 * System.out.println("user:"+user);
+			 */
+			// employee = employeeServices.getEmployeeByUserId(userId);
+			employeeDtoList = employeeServices
+					.getEmployeeAttendanceList(employeeDtoList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return employeeDtoList;
 	}
-	/*@RequestMapping(value = "/login", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,headers = "Accept=application/json")
-	public @ResponseBody Status getEmployee(@RequestBody Employee emplyee,HttpServletRequest request,HttpServletResponse response ) throws Exception {
 
-		Employee employeeDB = employeeServices.getEmployeeByUserId(emplyee.getUserid());
-		
-		try {		
-			  //eraseCookie(request, response);   
-			
-	            Cookie cookie = new Cookie("cookie",emplyee.getUserid());
-	            cookie.setMaxAge(60*60); //1 hour
-	    		response.addCookie(cookie);	 
-	    		//String userid = cookie.getValue();
-	    		//request.setAttribute("cookie", true);
-	    		 //response.setHeader("cookie", userid);
-	    		 //response.addHeader("cookie", userid);
-	    		Cookie[] cookies = request.getCookies();
-	    	    if (cookies != null)
-	    	        for (Cookie cookie1 : cookies) {
-	    	        	cookie1.setMaxAge(60*60);
-	    	        	//String userid = cookie.getValue();
-	    	        	cookie1.setValue(userid);
-	    	            response.addCookie(cookie1);
-	    	        }
-	    	    HttpSession session=request.getSession();  
-	    		session.setAttribute("name",emplyee.getUserid());
-			if(employeeDB ==null){
-				return  new Status(1,"Please Enter Valid UserId");
-			}else if(!employeeDB.getPassword().equals(emplyee.getPassword())){
-				return new Status(2,"Please Enter Valid Password");
-			}
-			return new Status(0,"Login Successfully",cookie);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	/*
+	 * @RequestMapping(value = "/login", method = RequestMethod.POST,consumes =
+	 * MediaType.APPLICATION_JSON_VALUE,headers = "Accept=application/json")
+	 * public @ResponseBody Status getEmployee(@RequestBody Employee
+	 * emplyee,HttpServletRequest request,HttpServletResponse response ) throws
+	 * Exception {
+	 * 
+	 * Employee employeeDB =
+	 * employeeServices.getEmployeeByUserId(emplyee.getUserid());
+	 * 
+	 * try { //eraseCookie(request, response);
+	 * 
+	 * Cookie cookie = new Cookie("cookie",emplyee.getUserid());
+	 * cookie.setMaxAge(60*60); //1 hour response.addCookie(cookie); //String
+	 * userid = cookie.getValue(); //request.setAttribute("cookie", true);
+	 * //response.setHeader("cookie", userid); //response.addHeader("cookie",
+	 * userid); Cookie[] cookies = request.getCookies(); if (cookies != null)
+	 * for (Cookie cookie1 : cookies) { cookie1.setMaxAge(60*60); //String
+	 * userid = cookie.getValue(); cookie1.setValue(userid);
+	 * response.addCookie(cookie1); } HttpSession session=request.getSession();
+	 * session.setAttribute("name",emplyee.getUserid()); if(employeeDB ==null){
+	 * return new Status(1,"Please Enter Valid UserId"); }else
+	 * if(!employeeDB.getPassword().equals(emplyee.getPassword())){ return new
+	 * Status(2,"Please Enter Valid Password"); } return new
+	 * Status(0,"Login Successfully",cookie); } catch (Exception e) {
+	 * e.printStackTrace(); }
+	 * 
+	 * return null; }
+	 */
 
-		return null;
-	}*/
-	
-
-	@RequestMapping(value = "/login", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,headers = "Accept=application/json")
-	public @ResponseBody Status getEmployee(@RequestBody Employee employee,HttpServletRequest request,HttpServletResponse response ) throws Exception {
+	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
+	public @ResponseBody Status getEmployee(@RequestBody Employee employee,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
 		try {
-			Employee employeeResult = employeeServices.getEmployeeByUserId(employee.getUserid());
+			Employee employeeResult = employeeServices
+					.getEmployeeByUserId(employee.getUserid());
 
-			if (employeeResult != null && authenticate(employee, employeeResult)) {
+			if (employeeResult != null
+					&& authenticate(employee, employeeResult)) {
 				Usertype usertype = userTypeServices.getEntityById(
 						Usertype.class, employeeResult.getUsertype().getId());
 				List<UserTypePageAssoDTO> userTypePageAssociations = usertypepageassociationService
@@ -190,105 +200,117 @@ public class EmployeeController extends HttpServlet {
 						pages.add(usertypepageassociation.getPage());
 					}
 				}
+				
 				result.put("pages", pages);
 				result.put("user", EmployeeFactory.getEmployeeDTO(employeeResult));
-//				 Cookie cookie = new Cookie("cookie",employee.getUserid());
-//		            cookie.setMaxAge(60*60); //1 hour
-//		    		response.addCookie(cookie);	 
-		    		
-				String success = employee.getUserid() + " logged in Successfully";
-				return new Status(0,success, result, employeeResult);
+				
+				//TODO : How can we use cookies in our application to get or retrieve a value in Spring REST?
+				// Cookie cookie = new Cookie("cookie",employee.getUserid());
+				// cookie.setMaxAge(60*60); //1 hour
+				// response.addCookie(cookie);
+
+				//TODO : Use messagesource to get message. No hard coding should be done.
+				String success = employee.getUserid()
+						+ " logged in Successfully";
+				return new Status(0, success, result, employeeResult);
 			}
-			if(employeeResult == null){
-				return  new Status(1,"Please enter valid User Id");
-			}else if(!employeeResult.getPassword().equals(employee.getPassword())){
-				return new Status(1,"Please enter valid Password");
+			if (employeeResult == null) {
+				//TODO : Use messagesource to get message. No hard coding should be done.
+				return new Status(1, "Please enter valid User Id");
+			} else if (!employeeResult.getPassword().equals(
+					employee.getPassword())) {
+				//TODO : Use messagesource to get message. No hard coding should be done.
+				return new Status(1, "Please enter valid Password");
 			}
-			
-		}catch (Exception e) {
+
+		} catch (Exception e) {
+			//TODO : Use log4j library to log error messages.
 			e.printStackTrace();
 		}
-		
-		return new Status(0,"Login Successfully");
+		//TODO : Use messagesource to get message. No hard coding should be done.
+		return new Status(0, "Login Successfully");
 
 	}
-	private boolean authenticate(Employee formUser, Employee dbUser) {
-		if (formUser.getUserid().equals(dbUser.getUserid())
-				&& formUser.getPassword().equals(dbUser.getPassword())) {
-			dbUser.getFirstName();
-			dbUser.getLastName();
+
+	private boolean authenticate(Employee formEmployee, Employee dbEmployee) {
+		if (formEmployee.getUserid().equals(dbEmployee.getUserid())
+				&& formEmployee.getPassword().equals(dbEmployee.getPassword())) {
+			//TODO : Add logger "Employee Authentication Successful"
 			return true;
 		} else {
+			//TODO : Add logger "Employee Authentication Failed"
 			return false;
 		}
 
 	}
 
-
-	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE ,headers = "Accept=application/json")
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
 	public @ResponseBody Status deleteEmployee(@PathVariable("id") long id) {
 		EmployeeDto employeeDto = null;
 
 		try {
-			
 			employeeDto = employeeServices.getEmployeeDtoByid(id);
 			employeeDto.setIsActive(false);
-			
+			return new Status(1, messageSource.getMessage(
+					MessageConstant.Employee_Deleted_Successfully, null, null));
 		} catch (Exception e) {
+			//TODO : Use log4j library to log error messages.
 			e.printStackTrace();
 			return new Status(0, messageSource.getMessage(
-					MessageConstant.EMPLOYEE_DOES_NOT_EXISTS,null,null));
+					MessageConstant.EMPLOYEE_DOES_NOT_EXISTS, null, null));
 		}
-		return new Status(1, messageSource.getMessage(
-				MessageConstant.Employee_Deleted_Successfully,null,null));
+		
 	}
 
-	@RequestMapping(value = "/update", method = RequestMethod.PUT,headers = "Accept=application/json")
-	public @ResponseBody Status updateEntity(@Valid @RequestBody EmployeeDto employeeDto,BindingResult bindingResult,HttpServletRequest request,HttpServletResponse response) {
+	@RequestMapping(value = "/update", method = RequestMethod.PUT, headers = "Accept=application/json")
+	public @ResponseBody Status updateEntity(
+			@Valid @RequestBody EmployeeDto employeeDto,
+			BindingResult bindingResult, HttpServletRequest request,
+			HttpServletResponse response) {
 		try {
 			employeeDto.setIsActive(true);
-			employeeServices.updateEntity(EmployeeFactory.setEmployeeUpdate(employeeDto));
+			employeeServices.updateEntity(EmployeeFactory
+					.setEmployeeUpdate(employeeDto));
 		} catch (Exception e) {
+			//TODO : Use log4j library to log error messages.
 			e.printStackTrace();
 			return new Status(0, messageSource.getMessage(
-					MessageConstant.EMPLOYEE_DOES_NOT_EXISTS,null,null));
+					MessageConstant.EMPLOYEE_DOES_NOT_EXISTS, null, null));
 		}
-		return new Status(1,messageSource.getMessage(
-				MessageConstant.Employee_Update_Successfully,null,null));
+		return new Status(1, messageSource.getMessage(
+				MessageConstant.Employee_Update_Successfully, null, null));
 	}
-	
-	@RequestMapping(value = "/resetpassword", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,headers = "Accept=application/json")
-	public @ResponseBody Status resetPassword(@RequestBody Employee employee,HttpServletRequest request,HttpServletResponse response ) throws Exception {
 
-		Employee employeeDB = employeeServices.getEmployeeByUserId(employee.getUserid());
-		
-		try {		
-			if(employeeDB ==null){
-				return  new Status(1,"Please Enetr Valid UserId");
+	@RequestMapping(value = "/resetpassword", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
+	public @ResponseBody Status resetPassword(@RequestBody Employee employee,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+
+		Employee employeeDB = employeeServices.getEmployeeByUserId(employee
+				.getUserid());
+
+		try {
+			if (employeeDB == null) {
+				return new Status(1, "Please Enetr Valid UserId");
 			}
-			   
-			   employeeDB.setPassword(employee.getPassword());
-               employeeServices.updateEntity(employeeDB);			
-			return new Status(0,"Your Password has been reset Successfully");
+
+			employeeDB.setPassword(employee.getPassword());
+			employeeServices.updateEntity(employeeDB);
+			return new Status(0, "Your Password has been reset Successfully");
 		} catch (Exception e) {
+			//TODO : Use log4j library to log error messages.
 			e.printStackTrace();
 		}
 
 		return null;
 	}
-	
-	
-	/*private  Cookie[] eraseCookie(HttpServletRequest request, HttpServletResponse response) {
-		
-	    Cookie[] cookies = request.getCookies();
-	    if (cookies != null)
-	        for (Cookie cookie1 : cookies) {
-	            cookie1.setValue("");
-	            cookie1.setPath("/");
-	            cookie1.setMaxAge(0);
-	            response.addCookie(cookie1);
-	        }
-	    return cookies;
-	}
-	*/
+
+	/*
+	 * private Cookie[] eraseCookie(HttpServletRequest request,
+	 * HttpServletResponse response) {
+	 * 
+	 * Cookie[] cookies = request.getCookies(); if (cookies != null) for (Cookie
+	 * cookie1 : cookies) { cookie1.setValue(""); cookie1.setPath("/");
+	 * cookie1.setMaxAge(0); response.addCookie(cookie1); } return cookies; }
+	 */
 }
