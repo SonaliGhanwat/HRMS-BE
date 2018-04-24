@@ -54,9 +54,7 @@ public class EmployeeAttendanceController extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * 
-	 */
+	
 
 	@Autowired
 	EmployeeAttendanceServices employeeAttendanceServices;

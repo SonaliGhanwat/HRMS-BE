@@ -29,7 +29,7 @@ public class PageFactory {
 		page.setSubmenu(pageDTO.getSubmenu());
 		page.setUrl(pageDTO.getUrl());
 		page.setActive(true);
-		page.setUpdatedBy(Long.parseLong(request.getAttribute("current_user").toString()));
+		//page.setUpdatedBy(Long.parseLong(request.getAttribute("current_user").toString()));
 		return page;
 	}
 	

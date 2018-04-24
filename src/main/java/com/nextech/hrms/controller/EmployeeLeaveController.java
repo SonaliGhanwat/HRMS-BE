@@ -378,18 +378,21 @@ public class EmployeeLeaveController {
 	}
 	
 	@RequestMapping(value = "/getlistByUserId/{userId}", method = RequestMethod.GET)
-	public @ResponseBody
-    List<Employeeleave> getEmployee(@PathVariable("userId") String userId) {
+	public @ResponseBody Status getEmployee(@PathVariable("userId") String userId) {
 		  Employee employee = null;
 		List<Employeeleave> employeeleaves = null;
 		try {
 			employee = employeeServices.getEmployeeByUserId(userId);
 			employeeleaves =employeeLeaveServices.getEmployeeLeaveByUserid(employee.getId());
+			if(employeeleaves.size()==0){
+				return new Status(1,"There is no any leave ") ;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			 
 		}
 
-		return employeeleaves;
+		return new Status(0,"",employeeleaves);
 	}
 
 	@RequestMapping(value = "/calculateLeaveByUserId/{userId}", method = RequestMethod.GET,headers = "Accept=application/json")
