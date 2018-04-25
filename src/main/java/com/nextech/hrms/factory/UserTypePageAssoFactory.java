@@ -25,7 +25,7 @@ public class UserTypePageAssoFactory {
 		Usertype usertype = new Usertype();
 		usertype.setId(userTypePageAssoDTO.getUsertypeId().getId());
 		usertypepageassociation.setActive(true);
-		usertypepageassociation.setUpdatedBy(Long.parseLong(request.getAttribute("current_user").toString()));
+	
 		return usertypepageassociation;
 	}
 	public static UserTypePageAssoDTO setUserTypePageDTO(Usertypepageassociation usertypepageassociation){
