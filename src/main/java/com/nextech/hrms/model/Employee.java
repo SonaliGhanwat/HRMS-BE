@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.nextech.hrms.model.Notificationuserassociation;
@@ -109,6 +111,10 @@ public class Employee implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="designationId")
 	private Designation designation;
+	
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL)
+	private List<Regularization> regularizations;
 	
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL)
@@ -364,6 +370,27 @@ public class Employee implements Serializable {
 	}
 	public void setReportTo(int reportTo) {
 		this.reportTo = reportTo;
+	}
+	public List<Regularization> getRegularizations() {
+		return this.regularizations;
+	}
+
+	public void setRegularizations(List<Regularization> regularizations) {
+		this.regularizations = regularizations;
+	}
+
+	public Regularization addRegularization(Regularization regularization) {
+		getRegularizations().add(regularization);
+		regularization.setEmployee(this);
+
+		return regularization;
+	}
+
+	public Regularization removeRegularization(Regularization regularization) {
+		getRegularizations().remove(regularization);
+		regularization.setEmployee(null);
+
+		return regularization;
 	}
 
 }

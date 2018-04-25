@@ -2,8 +2,12 @@ package com.nextech.hrms.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import javax.persistence.*;
 
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -48,6 +52,10 @@ public class Employeeattendance implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="employeeid")
 	private Employee employee;
+	
+	/*@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employeeattendance", cascade = CascadeType.ALL)
+	private List<Regularization> regularizations;*/
 
 	public Employeeattendance() {
 	}
@@ -135,5 +143,25 @@ public class Employeeattendance implements Serializable {
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
 	}
+	/*public List<Regularization> getRegularizations() {
+		return this.regularizations;
+	}
 
+	public void setRegularizations(List<Regularization> regularizations) {
+		this.regularizations = regularizations;
+	}
+
+	public Regularization addRegularization(Regularization regularization) {
+		getRegularizations().add(regularization);
+		regularization.setEmployeeattendance(this);
+
+		return regularization;
+	}
+
+	public Regularization removeRegularization(Regularization regularization) {
+		getRegularizations().remove(regularization);
+		regularization.setEmployeeattendance(null);
+
+		return regularization;
+	}*/
 }

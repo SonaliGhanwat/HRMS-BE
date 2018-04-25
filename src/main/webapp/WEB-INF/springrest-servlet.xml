@@ -35,6 +35,7 @@
 				<value>com.nextech.hrms.model.Notificationuserassociation</value>
 				<value>com.nextech.hrms.model.Page</value>
 				<value>com.nextech.hrms.model.Usertypepageassociation</value>
+				<value>com.nextech.hrms.model.Regularization</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
