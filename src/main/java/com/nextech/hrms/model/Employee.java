@@ -40,8 +40,6 @@ public class Employee implements Serializable {
 	
 /*	private long createdBy;
 */
-	//@NotBlank(message="Department should not be blank")
-	private String department;
 	
 	//@Email(message="{Emailid should be enter valid")
 	//@Size(min = 2, max = 255, message = "{Email sholud be greater than 2 or less than 255 characters}")
@@ -112,6 +110,10 @@ public class Employee implements Serializable {
 	@JoinColumn(name="designationId")
 	private Designation designation;
 	
+	@ManyToOne
+	@JoinColumn(name="departmentId")
+	private Department department;
+	
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employee", cascade = CascadeType.ALL)
 	private List<Regularization> regularizations;
@@ -161,13 +163,7 @@ public class Employee implements Serializable {
 		this.dateOfJoining = dateOfJoining;
 	}
 
-	public String getDepartment() {
-		return this.department;
-	}
-
-	public void setDepartment(String department) {
-		this.department = department;
-	}
+	
 
 	public String getEmailid() {
 		return this.emailid;
@@ -362,6 +358,12 @@ public class Employee implements Serializable {
 		return this.designation;
 	}
 
+	public Department getDepartment() {
+		return department;
+	}
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
 	public void setDesignation(Designation designation) {
 		this.designation = designation;
 	}

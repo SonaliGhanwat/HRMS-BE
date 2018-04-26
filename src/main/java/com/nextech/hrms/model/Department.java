@@ -4,28 +4,19 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
-
-
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import java.sql.Timestamp;
 import java.util.List;
 
 
-/**
- * The persistent class for the designation database table.
- * 
- */
 @Entity
-@NamedQuery(name="Designation.findAll", query="SELECT d FROM Designation d")
-public class Designation implements Serializable {
+@NamedQuery(name="Department.findAll", query="SELECT d FROM Department d")
+public class Department implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id 
-	@GeneratedValue(strategy=GenerationType.IDENTITY) 
+	@Id
 	private long id;
-
-	private int band;
 
 	@Column(name="created_by")
 	private int createdBy;
@@ -35,8 +26,6 @@ public class Designation implements Serializable {
 
 	private boolean isActive;
 
-	private int level;
-
 	private String name;
 
 	@Column(name="updated_by")
@@ -45,39 +34,34 @@ public class Designation implements Serializable {
 	@Column(name="updated_date")
 	private Timestamp updatedDate;
 
-	//bi-directional many-to-one association to Employee
-	
-	
-	@ManyToOne
-	@JoinColumn(name="departmentId")
-	private Department department;
-	
+	//bi-directional many-to-one association to Designation
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "designation", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "department", cascade = CascadeType.ALL)
+	private List<Designation> designations;
+
+	//bi-directional many-to-one association to Employee
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "department", cascade = CascadeType.ALL)
 	private List<Employee> employees;
 
-	public Designation() {
+	public Department() {
 	}
-	
-	public Designation(int id) {
+
+	public Department(int id) {
 		this.id=id;
 	}
 
 	public long getId() {
-		return this.id;
+		return id;
 	}
+
+
 
 	public void setId(long id) {
 		this.id = id;
 	}
 
-	public int getBand() {
-		return this.band;
-	}
 
-	public void setBand(int band) {
-		this.band = band;
-	}
 
 	public int getCreatedBy() {
 		return this.createdBy;
@@ -95,20 +79,13 @@ public class Designation implements Serializable {
 		this.createdDate = createdDate;
 	}
 
-	public boolean getIsactive() {
-		return this.isActive;
+	
+	public boolean isActive() {
+		return isActive;
 	}
 
-	public void setIsactive(boolean isactive) {
-		this.isActive = isactive;
-	}
-
-	public int getLevel() {
-		return this.level;
-	}
-
-	public void setLevel(int level) {
-		this.level = level;
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 
 	public String getName() {
@@ -135,6 +112,28 @@ public class Designation implements Serializable {
 		this.updatedDate = updatedDate;
 	}
 
+	public List<Designation> getDesignations() {
+		return this.designations;
+	}
+
+	public void setDesignations(List<Designation> designations) {
+		this.designations = designations;
+	}
+
+	public Designation addDesignation(Designation designation) {
+		getDesignations().add(designation);
+		designation.setDepartment(this);
+
+		return designation;
+	}
+
+	public Designation removeDesignation(Designation designation) {
+		getDesignations().remove(designation);
+		designation.setDepartment(null);
+
+		return designation;
+	}
+
 	public List<Employee> getEmployees() {
 		return this.employees;
 	}
@@ -145,24 +144,16 @@ public class Designation implements Serializable {
 
 	public Employee addEmployee(Employee employee) {
 		getEmployees().add(employee);
-		employee.setDesignation(this);
+		employee.setDepartment(this);
 
 		return employee;
 	}
 
 	public Employee removeEmployee(Employee employee) {
 		getEmployees().remove(employee);
-		employee.setDesignation(null);
+		employee.setDepartment(null);
 
 		return employee;
-	}
-
-	public Department getDepartment() {
-		return this.department;
-	}
-
-	public void setDepartment(Department department) {
-		this.department = department;
 	}
 
 }

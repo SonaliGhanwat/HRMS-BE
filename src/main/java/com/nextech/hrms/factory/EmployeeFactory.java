@@ -31,12 +31,12 @@ public class EmployeeFactory {
 		employee.setDateOfJoining(employeeDto.getDateOfJoining());
 		employee.setDateOfBirth(employeeDto.getDateOfBirth());
 		employee.setAddress(employeeDto.getAddress());
-		employee.setDepartment(employeeDto.getDepartment());
 		employee.setSalary(employeeDto.getSalary());
 		employee.setUsertype(UserTypeFactory.getUserTypeModel(employeeDto.getUsertype()));
 		employee.setEmployeetype(employeeDto.getEmployeetype());
 		employee.setDesignation(employeeDto.getDesignation());
 		employee.setReportTo(employeeDto.getReportTo());
+		employee.setDepartment(employeeDto.getDepartment());
 		employee.setCreatedDate(employeeDto.getCreatedDate());
 		employee.setUpdatedDate(employeeDto.getUpdatedDate());
 		employee.setIsActive(true);
@@ -56,12 +56,12 @@ public class EmployeeFactory {
 		employeeDto.setDateOfJoining(employee.getDateOfJoining());
 		employeeDto.setDateOfBirth(employee.getDateOfBirth());
 		employeeDto.setAddress(employee.getAddress());
-		employeeDto.setDepartment(employee.getDepartment());
 		employeeDto.setSalary(employee.getSalary());
 		employeeDto.setUsertype(UserTypeFactory.getUserTypeDTO(employee.getUsertype()));
 		employeeDto.setEmployeetype(employee.getEmployeetype());
 		employeeDto.setDesignation(employee.getDesignation());
 		employeeDto.setReportTo(employee.getReportTo());
+		employeeDto.setDepartment(employee.getDepartment());
 		employeeDto.setCreatedDate(employee.getCreatedDate());
 		employeeDto.setUpdatedDate(employee.getUpdatedDate());
 		employeeDto.setIsActive(true);
@@ -98,12 +98,12 @@ public class EmployeeFactory {
 		employee.setDateOfJoining(employeeDto.getDateOfJoining());
 		employee.setDateOfBirth(employeeDto.getDateOfBirth());
 		employee.setAddress(employeeDto.getAddress());
-		employee.setDepartment(employeeDto.getDepartment());
 		employee.setSalary(employeeDto.getSalary());
 		employee.setUsertype(UserTypeFactory.getUserTypeModel(employeeDto.getUsertype()));
 		employee.setEmployeetype(employeeDto.getEmployeetype());
 		employee.setDesignation(employeeDto.getDesignation());
 		employee.setReportTo(employeeDto.getReportTo());
+		employee.setDepartment(employeeDto.getDepartment());
 		employee.setCreatedDate(employeeDto.getCreatedDate());
 		employee.setUpdatedDate(employeeDto.getUpdatedDate());
 		employee.setIsActive(true);
@@ -134,7 +134,7 @@ public class EmployeeFactory {
 				employeeDto.setDateOfBirth(new Date(row.getCell(8)
 						.getDateCellValue().getTime()));
 				employeeDto.setAddress(row.getCell(9).getStringCellValue());
-				employeeDto.setDepartment(row.getCell(10).getStringCellValue());
+				//employeeDto.setDepartment(row.getCell(10).getStringCellValue());
 				employeeDto.setSalary(row.getCell(11).getStringCellValue());
 				UserTypeDto usertype = new UserTypeDto();
 				usertype.setId((int) (row.getCell(12).getNumericCellValue()));

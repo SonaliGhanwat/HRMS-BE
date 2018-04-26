@@ -17,10 +17,12 @@ public class DesignationServiceImpl extends CRUDServiceImpl<Designation>  implem
 	DesignationDao designationDao;
 	
 	
+
+
 	@Override
-	public List<Designation> getDesignationByUserTypeid(long usertypeid)
+	public List<Designation> getDesignationByDepartmentid(long departmentid)
 			throws Exception {
-		return designationDao.getDesignationByUserTypeid(usertypeid);
+		return designationDao.getDesignationByDepartmentid(departmentid);
 	}
 
 }

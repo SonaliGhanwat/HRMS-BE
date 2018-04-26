@@ -7,6 +7,6 @@ import com.nextech.hrms.model.Employeeattendance;
 
 public interface DesignationService extends CRUDService<Designation> {
 	
-	 public List<Designation> getDesignationByUserTypeid(long usertypeid) throws Exception;
+	 public List<Designation> getDesignationByDepartmentid(long departmentid) throws Exception;
 
 }

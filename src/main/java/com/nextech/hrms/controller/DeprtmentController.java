@@ -18,33 +18,31 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nextech.hrms.dto.RegularizationDto;
+import com.nextech.hrms.model.Department;
 import com.nextech.hrms.model.Designation;
-import com.nextech.hrms.model.Regularization;
 import com.nextech.hrms.model.Status;
-import com.nextech.hrms.services.RegularizationServices;
+import com.nextech.hrms.services.DepartmentService;
 
 @RestController
-@RequestMapping("/regularization")
-public class RegularizationController {
+@RequestMapping("/department")
+public class DeprtmentController {
 
 	
 	@Autowired
-	RegularizationServices regularizationServices;
+	DepartmentService departmentService;
 	
 	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
-	public @ResponseBody Status addRegularization(
-			@Valid @RequestBody Regularization regularization) {
+	public @ResponseBody Status addDepartment(
+			@Valid @RequestBody Department department,
+			BindingResult bindingResult, HttpServletRequest request,
+			HttpServletResponse response) {
 		try {
-			
-			Regularization regularizationResult = regularizationServices.getRegularizationByUseridandDate(regularization.getEmployee().getId(),regularization.getDate());
-			if(regularizationResult==null){
-			regularization.setActive(true);
-			regularizationServices.addEntity(regularization);
-			}else{
-				return new Status(1, "You have allready added Regularization.");
+			if (bindingResult.hasErrors()) {
+				return new Status(0, bindingResult.getFieldError().getDefaultMessage());
 			}
-			return new Status(0, "Regularization added Successfully !");
+			department.setActive(true);
+			departmentService.addEntity(department);
+			return new Status(0, "Department added Successfully !");
 		} catch (ConstraintViolationException cve) {
 			System.out.println("Inside ConstraintViolationException");
 			cve.printStackTrace();
@@ -59,56 +57,55 @@ public class RegularizationController {
 			return new Status(0, e.getCause().getMessage());
 		}
 	}
-
+	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
-	public @ResponseBody Regularization getRegularization(@PathVariable("id") long id) {
-		Regularization regularization = null;
+	public @ResponseBody Department getDepartment(@PathVariable("id") long id) {
+		Department department = null;
 		try {
-			regularization = regularizationServices.getEntityById(Regularization.class,
+			department = departmentService.getEntityById(Department.class,
 					id);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return regularization;
+		return department;
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.PUT, headers = "Accept=application/json")
-	public @ResponseBody Status updateRegularization(
-			@RequestBody Regularization regularization, HttpServletRequest request,
+	public @ResponseBody Status updateDepartment(
+			@RequestBody Department department, HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
-			regularization.setActive(true);
-			regularizationServices.updateEntity(regularization);
-			return new Status(0, "Regularization update Successfully !");
+			department.setActive(true);
+			departmentService.updateEntity(department);
+			return new Status(0, "department update Successfully !");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Status(0, e.toString());
 		}
 	}
-	
 	@RequestMapping(value = "/list", method = RequestMethod.GET, headers = "Accept=application/json")
-	public @ResponseBody List<Regularization> getRegularization() {
+	public @ResponseBody List<Department> getDepartment() {
 
-		List<Regularization> regularizations = null;
+		List<Department> departments = null;
 		try {
-			regularizations = regularizationServices.getEntityList(Regularization.class);
+			departments = departmentService.getEntityList(Department.class);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return regularizations;
+		return departments;
 	}
 	
 	@RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-	public @ResponseBody Status deleteRegularization(@PathVariable("id") long id) {
+	public @ResponseBody Status deleteDepartment(@PathVariable("id") long id) {
 
 		try {
-			Regularization regularization = regularizationServices.getEntityById(
-					Regularization.class, id);
-			regularization.setActive(false);
-			regularizationServices.updateEntity(regularization);
-			return new Status(0, "Regularization deleted Successfully !");
+			Department department = departmentService.getEntityById(
+					Department.class, id);
+			department.setActive(false);
+			departmentService.updateEntity(department);
+			return new Status(0, "Designation deleted Successfully !");
 		} catch (Exception e) {
 			return new Status(0, e.toString());
 		}

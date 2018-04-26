@@ -42,9 +42,7 @@ public class Usertype implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usertype", cascade = CascadeType.ALL)
 	private List<Employee> employees;
 
-	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usertype", cascade = CascadeType.ALL)
-	private List<Designation> designations;
+	
 	
 	public Usertype() {
 	}
@@ -122,26 +120,6 @@ public class Usertype implements Serializable {
 		return employee;
 	}
 
-	public List<Designation> getDesignations() {
-		return this.designations;
-	}
-
-	public void setDesignations(List<Designation> designations) {
-		this.designations = designations;
-	}
-
-	public Designation addDesignation(Designation designation) {
-		getDesignations().add(designation);
-		designation.setUsertype(this);
-
-		return designation;
-	}
-
 	
-	public Designation removeDesignation(Designation designation) {
-		getDesignations().remove(designation);
-		designation.setUsertype(null);
-
-		return designation;
-	}
+	
 }

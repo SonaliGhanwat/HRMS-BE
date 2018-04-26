@@ -16,12 +16,14 @@ import com.nextech.hrms.model.Employeeattendance;
 @Transactional
 public class DesignationDaoImpl extends SuperDaoImpl<Designation> implements DesignationDao{
 
+	
+
 	@Override
-	public List<Designation> getDesignationByUserTypeid(long usertypeid)
+	public List<Designation> getDesignationByDepartmentid(long departmentid)
 			throws Exception {
 		session = sessionFactory.openSession();
 		 Criteria criteria = session.createCriteria(Designation.class);
-		  criteria.add(Restrictions.eq("usertype.id",usertypeid));
+		  criteria.add(Restrictions.eq("department.id",departmentid));
 		  List<Designation> designations =criteria.list();
 		  return designations;
 	}

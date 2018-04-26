@@ -107,11 +107,11 @@ public class DesignationController {
 		return designations;
 	}
 
-	@RequestMapping(value = "designationList/{usertypeid}", method = RequestMethod.GET, headers = "Accept=application/json")
-	public @ResponseBody List<Designation> getDesignationListByUserTypeId(@PathVariable("usertypeid") long usertypeid) {
+	@RequestMapping(value = "designationList/{departmentid}", method = RequestMethod.GET, headers = "Accept=application/json")
+	public @ResponseBody List<Designation> getDesignationListByUserTypeId(@PathVariable("departmentid") long departmentid) {
 		List<Designation> designations = null;
 		try {
-			designations = designationService.getDesignationByUserTypeid(usertypeid);
+			designations = designationService.getDesignationByDepartmentid(departmentid);
 
 		} catch (Exception e) {
 			e.printStackTrace();
