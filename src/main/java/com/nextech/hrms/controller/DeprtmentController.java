@@ -93,7 +93,6 @@ public class DeprtmentController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return departments;
 	}
 	

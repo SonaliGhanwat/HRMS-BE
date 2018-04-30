@@ -1,6 +1,7 @@
 package com.nextech.hrms.servicesImpl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,5 +21,12 @@ public class RegularizationServicesImpl extends CRUDServiceImpl<Regularization> 
 	public Regularization getRegularizationByUseridandDate(long empId,
 			Date date) throws Exception {
 		return regularizationDao.getRegularizationByUseridandDate(empId, date);
+	}
+
+	@Override
+	public List<Regularization> getRegularizationByEmployeeId(long empId)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return regularizationDao.getRegularizationByEmployeeId(empId);
 	}
 }

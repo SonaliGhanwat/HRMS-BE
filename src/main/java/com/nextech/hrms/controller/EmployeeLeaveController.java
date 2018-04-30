@@ -581,6 +581,9 @@ public class EmployeeLeaveController {
 		
 	        Employee employee = employeeServices.getEmployeeByUserId(userId);
 	        List<Employee> employees = employeeServices.getEmployeeByReportTo((int) employee.getId());
+	        if(employees==null){
+	        	 return new Status(1,"Employee does not exits") ;
+				}  
 	        for (Employee employee2 : employees) {
 	        	 employeeleaves =  employeeLeaveServices.getEmployeeLeaveByEmployeeId(employee2.getId());
 	        	for (Employeeleave employeeleave2 : employeeleaves) {
@@ -604,11 +607,11 @@ public class EmployeeLeaveController {
 		        		//employeeleaveList.add(employeeleave2);
 		        	}
 				}
-	        }       
+	        }     
 	      
 		} catch (Exception e) {
 			e.printStackTrace();	
-			  return new Status(1,"Employee does not exits") ;
+			 
 		}
 		return new Status(0,"",employeeleaveList) ;
 	}
