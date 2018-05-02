@@ -9,7 +9,7 @@ public class EmployeeDailyTaskDto extends AbstractDTO{
 	private Employee employee;
 	private Date date;
 	private String taskName;
-	private Time estimationTime;
+	private String estimationTime;
 	private Time starttime;
 	private Time endtime;
 	private long takenTime;
@@ -33,10 +33,12 @@ public class EmployeeDailyTaskDto extends AbstractDTO{
 	public void setTaskName(String taskName) {
 		this.taskName = taskName;
 	}
-	public Time getEstimationTime() {
+	
+	
+	public String getEstimationTime() {
 		return estimationTime;
 	}
-	public void setEstimationTime(Time estimationTime) {
+	public void setEstimationTime(String estimationTime) {
 		this.estimationTime = estimationTime;
 	}
 	public Time getStarttime() {

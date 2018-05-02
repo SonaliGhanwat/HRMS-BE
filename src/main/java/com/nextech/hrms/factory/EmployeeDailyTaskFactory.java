@@ -83,7 +83,7 @@ public class EmployeeDailyTaskFactory {
 	        	employeeDailyTaskDto.setEmployee(employee);
 	        	employeeDailyTaskDto.setDate(new Date(row.getCell(2).getDateCellValue().getTime()));
 	        	employeeDailyTaskDto.setTaskName(row.getCell(3).getStringCellValue());
-	        	employeeDailyTaskDto.setEstimationTime(new Time(row.getCell(4).getDateCellValue().getTime()));
+	        	employeeDailyTaskDto.setEstimationTime(row.getCell(4).getStringCellValue());
 	        	employeeDailyTaskDto.setStarttime(new Time(row.getCell(5).getDateCellValue().getTime()));
 	        	employeeDailyTaskDto.setEndtime(new Time(row.getCell(6).getDateCellValue().getTime()));
 	        	employeeDailyTaskDtos.add(employeeDailyTaskDto);

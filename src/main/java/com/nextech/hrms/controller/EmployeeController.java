@@ -294,8 +294,14 @@ public class EmployeeController extends HttpServlet {
 				return new Status(1, "Please Enetr Valid UserId");
 			}
 
-			employeeDB.setPassword(employee.getPassword());
-			employeeServices.updateEntity(employeeDB);
+			if(employeeDB.getPassword().equals(employee.getPassword())){
+				return new Status(1, "You have enter old password ,Please enter new password");
+							
+			}else{
+				employeeDB.setPassword(employee.getPassword());
+				employeeServices.updateEntity(employeeDB);
+			}
+			
 			return new Status(0, "Your Password has been reset Successfully");
 		} catch (Exception e) {
 			//TODO : Use log4j library to log error messages.

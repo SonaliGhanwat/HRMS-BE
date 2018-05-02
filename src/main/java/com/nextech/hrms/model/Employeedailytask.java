@@ -31,7 +31,7 @@ public class Employeedailytask implements Serializable {
 	private Time endtime;
 
 	@Column(name="estimation_time")
-	private Time estimationTime;
+	private String estimationTime;
 	
 	@Column(name="description")
 	private String description;
@@ -96,11 +96,12 @@ public class Employeedailytask implements Serializable {
 		this.endtime = endtime;
 	}
 
-	public Time getEstimationTime() {
-		return this.estimationTime;
+
+	public String getEstimationTime() {
+		return estimationTime;
 	}
 
-	public void setEstimationTime(Time estimationTime) {
+	public void setEstimationTime(String estimationTime) {
 		this.estimationTime = estimationTime;
 	}
 
