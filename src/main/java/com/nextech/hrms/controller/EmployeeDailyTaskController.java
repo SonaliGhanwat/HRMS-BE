@@ -45,7 +45,7 @@ public class EmployeeDailyTaskController {
 	@Autowired
 	private MessageSource messageSource;
 
-	static final Logger logger = Logger.getLogger(EmployeeDailyTaskController.class);
+	static  Logger logger = Logger.getLogger(EmployeeDailyTaskController.class);
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST,headers = "Accept=application/json")
 	public @ResponseBody
@@ -58,10 +58,10 @@ public class EmployeeDailyTaskController {
 			employeeDailyTaskDto.setIsActive(true);
 			employeeDailyTaskDto.setTakenTime(calculateTotalTime(employeeDailyTaskDto));
 			employeeDailyTaskServices.addEntity(EmployeeDailyTaskFactory.setEmployeeDailyTask(employeeDailyTaskDto));
-			return new Status(1, "Employee Daily Task added Successfully !");
+			return new Status(1, messageSource.getMessage(MessageConstant.EmployeeDailyTask_Added_Successfully, null,null));
 		}
 		}catch (Exception e) {
-			// e.printStackTrace();
+			logger.error(e);
 			return new Status(0, e.toString());
 		}
 	}
@@ -72,7 +72,7 @@ public class EmployeeDailyTaskController {
 			employeeDailyTaskServices.addEmployeeDailyTaskExcel(employeeDailyTaskDtos);
 			return new Status(1, messageSource.getMessage(MessageConstant.EmployeeDailyTask_Added_Successfully, null,null));
 		} catch (Exception e) {
-			 e.printStackTrace();
+			logger.error(e);
 			return new Status(0, e.toString());
 		}
 	}
@@ -84,7 +84,7 @@ public class EmployeeDailyTaskController {
 			employeeDailyTaskDto = employeeDailyTaskServices.getEmployeeDailyTaskDto(id);
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 			
 		}
 		return employeeDailyTaskDto;
@@ -98,28 +98,12 @@ public class EmployeeDailyTaskController {
 					.getEmployeeDailyTaskByUserid(empId);		
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 
 		}
 		return  employeedailytasks; // TODO Use proper message to indicate correct reason user
 	}
-	/*@RequestMapping(value = "/list/{userId}", method = RequestMethod.GET,headers = "Accept=application/json")
-	public @ResponseBody List<Employeedailytask> getEmployee(@PathVariable("userId") String userId) {
-
-		List<Employeedailytask> employeedailytasks = null;
-		 Employee employee = null;
-		try {
-			employee = employeeServices.getEmployeeByUserId(userId);
-			employeedailytasks = employeeDailyTaskServices.getEmployeeDailyTaskByUserid(employee.getId());
-			if(employee.getUsertype().getId()==2 ||employee.getUsertype().getId()==4 ||employee.getUsertype().getId()==5){
-				return employeedailytasks = employeeDailyTaskServices.getEntityList(Employeedailytask.class);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return employeedailytasks;
-	}*/
+	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public @ResponseBody
     List<EmployeeDailyTaskDto> getEmployee() {
@@ -129,7 +113,7 @@ public class EmployeeDailyTaskController {
 			employeeDailyTaskDtoList = employeeDailyTaskServices.getEmployeeDailyTaskDtoList(employeeDailyTaskDtoList);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 
 		return employeeDailyTaskDtoList;
@@ -153,10 +137,10 @@ public class EmployeeDailyTaskController {
 
 		try {
 			employeeDailyTaskDto.setTakenTime(calculateTotalTime(employeeDailyTaskDto));
-			//calculateTotalTime(employeeDailyTaskDto);
 			employeeDailyTaskServices.updateEntity(EmployeeDailyTaskFactory.setEmployeeDailyTaskUpdate(employeeDailyTaskDto));
 			return new Status(1, messageSource.getMessage(MessageConstant.EmployeeDailyTask_Update_Successfully, null,null));
 		} catch (Exception e) {
+			logger.error(e);
 			return new Status(0, e.toString());
 		}
 
@@ -174,7 +158,7 @@ public class EmployeeDailyTaskController {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 
 		}
 		return new Status(1, "Employee Daily Task By Id and Date!", employeedailytaskList);

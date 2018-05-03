@@ -27,7 +27,7 @@ public class LeaveTypeController {
 	@Autowired
 	private MessageSource messageSource;
 
-	static final Logger logger = Logger.getLogger(UserTypeController.class);
+	static  Logger logger = Logger.getLogger(UserTypeController.class);
 	
 	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody Status addLeaveType(@RequestBody LeaveTypeDto leaveTypeDto) {
@@ -36,9 +36,9 @@ public class LeaveTypeController {
 			leaveTypeServices.addEntity(LeaveTypeFactory.setLeaveType(leaveTypeDto));
 			
 		} catch (Exception e) {
-		     e.printStackTrace();
+		     logger.error(e);
 		}
-		return new Status(0, "Leave Type added Successfully !");
+		return new Status(0, messageSource.getMessage(MessageConstant.LeaveType_Added_Successfully, null,null));
 	}
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody
@@ -48,7 +48,7 @@ public class LeaveTypeController {
 			leaveTypeDto = leaveTypeServices.getLeaveTypeDto(id);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		 return leaveTypeDto;
 	}
@@ -61,7 +61,7 @@ public class LeaveTypeController {
 			leaveTypeDtos = leaveTypeServices.getLeaveTypeList(leaveTypeDtos);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return leaveTypeDtos;
 	}
@@ -74,7 +74,7 @@ public class LeaveTypeController {
 			leaveTypeServices.getLeaveTypeDtoByid(id);
            
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 			return new Status(1,messageSource.getMessage(MessageConstant.LeaveType_DOES_NOT_EXISTS, null,null));
 		}
 		return new Status(1, messageSource.getMessage(MessageConstant.LeaveType_Delete_Successfully, null,null));
@@ -86,7 +86,7 @@ public class LeaveTypeController {
 			leaveTypeServices.updateEntity(LeaveTypeFactory.setLeaveTypeUpdate(leaveTypeDto));
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 			
 		}
 		return new Status(1,messageSource.getMessage(MessageConstant.LeaveType_Update_Successfully, null,null));

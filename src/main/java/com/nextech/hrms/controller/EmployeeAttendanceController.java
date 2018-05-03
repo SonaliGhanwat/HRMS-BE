@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,11 +12,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,6 +68,8 @@ public class EmployeeAttendanceController extends HttpServlet {
 	
 	@Autowired
 	HolidayServices holidayServices;
+	
+	static  Logger logger = Logger.getLogger(EmployeeAttendanceController.class);
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, headers = "Accept=application/json")
 	public @ResponseBody Status addEmployeeAttendance(
@@ -80,9 +80,9 @@ public class EmployeeAttendanceController extends HttpServlet {
 							.getEmployee().getId(), employeeAttendanceDto
 							.getDate());
 			if (employeeleaves != null) {
-				return new Status(
-						1,
-						"Sorry You have allready applied leave for this day,So you cant fill Attendance");
+				return new Status(1,messageSource.getMessage(
+						MessageConstant.AllReady_Apply_Leave,
+						null, null));
 			} else {
 
 				Employeeattendance employeeattendance1 = employeeAttendanceServices.getEmpolyeeAttendanceByIdandDate(employeeAttendanceDto.getEmployee().getId(), employeeAttendanceDto.getDate());
@@ -98,12 +98,13 @@ public class EmployeeAttendanceController extends HttpServlet {
 				} else {
 					return new Status(1, "You have allready added attenadnce.");
 				}
-				return new Status(0, "Employee Attendance added Successfully !");
+				return new Status(0, messageSource.getMessage(
+						MessageConstant.EmployeeAttendance_Added_Successfully,
+						null, null));
 
 			}
 		} catch (Exception e) {
-			System.out.println("Inside Exception");
-			e.printStackTrace();
+			logger.error(e);
 			return new Status(0, e.getCause().getMessage());
 		}
 
@@ -123,8 +124,7 @@ public class EmployeeAttendanceController extends HttpServlet {
 					MessageConstant.EmployeeAttendance_Added_Successfully,
 					null, null));
 		} catch (Exception e) {
-			System.out.println("Inside Exception");
-			e.printStackTrace();
+			logger.error(e);
 			return new Status(0, e.getCause().getMessage());
 		}
 	}
@@ -137,9 +137,7 @@ public class EmployeeAttendanceController extends HttpServlet {
 			employeeAttendanceDto = employeeAttendanceServices
 					.getEmployeeAttendanceDto(id);
 		} catch (Exception e) {
-			e.printStackTrace();
-			// return new
-			// Status(1,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS,null,null));
+			logger.error(e);
 		}
 		return employeeAttendanceDto;
 	}
@@ -151,43 +149,14 @@ public class EmployeeAttendanceController extends HttpServlet {
 		try {
 			employeeattendanceList = employeeAttendanceServices
 					.getEmployeeattendanceByUserid(empId);
-			/*
-			 * if(employeeattendanceList!=null){ // TODO create constants for
-			 * success status code and error status code and user everywhere
-			 * return new Status(0,messageSource.getMessage(MessageConstant.
-			 * EMPLOYEE_DOES_NOT_EXISTS,null,null));// TODO Use proper message
-			 * to indicate correct reason user }
-			 */
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 
 		}
-		return employeeattendanceList; // TODO Use proper message to indicate
-										// correct reason user
+		return employeeattendanceList; 
 	}
 
-	/*
-	 * @RequestMapping(value = "/list/{userId}", method =
-	 * RequestMethod.GET,headers = "Accept=application/json") public
-	 * @ResponseBody List<Employeeattendance>
-	 * getEmployee(@PathVariable("userId") String userId ,HttpServletRequest
-	 * request) {
-	 * 
-	 * List<Employeeattendance> employeeattendances = null; Employee employee =
-	 * null; try { employee = employeeServices.getEmployeeByUserId(userId);
-	 * employeeattendances =
-	 * employeeAttendanceServices.getEmployeeattendanceByUserid
-	 * (employee.getId()); //employeeAttendanceDtoList =
-	 * employeeAttendanceServices
-	 * .getEmployeeAttendanceList(employeeAttendanceDtoList);
-	 * if(employee.getUsertype().getId()==2 ||employee.getUsertype().getId()==4
-	 * ||employee.getUsertype().getId()==5){ return employeeattendances =
-	 * employeeAttendanceServices.getEntityList(Employeeattendance.class); }
-	 * 
-	 * } catch (Exception e) { e.printStackTrace(); } return
-	 * employeeattendances; }
-	 */
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public @ResponseBody List<EmployeeAttendanceDto> getEmployee() {
@@ -197,7 +166,7 @@ public class EmployeeAttendanceController extends HttpServlet {
 			employeeAttendanceDtoList = employeeAttendanceServices
 					.getEmployeeAttendanceList(employeeAttendanceDtoList);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 
 		return employeeAttendanceDtoList;
@@ -240,48 +209,6 @@ public class EmployeeAttendanceController extends HttpServlet {
 				null));
 	}
 
-	/*
-	 * @RequestMapping(value = "/getAttendanceByDate/{Date}", method =
-	 * RequestMethod.GET,headers = "Accept=application/json") public
-	 * @ResponseBody List<Employeeattendance> getEmployeeAttendanceByDate(
-	 * @PathVariable("Date") String date) { List<Employeeattendance>
-	 * employeeattendanceList = null; try { employeeattendanceList =
-	 * employeeAttendanceServices
-	 * .getEmployeeattendanceByCurrentDate(DateUtil.convertToDate(date));
-	 * if(employeeattendanceList!=null){ // TODO create constants for success
-	 * status code and error status code and user everywhere return new
-	 * Status(0,
-	 * messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS
-	 * ,null,null));// TODO Use proper message to indicate correct reason user }
-	 * 
-	 * } catch (Exception e) { e.printStackTrace();
-	 * 
-	 * } return employeeattendanceList; }
-	 */
-	/*
-	 * @RequestMapping(value = "/getAttendance/{id}/{yearMonth}", method =
-	 * RequestMethod.GET,headers = "Accept=application/json") public
-	 * @ResponseBody List<Employeeattendance>
-	 * calculateEmployeeAttendanceByIdandMonth(
-	 * 
-	 * @PathVariable("id") long empId, @PathVariable("yearMonth") String
-	 * yearMonthString) { List<Employeeattendance> employeeattendanceList =
-	 * null; String count=""; try { employeeattendanceList =
-	 * employeeAttendanceServices
-	 * .calculateEmployeeAttendanceByEmployeeIdandDate
-	 * (empId,YearUtil.convertToDate(yearMonthString));
-	 * 
-	 * count = String.valueOf(employeeattendanceList.size());
-	 * System.out.println("Employee Attedance"+count);
-	 * 
-	 * } catch (Exception e) { e.printStackTrace();
-	 * 
-	 * }
-	 * 
-	 * return employeeattendanceList;
-	 * 
-	 * }
-	 */
 
 	@RequestMapping(value = "/getAttendance/{userid}/{yearMonth}", method = RequestMethod.GET, headers = "Accept=application/json")
 	public @ResponseBody Status calculateEmployeeAttendanceByIdandMonth(
@@ -299,7 +226,7 @@ public class EmployeeAttendanceController extends HttpServlet {
 				return new Status(0,"There is no any attendance for this month"); 
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return new Status(1,"",employeeattendanceList); 
 	}
@@ -340,7 +267,7 @@ public class EmployeeAttendanceController extends HttpServlet {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}	
 	}
 	 
@@ -357,8 +284,7 @@ public class EmployeeAttendanceController extends HttpServlet {
 				return "Absent";
 			}
 		} catch (Exception e) {
-			System.err.println("Got an exception!");
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return null;
 	}
@@ -415,7 +341,7 @@ public class EmployeeAttendanceController extends HttpServlet {
 				return new Status(0,"There is no any attendance for this month"); 
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return new Status(1,"",attendanceWorkInfoDtos); 
 	}

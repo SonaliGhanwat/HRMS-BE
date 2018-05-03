@@ -112,19 +112,6 @@ public class UsertypepageassociationController {
 		return new Status(1,"",userTypePageAssoDTO);
 	}
 
-	/*@RequestMapping(value = "/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
-	public @ResponseBody Status getUserTypePageAsso(
-			@PathVariable("id") long id) {
-		List<Usertypepageassociation> usertypepageassociations = null;
-		try {
-			usertypepageassociations = usertypepageassociationService.getUserTypeDtoList(id);
-			
-		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();
-		}
-		return new Status(1,"",usertypepageassociations);
-	}*/
 	@RequestMapping(value = "/update", method = RequestMethod.PUT, headers = "Accept=application/json")
 	public @ResponseBody Status updateUserTypePageAsso(
 			@RequestBody UserTypePageAssoDTO userTypePageAssoDTO,HttpServletRequest request,HttpServletResponse response) {

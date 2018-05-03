@@ -1,6 +1,5 @@
 package com.nextech.hrms.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,14 +20,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.dto.EmployeeAttendanceDto;
-import com.nextech.hrms.dto.EmployeeLeaveDto;
-import com.nextech.hrms.dto.NotificationDTO;
 import com.nextech.hrms.dto.RegularizationDto;
-import com.nextech.hrms.model.Designation;
 import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.Employeeattendance;
-import com.nextech.hrms.model.Employeeleave;
 import com.nextech.hrms.model.Regularization;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.EmployeeAttendanceServices;
@@ -48,6 +45,11 @@ public class RegularizationController {
 	@Autowired
 	EmployeeAttendanceServices employeeAttendanceServices;
 	
+	@Autowired
+	private MessageSource messageSource;
+	
+	static Logger logger = Logger.getLogger(RegularizationController.class);
+	
 	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
 	public @ResponseBody Status addRegularization(
 			@Valid @RequestBody Regularization regularization) {
@@ -62,7 +64,7 @@ public class RegularizationController {
 			}else{
 				return new Status(1, "You have allready added Regularization.");
 			}
-			return new Status(0, "Regularization added Successfully !");
+			return new Status(0, messageSource.getMessage(MessageConstant.Regularization_Added_Successfully, null,null));
 		} catch (ConstraintViolationException cve) {
 			System.out.println("Inside ConstraintViolationException");
 			cve.printStackTrace();
@@ -97,7 +99,7 @@ public class RegularizationController {
 		try {
 			regularization.setActive(true);
 			regularizationServices.updateEntity(regularization);
-			return new Status(0, "Regularization update Successfully !");
+			return new Status(0, messageSource.getMessage(MessageConstant.Regularization_Update_Successfully, null,null));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Status(0, e.toString());
@@ -126,7 +128,7 @@ public class RegularizationController {
 					Regularization.class, id);
 			regularization.setActive(false);
 			regularizationServices.updateEntity(regularization);
-			return new Status(0, "Regularization deleted Successfully !");
+			return new Status(0, messageSource.getMessage(MessageConstant.Regularization_Delete_Successfully, null,null));
 		} catch (Exception e) {
 			return new Status(0, e.toString());
 		}

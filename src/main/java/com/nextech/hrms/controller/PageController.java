@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.nextech.hrms.factory.PageFactory;
+import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.dto.PageDTO;
 import com.nextech.hrms.services.PageService;
 import com.nextech.hrms.model.Designation;
@@ -34,6 +36,9 @@ public class PageController {
 	@Autowired
 	PageService pageservice;
 	
+	@Autowired
+	private MessageSource messageSource;
+	
 	static Logger logger = Logger.getLogger(PageController.class);
 	
 	@Transactional @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
@@ -45,7 +50,7 @@ public class PageController {
 						.getDefaultMessage());
 			}
 			pageservice.addEntity(PageFactory.setPage(pageDTO, request));
-			return new Status(1, "Page added Successfully !");
+			return new Status(1, messageSource.getMessage(MessageConstant.Page_Added_Successfully, null,null));
 		} catch (ConstraintViolationException cve) {
 			logger.error(cve);
 			cve.printStackTrace();
@@ -61,28 +66,12 @@ public class PageController {
 		}
 	}
 
-	/*@Transactional @RequestMapping(value = "/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
-	public @ResponseBody PageDTO getPage(@PathVariable("id") long id) {
-		PageDTO pageDTO = null;
-		try {
-			pageDTO = pageservice.getPageDTOById(id);
-			if(pageDTO==null){
-				logger.error("There is no any page");
-				
-			}
-		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();
-		}
-		return pageDTO;
-	}*/
-
 	@Transactional @RequestMapping(value = "/update", method = RequestMethod.PUT, headers = "Accept=application/json")
 	public @ResponseBody Status updatePage(@RequestBody PageDTO pageDTO,
 			HttpServletRequest request, HttpServletResponse response) {
 		try {
 			pageservice.updateEntity(PageFactory.setPageUpdate(pageDTO, request));
-			return new Status(1, "Page update Successfully !");
+			return new Status(1, messageSource.getMessage(MessageConstant.Page_Update_Successfully, null,null));
 		} catch (Exception e) {
 			logger.error(e);
 			return new Status(0, e.toString());
@@ -96,7 +85,7 @@ public class PageController {
 		try {
 			pageList = pageservice.getPageDTOList(pageList);
 			if(pageList==null){
-				logger.error("There is no any page list");
+				
 				return new Status(1,"There is no any page list");
 			}
 		} catch (Exception e) {
@@ -127,7 +116,7 @@ public class PageController {
 					Page.class, id);
 			page.setActive(false);
 			pageservice.updateEntity(page);
-			return new Status(0, "Page deleted Successfully !");
+			return new Status(0, messageSource.getMessage(MessageConstant.Page_Delete_Successfully, null,null));
 		} catch (Exception e) {
 			return new Status(0, e.toString());
 		}

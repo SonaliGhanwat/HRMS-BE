@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.dto.EmployeeDto;
 import com.nextech.hrms.model.Designation;
 import com.nextech.hrms.model.Employee;
@@ -39,6 +41,8 @@ public class DesignationController {
 
 	@Autowired
 	EmployeeServices employeeServices;
+	
+	static  Logger logger = Logger.getLogger(DesignationController.class);
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
 	public @ResponseBody Status addDesignation(
@@ -51,18 +55,16 @@ public class DesignationController {
 			}
 			designation.setIsactive(true);
 			designationService.addEntity(designation);
-			return new Status(0, "Designation added Successfully !");
+			return new Status(0, messageSource.getMessage(
+					MessageConstant.Designation_Added_Successfully, null, null));
 		} catch (ConstraintViolationException cve) {
-			System.out.println("Inside ConstraintViolationException");
-			cve.printStackTrace();
+			logger.error(cve);
 			return new Status(0, cve.getCause().getMessage());
 		} catch (PersistenceException pe) {
-			System.out.println("Inside PersistenceException");
-			pe.printStackTrace();
+			logger.error(pe);
 			return new Status(0, pe.getCause().getMessage());
 		} catch (Exception e) {
-			System.out.println("Inside Exception");
-			e.printStackTrace();
+			logger.error(e);
 			return new Status(0, e.getCause().getMessage());
 		}
 	}
@@ -74,7 +76,8 @@ public class DesignationController {
 			designation = designationService.getEntityById(Designation.class,
 					id);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
+			
 		}
 		return designation;
 	}
@@ -86,9 +89,10 @@ public class DesignationController {
 		try {
 			designation.setIsactive(true);
 			designationService.updateEntity(designation);
-			return new Status(0, "Designation update Successfully !");
+			return new Status(0, messageSource.getMessage(
+					MessageConstant.Designation_Update_Successfully, null, null));
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 			return new Status(0, e.toString());
 		}
 	}
@@ -101,7 +105,7 @@ public class DesignationController {
 			designations = designationService.getEntityList(Designation.class);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 
 		return designations;
@@ -114,7 +118,7 @@ public class DesignationController {
 			designations = designationService.getDesignationByDepartmentid(departmentid);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 
 		return designations;
@@ -128,8 +132,10 @@ public class DesignationController {
 					Designation.class, id);
 			designation.setIsactive(false);
 			designationService.updateEntity(designation);
-			return new Status(0, "Designation deleted Successfully !");
+			return new Status(0, messageSource.getMessage(
+					MessageConstant.Designation_Delete_Successfully, null, null));
 		} catch (Exception e) {
+			logger.error(e);
 			return new Status(0, e.toString());
 		}
 	}
@@ -157,6 +163,7 @@ public class DesignationController {
 			}
 			return new Status(employeeDtos);
 		} catch (Exception e) {
+			logger.error(e);
 			return new Status(0, e.toString());
 		}
 

@@ -37,5 +37,29 @@ public class MessageConstant {
 	public static final String Phone_Number_Allready_Exit="phoneNumberExit";
 	public static final String SESSIONTIMEOUT="sessionTimeout";
 	public static final String USER_ADD_NOTIFICATION="useraddNotification";
-
+	public static final String Department_Added_Successfully="departmentAdd";
+	public static final String Department_Update_Successfully="departmentUpdate";
+	public static final String Department_Delete_Successfully="departmentDelete";
+	public static final String Designation_Added_Successfully="designationAdd";
+	public static final String Designation_Update_Successfully="designationUpdate";
+	public static final String Designation_Delete_Successfully="designationDelete";
+	public static final String Valid_UserId="validUserId";
+	public static final String Valid_Password="validPassword";
+	public static final String Old_Password="oldPassword";
+	public static final String Reset_Password="resetPassword";
+	public static final String Login_Successfully="loginSuccessfully";
+	public static final String AllReady_Apply_Leave="allReadyApplyLeave";
+	public static final String Employee_Type_Added_Successfully="allReadyApplyLeave";
+	public static final String Employee_Type_Update_Successfully="allReadyApplyLeave";
+	public static final String Employee_Type_Delete_Successfully="employeeTypeDelete";
+	public static final String Notification_Added_Successfully="notificationAdd";
+	public static final String Notification_Update_Successfully="notificationUpdate";
+	public static final String Notification_Delete_Successfully="notificationDelete";
+	public static final String Notification_Does_Not_Exits="notificationExit";
+	public static final String Page_Added_Successfully="pageAdd";
+	public static final String Page_Delete_Successfully="pageDelete";
+	public static final String Page_Update_Successfully="pageUpdate";
+	public static final String Regularization_Added_Successfully="regularizationAdd";
+	public static final String Regularization_Delete_Successfully="regularizationUpdate";
+	public static final String Regularization_Update_Successfully="regularizationDelete";
 }

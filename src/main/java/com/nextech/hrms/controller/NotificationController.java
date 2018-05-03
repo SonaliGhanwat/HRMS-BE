@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.nextech.hrms.factory.NotificationRequestResponseFactory;
+import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.dto.NotificationDTO;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.NotificationService;
@@ -30,7 +33,10 @@ public class NotificationController {
 	@Autowired
 	NotificationService notificationservice;
 	
-	static Logger logger = Logger.getLogger(NotificationController.class);
+	@Autowired
+	private MessageSource messageSource;
+
+	static  Logger logger = Logger.getLogger(NotificationController.class);
 	
 	 @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
 	public @ResponseBody Status addNotification(@Valid @RequestBody NotificationDTO notificationDTO,
@@ -39,10 +45,10 @@ public class NotificationController {
 			
 			
 			notificationservice.addEntity(NotificationRequestResponseFactory.setNotification(notificationDTO));
-			return new Status(1, "Notification added Successfully !");
+			return new Status(1, messageSource.getMessage(MessageConstant.Notification_Added_Successfully, null,null));
 			
 		} catch (ConstraintViolationException cve) {
-		
+		logger.error(cve);
 			return new Status(0, cve.getMessage());
 		
 	}
@@ -55,11 +61,10 @@ public class NotificationController {
 			notification = notificationservice.getNotificationDTOById(id);
 			if(notification==null){
 				
-				return  new Status(1,"There is no any notification");
+				return  new Status(1,messageSource.getMessage(MessageConstant.Notification_Does_Not_Exits, null,null));
 			}
 		} catch (Exception e) {
-		
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return new Status(1,"",notification);
 	}
@@ -70,9 +75,9 @@ public class NotificationController {
 		try {
 	
 			notificationservice.updateEntity(NotificationRequestResponseFactory.setNotification(notificationDTO));
-			return new Status(1, "Notification update Successfully !");
+			return new Status(1, messageSource.getMessage(MessageConstant.Notification_Update_Successfully, null,null));
 		} catch (Exception e) {
-			
+			logger.error(e);
 			return new Status(0, e.toString());
 		}
 	}
@@ -103,11 +108,11 @@ public class NotificationController {
 			NotificationDTO notificationDTO =notificationservice.deleteNofificationById(id);
 			if(notificationDTO==null){
 				
-				return  new Status(1,"There is no any notification for delete");
+				return  new Status(1,messageSource.getMessage(MessageConstant.Notification_Does_Not_Exits, null,null));
 			}
-			return new Status(1, "Notification deleted Successfully !");
+			return new Status(1, messageSource.getMessage(MessageConstant.Notification_Delete_Successfully, null,null));
 		} catch (Exception e) {
-			
+			logger.error(e);
 			return new Status(0, e.toString());
 		}
 

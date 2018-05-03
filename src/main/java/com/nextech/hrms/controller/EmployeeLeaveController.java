@@ -89,7 +89,7 @@ public class EmployeeLeaveController {
 	@Autowired
 	MailService mailService;
 
-	static final Logger logger = Logger.getLogger(EmployeeLeaveController.class);
+	static  Logger logger = Logger.getLogger(EmployeeLeaveController.class);
 	
 	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody Status addEmployeeLeave(@RequestBody EmployeeLeaveDto employeeLeaveDto) {
@@ -191,10 +191,10 @@ public class EmployeeLeaveController {
 			}else{
 			return new Status(1, "You have allready added leave");
 		}
-			return new Status(0, "Employee Leave added Successfully !");
+			return new Status(0, messageSource.getMessage(MessageConstant.EmployeeLeave_Added_Successfully, null,null));
 		} 
 		}catch (Exception e) {
-			// e.printStackTrace();
+			logger.error(e);
 			return new Status(0, e.toString());
 		}
 	}
@@ -219,7 +219,7 @@ public class EmployeeLeaveController {
 		
 			return new Status(1, messageSource.getMessage(MessageConstant.EmployeeLeave_Added_Successfully, null,null));
 		} catch (Exception e) {
-			 e.printStackTrace();
+			logger.error(e);
 			return new Status(0, e.toString());
 		}
 	}
@@ -232,29 +232,13 @@ public class EmployeeLeaveController {
 			employeeLeaveDto = employeeLeaveServices.getEmployeeLeaveDto(id);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 			
 		}
 		return employeeLeaveDto;
 	}
 
-	/*@RequestMapping(value = "/list/{userId}", method = RequestMethod.GET)
-	public @ResponseBody List<Employeeleave> getEmployee(@PathVariable("userId") String userId) {
-
-		List<Employeeleave> employeeleaves = null;
-		  Employee employee = null;
-		try {
-			employee = employeeServices.getEmployeeByUserId(userId);
-			employeeleaves = employeeLeaveServices.getEmployeeLeaveByUserid(employee.getId());
-			if(employee.getUsertype().getId()==2 ||employee.getUsertype().getId()==4 ||employee.getUsertype().getId()==5){
-				return employeeleaves = employeeLeaveServices.getEntityList(Employeeleave.class);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return employeeleaves;
-	}*/
+	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public @ResponseBody List<EmployeeLeaveDto> getEmployee() {
 
@@ -262,7 +246,7 @@ public class EmployeeLeaveController {
 		try {
 			employeeLeaveDtolist = employeeLeaveServices.getEmployeeLeaveDtoList();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 
 		return employeeLeaveDtolist;
@@ -335,17 +319,11 @@ public class EmployeeLeaveController {
 				Employee employee = employeeServices.getEntityById(Employee.class, setEmployeeEntry.getKey());
 				employeeLeaveDto.setEmployee(employee);
 				employeeLeaveDto.setEmplyeeLeaveParts(setEmployeeEntry.getValue());
-			/*	for (EmplyeeLeavePart emplyeeLeavePart : employeeLeaveDto.getEmplyeeLeaveParts()) {
-					employeeLeaveDto.setTotalCount(emplyeeLeavePart.getTotalCount());
-					employeeLeaveDto.setPendingLeave(emplyeeLeavePart.getPendingLeave());
-					employeeLeaveDto.setSeekLeave(emplyeeLeavePart.getSeekLeave());
-					employeeLeaveDto.setPaidLeave(emplyeeLeavePart.getPaidLeave());
-				}*/
 				employeeLeaveDTOs.add(employeeLeaveDto);
 			}
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 
 		}
 		return new Status(1,"",employeeLeaveDTOs)  ; 
@@ -360,7 +338,7 @@ public class EmployeeLeaveController {
 			 employeeLeaveServices.getEmployeeLeaveDtoByid(id);
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 			return new Status(1,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS, null,null));
 		}
 		return new Status(1, messageSource.getMessage(MessageConstant.EmployeeLeave_Delete_Successfully, null,null));
@@ -372,7 +350,7 @@ public class EmployeeLeaveController {
 		try {
 			employeeLeaveServices.updateEntity(EmployeeLeaveFactory.setEmployeeLeaveUpdate(employeeLeaveDto));			
 		} catch (Exception e) {
-			e.printStackTrace();			
+			logger.error(e);	
 		}
 		return new Status(1, messageSource.getMessage(MessageConstant.EmployeeLeave_Update_Successfully, null,null));
 	}
@@ -388,7 +366,7 @@ public class EmployeeLeaveController {
 				return new Status(1,"There is no any leave ") ;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 			 
 		}
 
@@ -470,72 +448,6 @@ public class EmployeeLeaveController {
 		}
 		return new Status(1,"",employeeLeaveDTOs)  ; 
 	}
-
-	/*@RequestMapping(value = "/calculateLeaveByUserId/{userId}", method = RequestMethod.GET,headers = "Accept=application/json")
-	public @ResponseBody Status calculateLeaveByUserId(@PathVariable("userId") String userId ) {
-		List<Employeeleave> employeeleaves = null;
-		  Employee employee = null;
-		  List<EmployeeLeaveDto> employeeLeaveDtos =  new ArrayList<>();
-		try {
-			employee = employeeServices.getEmployeeByUserId(userId);
-			int totalCount=0;
-			int totalLeave=0;
-			int totalSeekleave=0;
-			int totalPaidLeave=0;
-			int pendingLeave=0;
-			int remaningSeekLeave=0;
-			int remaningPaidLeave=0;
-			   employeeleaves  = employeeLeaveServices.getEmployeeLeaveByUserid(employee.getId());
-				for (Employeeleave employeeleave : employeeleaves) {	
-					
-					totalLeave = employeeleave.getEmployee().getEmployeetype().getTotalLeave();
-				int seekLeave = employeeleave.getEmployee().getEmployeetype().getSeekLeave();
-				int paidLeave = employeeleave.getEmployee().getEmployeetype().getPaidLeave();
-					
-					if(employeeleave.getLeavetype().getId()==1){
-				 SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
-				  int day = Integer.valueOf(dayFormat.format(employeeleave.getFromDate()));
-				  SimpleDateFormat dayFormat1 = new SimpleDateFormat("dd");
-				  int day1 = Integer.valueOf(dayFormat1.format(employeeleave.getToDate()));
-				  totalSeekleave=totalSeekleave+day1-day;
-				  remaningSeekLeave = seekLeave-totalSeekleave;
-				  remaningPaidLeave = paidLeave-totalPaidLeave;
-				  
-					}else{
-						 SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
-						  int day = Integer.valueOf(dayFormat.format(employeeleave.getFromDate()));
-						  SimpleDateFormat dayFormat1 = new SimpleDateFormat("dd");
-						  int day1 = Integer.valueOf(dayFormat1.format(employeeleave.getToDate()));
-						  totalPaidLeave = totalPaidLeave+day1-day;
-						  remaningPaidLeave = paidLeave-totalPaidLeave;
-						  remaningSeekLeave = seekLeave-totalSeekleave;
-					}
-
-					totalCount= totalSeekleave+totalPaidLeave;
-					pendingLeave = totalLeave-totalCount;
-					EmployeeLeaveDto  employeeLeaveDto =  new EmployeeLeaveDto();
-				EmplyeeLeavePart emplyeeLeavePart = new EmplyeeLeavePart();			
-				List<EmplyeeLeavePart> emplyeeLeaveParts =  new ArrayList<EmplyeeLeavePart>();
-				emplyeeLeavePart.setTotalCount(totalCount);
-				emplyeeLeavePart.setPaidLeave(paidLeave);
-				emplyeeLeavePart.setSeekLeave(seekLeave);
-				emplyeeLeavePart.setPendingLeave(pendingLeave);
-				emplyeeLeavePart.setRemaningPaidLeave(remaningPaidLeave);
-				emplyeeLeavePart.setRemaningSeekLeave(remaningSeekLeave);
-				emplyeeLeaveParts.add(emplyeeLeavePart);
-				employeeLeaveDto.setEmplyeeLeaveParts(emplyeeLeaveParts);
-				employeeLeaveDto.setEmployee(employee);
-				employeeLeaveDtos.add(employeeLeaveDto);
-			    
-				
-				}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return new Status(1,"",employeeLeaveDtos)  ; 
-	}
-*/
 	
 	@RequestMapping(value = "/leaveYear/{id}", method = RequestMethod.GET)
 	public @ResponseBody List<EmployeeLeaveDTO> getYearlyEmployeeLeaveByEmployeeId(@PathVariable("id") long empId) {
@@ -566,8 +478,7 @@ public class EmployeeLeaveController {
 			employeeleaveList = employeeLeaveServices
 					.getEmployeeLeaveByCurrentDate(DateUtil.convertToDate(date));
 		} catch (Exception e) {
-			e.printStackTrace();
-			//return new Status(1,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS, null,null));
+			logger.error(e);
 		}
 		return  employeeleaveList;
 	}
@@ -581,9 +492,10 @@ public class EmployeeLeaveController {
 		
 	        Employee employee = employeeServices.getEmployeeByUserId(userId);
 	        List<Employee> employees = employeeServices.getEmployeeByReportTo((int) employee.getId());
-	        if(employees==null){
+	       /* if(employees==null){
+	        	logger.error("Employee does not exits");
 	        	 return new Status(1,"Employee does not exits") ;
-				}  
+				}  */
 	        for (Employee employee2 : employees) {
 	        	 employeeleaves =  employeeLeaveServices.getEmployeeLeaveByEmployeeId(employee2.getId());
 	        	for (Employeeleave employeeleave2 : employeeleaves) {
@@ -610,7 +522,9 @@ public class EmployeeLeaveController {
 	        }     
 	      
 		} catch (Exception e) {
-			e.printStackTrace();	
+			logger.error(e);
+			
+			return new Status(0, e.getCause().getMessage());
 			 
 		}
 		return new Status(0,"",employeeleaveList) ;
@@ -629,7 +543,7 @@ public class EmployeeLeaveController {
 				
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		 return new Status(1, "Status Update Successfully");
 	}

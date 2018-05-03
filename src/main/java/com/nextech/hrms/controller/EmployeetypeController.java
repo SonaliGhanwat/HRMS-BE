@@ -7,7 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.model.Employeetype;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.EmployeeServices;
@@ -29,6 +34,11 @@ public class EmployeetypeController {
 	
 	@Autowired
 	EmployeeServices employeeServices;
+	
+	@Autowired
+	private MessageSource messageSource;
+	
+	static  Logger logger = Logger.getLogger(EmployeetypeController.class);
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
 	public @ResponseBody Status addEmployeetype(@Valid @RequestBody Employeetype employeetype,
@@ -40,18 +50,16 @@ public class EmployeetypeController {
 			}
 			employeetype.setIsactive(true);
 			employeetypeService.addEntity(employeetype);
-			return new Status(0, "Employeetype added Successfully !");
+			return new Status(0, messageSource.getMessage(
+					MessageConstant.Employee_Type_Added_Successfully, null, null));
 		} catch (ConstraintViolationException cve) {
-			System.out.println("Inside ConstraintViolationException");
-			cve.printStackTrace();
+			logger.error(cve);
 			return new Status(0, cve.getCause().getMessage());
 		} catch (PersistenceException pe) {
-			System.out.println("Inside PersistenceException");
-			pe.printStackTrace();
+			logger.error(pe);
 			return new Status(0, pe.getCause().getMessage());
 		} catch (Exception e) {
-			System.out.println("Inside Exception");
-			e.printStackTrace();
+			logger.error(e);
 			return new Status(0, e.getCause().getMessage());
 		}
 	}
@@ -62,7 +70,7 @@ public class EmployeetypeController {
 		try {
 			employeetype = employeetypeService.getEntityById(Employeetype.class, id);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return employeetype;
 	}
@@ -73,9 +81,10 @@ public class EmployeetypeController {
 		try {
 			employeetype.setIsactive(true);
 			employeetypeService.updateEntity(employeetype);
-			return new Status(0, "Employeetype update Successfully !");
+			return new Status(0, messageSource.getMessage(
+					MessageConstant.Employee_Type_Update_Successfully, null, null));
 		} catch (Exception e) {
-			 e.printStackTrace();
+			logger.error(e);
 			return new Status(0, e.toString());
 		}
 	}
@@ -88,7 +97,7 @@ public class EmployeetypeController {
 			employeetypees = employeetypeService.getEntityList(Employeetype.class);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 
 		return employeetypees;
@@ -101,8 +110,10 @@ public class EmployeetypeController {
 			Employeetype employeetype = employeetypeService.getEntityById(Employeetype.class,id);
 			employeetype.setIsactive(false);
 			employeetypeService.updateEntity(employeetype);
-			return new Status(0, "Employeetype deleted Successfully !");
+			return new Status(0, messageSource.getMessage(
+					MessageConstant.Employee_Type_Delete_Successfully, null, null));
 		} catch (Exception e) {
+			logger.error(e);
 			return new Status(0, e.toString());
 		}
 
