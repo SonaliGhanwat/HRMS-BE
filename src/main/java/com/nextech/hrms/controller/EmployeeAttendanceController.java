@@ -10,14 +10,20 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,14 +34,21 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nextech.hrms.dto.EmployeeAttendanceDto;
+import com.nextech.hrms.dto.EmployeeAttendancePart;
 import com.nextech.hrms.dto.EmployeeAttendanceWorkInfoDto;
+import com.nextech.hrms.dto.PageDTO;
+import com.nextech.hrms.dto.UserTypePageAssoDTO;
+import com.nextech.hrms.dto.UserTypePageAssoPart;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeAttendanceFactory;
 import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.Employeeleave;
 import com.nextech.hrms.model.Holiday;
+import com.nextech.hrms.model.Page;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.model.Employeeattendance;
+import com.nextech.hrms.model.Usertype;
+import com.nextech.hrms.model.Usertypepageassociation;
 import com.nextech.hrms.services.EmployeeAttendanceServices;
 import com.nextech.hrms.services.EmployeeLeaveServices;
 import com.nextech.hrms.services.EmployeeServices;
@@ -125,6 +138,45 @@ public class EmployeeAttendanceController extends HttpServlet {
 					null, null));
 		} catch (Exception e) {
 			logger.error(e);
+			return new Status(0, e.getCause().getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/createMultiple", method = RequestMethod.POST, headers = "Accept=application/json")
+	public @ResponseBody Status addMultipleEmployeeAttendance(
+			@Valid @RequestBody EmployeeAttendanceDto employeeAttendanceDto) {
+		try {
+			
+			List<EmployeeAttendancePart> employeeAttendanceParts =	employeeAttendanceDto.getEmployeeAttendanceParts();
+			if(!employeeAttendanceParts.isEmpty()){
+			for (EmployeeAttendancePart employeeAttendancePart : employeeAttendanceParts) {	
+				Employeeattendance employeeattendance =new Employeeattendance();
+				employeeattendance.setEmployee(employeeAttendancePart.getEmployee());
+				employeeattendance.setDate(employeeAttendancePart.getDate());
+				employeeattendance.setIntime(employeeAttendancePart.getIntime());
+				employeeattendance.setOuttime(employeeAttendancePart.getOuttime());
+				employeeAttendanceDto.setIntime(employeeAttendancePart.getIntime());
+				employeeAttendanceDto.setOuttime(employeeAttendancePart.getOuttime());
+				employeeattendance.setTotaltime(calculateTotalTime(employeeAttendanceDto));
+				employeeattendance.setStatus(getEmployeeAttendanceStatus(employeeAttendanceDto));
+					employeeAttendanceServices.addEntity(employeeattendance);
+			
+			}
+			}else{
+				return new Status(2,"There is no data in xlsx file");
+			}
+			return new Status(1,"Xlsx data upload Successfully !");
+		} catch (ConstraintViolationException cve) {
+			logger.error(cve);
+			cve.printStackTrace();
+			return new Status(0, cve.getCause().getMessage());
+		} catch (PersistenceException pe) {
+			logger.error(pe);
+			pe.printStackTrace();
+			return new Status(0, pe.getCause().getMessage());
+		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
 			return new Status(0, e.getCause().getMessage());
 		}
 	}

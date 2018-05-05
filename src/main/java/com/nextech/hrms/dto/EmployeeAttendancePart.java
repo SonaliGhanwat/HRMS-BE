@@ -2,25 +2,26 @@ package com.nextech.hrms.dto;
 
 import java.sql.Time;
 import java.util.Date;
-import java.util.List;
 
 import com.nextech.hrms.model.Employee;
 
-public class EmployeeAttendanceDto extends AbstractDTO {
+public class EmployeeAttendancePart extends AbstractDTO{
+	
 	private Employee employee;
 	private Time intime;
 	private Time outtime;
 	private long totaltime;
 	private Date date;
-	private String status;	
-	private List<EmployeeAttendancePart> employeeAttendanceParts;
+	private String status;
 	
-	public EmployeeAttendanceDto(){
+	public EmployeeAttendancePart(){
+		
 		
 	}
 	
-	public EmployeeAttendanceDto(int id){
+	public EmployeeAttendancePart(int id){
 		this.setId(id);
+		
 	}
 	public Employee getEmployee() {
 		return employee;
@@ -57,13 +58,8 @@ public class EmployeeAttendanceDto extends AbstractDTO {
 	}
 	public void setStatus(String status) {
 		this.status = status;
-	}
-	public List<EmployeeAttendancePart> getEmployeeAttendanceParts() {
-		return employeeAttendanceParts;
-	}
-	public void setEmployeeAttendanceParts(
-			List<EmployeeAttendancePart> employeeAttendanceParts) {
-		this.employeeAttendanceParts = employeeAttendanceParts;
-	}
+	}	
 	
+	
+
 }
