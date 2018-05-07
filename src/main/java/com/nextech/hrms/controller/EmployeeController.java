@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
@@ -24,13 +26,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.nextech.hrms.dto.EmployeeAttendanceDto;
+import com.nextech.hrms.dto.EmployeeAttendancePart;
+import com.nextech.hrms.dto.EmployeePart;
 import com.nextech.hrms.dto.PageDTO;
 import com.nextech.hrms.dto.UserTypePageAssoDTO;
 import com.nextech.hrms.model.Usertype;
 import com.nextech.hrms.dto.EmployeeDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeFactory;
+import com.nextech.hrms.factory.UserTypeFactory;
 import com.nextech.hrms.model.Employee;
+import com.nextech.hrms.model.Employeeattendance;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.EmployeeServices;
 import com.nextech.hrms.services.UserTypeServices;
@@ -250,6 +257,57 @@ public class EmployeeController extends HttpServlet {
 		}
 
 		return null;
+	}
+	@RequestMapping(value = "/createMultiple", method = RequestMethod.POST, headers = "Accept=application/json")
+	public @ResponseBody Status addMultipleEmployee(
+			@Valid @RequestBody EmployeeDto employeeDto) {
+		try {			
+			List<EmployeePart> employeeParts =	employeeDto.getEmployeeParts();
+			if(!employeeParts.isEmpty()){
+				
+			for (EmployeePart employeePart : employeeParts) {	
+				Employee employee2 = employeeServices.getEmployeeDataByUserIdAndPhoneNumber(employeePart.getUserid(),employeePart.getEmailid(),employeePart.getPhoneNumber());
+				if(employee2!=null){
+					return new Status(2,"Employee data allready in database");
+				}
+				Employee employee =new Employee();
+				employee.setId(employeePart.getId());
+				employee.setUserid(employeePart.getUserid());
+				employee.setPassword(employeePart.getPassword());
+				employee.setFirstName(employeePart.getFirstName());
+				employee.setLastName(employeePart.getLastName());
+				employee.setPhoneNumber(employeePart.getPhoneNumber());
+				employee.setEmailid(employeePart.getEmailid());
+				employee.setDateOfJoining(employeePart.getDateOfJoining());
+				employee.setDateOfBirth(employeePart.getDateOfBirth());
+				employee.setAddress(employeePart.getAddress());
+				employee.setSalary(employeePart.getSalary());
+				employee.setUsertype(employeePart.getUsertype());
+				employee.setEmployeetype(employeePart.getEmployeetype());
+				employee.setDesignation(employeePart.getDesignation());
+				employee.setReportTo(employeePart.getReportTo());
+				employee.setDepartment(employeePart.getDepartment());
+				employeeServices.addEntity(employee);
+				
+			
+			}
+			}else{
+				return new Status(2,"There is no data in xlsx file");
+			}
+			return new Status(1,"Xlsx data upload Successfully !");
+		} catch (ConstraintViolationException cve) {
+			logger.error(cve);
+			cve.printStackTrace();
+			return new Status(0, cve.getCause().getMessage());
+		} catch (PersistenceException pe) {
+			logger.error(pe);
+			pe.printStackTrace();
+			return new Status(0, pe.getCause().getMessage());
+		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+			return new Status(0, e.getCause().getMessage());
+		}
 	}
 
 	

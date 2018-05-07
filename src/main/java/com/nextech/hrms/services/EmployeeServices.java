@@ -29,6 +29,8 @@ public interface EmployeeServices extends CRUDService<Employee> {
 	public EmployeeDto getEmployeeDtoByidforLeave(long id)throws Exception;
 	
 	public List<Employee> getEmployeeByReportTo(int id) throws Exception;
+	
+	public Employee getEmployeeDataByUserIdAndPhoneNumber(String userid ,String emailid,long phoneNumber) throws Exception;
  
 
 

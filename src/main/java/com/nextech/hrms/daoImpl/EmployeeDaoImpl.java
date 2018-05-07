@@ -14,6 +14,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.nextech.hrms.dao.EmployeeDao;
+import com.nextech.hrms.dto.EmployeeDto;
 import com.nextech.hrms.model.Designation;
 import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.Employeeattendance;
@@ -88,6 +89,20 @@ public class EmployeeDaoImpl extends SuperDaoImpl<Employee> implements EmployeeD
 		Criteria criteria = session.createCriteria(Employee.class);
 		criteria.add(Restrictions.in("id", ids));
 		return criteria.list().size() > 0 ? (List<Employee>)criteria.list() : null;
+	}
+
+	@Override
+	public Employee getEmployeeDataByUserIdAndPhoneNumber(String userid,
+			String emailid, long phoneNumber) throws Exception {
+		session = sessionFactory.openSession();
+		Criteria criteria = session.createCriteria(Employee.class);
+		
+		criteria.add(Restrictions.eq("userid", userid));
+		criteria.add(Restrictions.eq("emailid", emailid));
+		criteria.add(Restrictions.eq("phoneNumber", phoneNumber));
+		Employee employee= criteria.list().size() > 0 ? (Employee) criteria.list().get(0): null;
+		session.close();
+		return employee;
 	}
 	
 

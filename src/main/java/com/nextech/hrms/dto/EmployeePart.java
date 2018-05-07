@@ -1,14 +1,14 @@
 package com.nextech.hrms.dto;
 
 import java.util.Date;
-import java.util.List;
 
 import com.nextech.hrms.model.Department;
 import com.nextech.hrms.model.Designation;
 import com.nextech.hrms.model.Employeetype;
 import com.nextech.hrms.model.Usertype;
 
-public class EmployeeDto extends AbstractDTO {
+public class EmployeePart extends AbstractDTO{
+
 	
 	private String userid;
 	private String password;
@@ -21,12 +21,20 @@ public class EmployeeDto extends AbstractDTO {
 	private String address;
 	private String salary;
 	private int reportTo;
-	private UserTypeDto usertype;
+	private Usertype usertype;
 	private Employeetype employeetype;
 	private Designation designation;
 	private Department department;
 	
-	private List<EmployeePart> employeeParts;
+public EmployeePart(){
+		
+		
+	}
+	
+	public EmployeePart(int id){
+		this.setId(id);
+		
+	}
 	public String getUserid() {
 		return userid;
 	}
@@ -81,24 +89,11 @@ public class EmployeeDto extends AbstractDTO {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
-	public Department getDepartment() {
-		return department;
-	}
-	public void setDepartment(Department department) {
-		this.department = department;
-	}
 	public String getSalary() {
 		return salary;
 	}
 	public void setSalary(String salary) {
 		this.salary = salary;
-	}
-	public UserTypeDto getUsertype() {
-		return usertype;
-	}
-	public void setUsertype(UserTypeDto usertype) {
-		this.usertype = usertype;
 	}
 	public int getReportTo() {
 		return reportTo;
@@ -106,6 +101,15 @@ public class EmployeeDto extends AbstractDTO {
 	public void setReportTo(int reportTo) {
 		this.reportTo = reportTo;
 	}
+	
+	public Usertype getUsertype() {
+		return usertype;
+	}
+
+	public void setUsertype(Usertype usertype) {
+		this.usertype = usertype;
+	}
+
 	public Employeetype getEmployeetype() {
 		return employeetype;
 	}
@@ -118,12 +122,12 @@ public class EmployeeDto extends AbstractDTO {
 	public void setDesignation(Designation designation) {
 		this.designation = designation;
 	}
-	public List<EmployeePart> getEmployeeParts() {
-		return employeeParts;
+	public Department getDepartment() {
+		return department;
 	}
-	public void setEmployeeParts(List<EmployeePart> employeeParts) {
-		this.employeeParts = employeeParts;
+	public void setDepartment(Department department) {
+		this.department = department;
 	}
 	
-
+	
 }

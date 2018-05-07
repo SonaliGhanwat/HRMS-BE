@@ -145,11 +145,17 @@ public class EmployeeAttendanceController extends HttpServlet {
 	@RequestMapping(value = "/createMultiple", method = RequestMethod.POST, headers = "Accept=application/json")
 	public @ResponseBody Status addMultipleEmployeeAttendance(
 			@Valid @RequestBody EmployeeAttendanceDto employeeAttendanceDto) {
-		try {
-			
+		try {			
 			List<EmployeeAttendancePart> employeeAttendanceParts =	employeeAttendanceDto.getEmployeeAttendanceParts();
 			if(!employeeAttendanceParts.isEmpty()){
+				
 			for (EmployeeAttendancePart employeeAttendancePart : employeeAttendanceParts) {	
+				Employeeattendance employeeattendance1 = employeeAttendanceServices.getEmpolyeeAttendanceByIdandDate(employeeAttendancePart.getEmployee().getId(), employeeAttendancePart.getDate());
+				if(employeeattendance1!=null){
+					
+				}else if(employeeAttendancePart.getEmployee()==null|| employeeAttendancePart.getDate()==null||employeeAttendancePart.getIntime()==null||employeeAttendancePart.getOuttime()==null){
+					return new Status(2,"There is empty field in excel file");
+				}else{
 				Employeeattendance employeeattendance =new Employeeattendance();
 				employeeattendance.setEmployee(employeeAttendancePart.getEmployee());
 				employeeattendance.setDate(employeeAttendancePart.getDate());
@@ -159,7 +165,8 @@ public class EmployeeAttendanceController extends HttpServlet {
 				employeeAttendanceDto.setOuttime(employeeAttendancePart.getOuttime());
 				employeeattendance.setTotaltime(calculateTotalTime(employeeAttendanceDto));
 				employeeattendance.setStatus(getEmployeeAttendanceStatus(employeeAttendanceDto));
-					employeeAttendanceServices.addEntity(employeeattendance);
+				employeeAttendanceServices.addEntity(employeeattendance);
+				}
 			
 			}
 			}else{

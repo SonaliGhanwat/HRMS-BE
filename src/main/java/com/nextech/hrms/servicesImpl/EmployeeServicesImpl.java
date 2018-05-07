@@ -118,5 +118,11 @@ public class EmployeeServicesImpl extends CRUDServiceImpl<Employee> implements E
 	public List<Employee> getEmployeeByReportTo(int id) throws Exception {
 		// TODO Auto-generated method stub
 		return employeeDao.getEmployeeByReportTo(id);
+	}
+
+	@Override
+	public Employee getEmployeeDataByUserIdAndPhoneNumber(String userid,
+			String emailid, long phoneNumber) throws Exception {
+		return employeeDao.getEmployeeDataByUserIdAndPhoneNumber(userid,emailid,phoneNumber);
 	}	
 }
