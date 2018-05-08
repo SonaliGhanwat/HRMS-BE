@@ -146,39 +146,39 @@ public class EmployeeLeaveController {
 					  if(leavetype.getName().equals("seek leave")){
 					  if(totalSeekLeave<=seekLeave){
 					  }else{
-						  return new Status(1,"your seek leave is over");
+						  return new Status(1,messageSource.getMessage(MessageConstant.SeekLeave_Over, null,null));
 					  }
 					  }
 					  if(leavetype.getName().equals("paid leave")){
 					  if(totalPaidleave<=paidLeave){
 					  }else{
-						  return new Status(1,"your paid leave is over ");
+						  return new Status(1,messageSource.getMessage(MessageConstant.PaidLeave_Over, null,null));
 					  }
 					  }
 				  }if(month<=8){
 					  if(leavetype.getName().equals("seek leave")){
 						  if(totalSeekLeave<=seekLeave){
 						  }else{
-							  return new Status(1,"your seek leave is over");
+							  return new Status(1,messageSource.getMessage(MessageConstant.SeekLeave_Over, null,null));
 						  }
 					  }
 					  if(leavetype.getName().equals("paid leave")){
 						  if(totalPaidleave<=paidLeave){
 					  }else{
-						  return new Status(1,"your paid leave is over");
+						  return new Status(1,messageSource.getMessage(MessageConstant.PaidLeave_Over, null,null));
 					  }
 				  }
 				  }if(month<=12){
 					  if(leavetype.getName().equals("seek leave")){
 						  if(totalSeekLeave<=seekLeave){
 						  }else{
-							  return new Status(1,"your seek leave is over");
+							  return new Status(1,messageSource.getMessage(MessageConstant.SeekLeave_Over, null,null));
 						  }
 					  }
 					  if(leavetype.getName().equals("paid leave")){
 						  if(totalPaidleave<=paidLeave){
 					  }else{
-						  return new Status(1,"your paid leave is over");
+						  return new Status(1,messageSource.getMessage(MessageConstant.PaidLeave_Over, null,null));
 					  }
 				  }
 				  }
@@ -189,7 +189,7 @@ public class EmployeeLeaveController {
 				emailNotificationUser(employeeLeaveDto, notificationDTO);
 				
 			}else{
-			return new Status(1, "You have allready added leave");
+			return new Status(1, messageSource.getMessage(MessageConstant.Alreay_Add_Leave, null,null));
 		}
 			return new Status(0, messageSource.getMessage(MessageConstant.EmployeeLeave_Added_Successfully, null,null));
 		} 
@@ -532,12 +532,9 @@ public class EmployeeLeaveController {
 	@RequestMapping(value = "/statusUpdate", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody Status addEmployeeLeaveStatus(@RequestBody  EmployeeLeaveDto employeeLeaveDto, HttpServletRequest request ) {
 		try {
-		
-			
 				Employeeleave employeeleave = employeeLeaveServices.getEntityById(Employeeleave.class, employeeLeaveDto.getId());
 				employeeleave.setStatus(employeeLeaveDto.getStatus());
-				employeeLeaveServices.updateEntity(employeeleave);
-				
+				employeeLeaveServices.updateEntity(employeeleave);				
 				NotificationDTO notificationDTO = notificationService.getNotificationByCode("Approval Response");
 				emailLeaveStatusApprovalResponse(employeeLeaveDto, notificationDTO);
 				

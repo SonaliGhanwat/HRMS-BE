@@ -61,5 +61,15 @@ public class MessageConstant {
 	public static final String Page_Update_Successfully="pageUpdate";
 	public static final String Regularization_Added_Successfully="regularizationAdd";
 	public static final String Regularization_Delete_Successfully="regularizationUpdate";
-	public static final String Regularization_Update_Successfully="regularizationDelete";
+	public static final String Regularization_Update_Successfully="regularizationUpdate";
+	public static final String Already_Add_Attendance="allreadyAddAttendance";
+	public static final String Already_Data_InDatabase="datainDatabase";
+	public static final String Empty_Filed_ExcelFile="datainDatabase";
+	public static final String Excel_Upload_Successfully="excelDataUpload";
+	public static final String Attendance_For_Month="noAttendanceForMonth";
+	public static final String SeekLeave_Over="seekLeave";
+	public static final String PaidLeave_Over="paidLeave";
+	public static final String Alreay_Add_Leave="alreadyAddLeave";
+	
+	
 }

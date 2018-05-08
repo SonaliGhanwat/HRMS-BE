@@ -292,9 +292,13 @@ public class EmployeeController extends HttpServlet {
 			
 			}
 			}else{
-				return new Status(2,"There is no data in xlsx file");
+				return new Status(2,messageSource.getMessage(
+						MessageConstant.Empty_Filed_ExcelFile,
+						null, null));
 			}
-			return new Status(1,"Xlsx data upload Successfully !");
+			return new Status(1,messageSource.getMessage(
+					MessageConstant.Excel_Upload_Successfully,
+					null, null));
 		} catch (ConstraintViolationException cve) {
 			logger.error(cve);
 			cve.printStackTrace();

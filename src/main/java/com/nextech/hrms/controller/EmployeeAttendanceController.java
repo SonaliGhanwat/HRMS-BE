@@ -109,7 +109,9 @@ public class EmployeeAttendanceController extends HttpServlet {
 									.setEmployeeAttendance(employeeAttendanceDto));
 					// System.out.println("JSESSIONID:"+ cookie);
 				} else {
-					return new Status(1, "You have allready added attenadnce.");
+					return new Status(1, messageSource.getMessage(
+							MessageConstant.Already_Add_Attendance,
+							null, null));
 				}
 				return new Status(0, messageSource.getMessage(
 						MessageConstant.EmployeeAttendance_Added_Successfully,
@@ -152,9 +154,13 @@ public class EmployeeAttendanceController extends HttpServlet {
 			for (EmployeeAttendancePart employeeAttendancePart : employeeAttendanceParts) {	
 				Employeeattendance employeeattendance1 = employeeAttendanceServices.getEmpolyeeAttendanceByIdandDate(employeeAttendancePart.getEmployee().getId(), employeeAttendancePart.getDate());
 				if(employeeattendance1!=null){
-					
+					return new Status(2,messageSource.getMessage(
+							MessageConstant.Already_Data_InDatabase,
+							null, null));
 				}else if(employeeAttendancePart.getEmployee()==null|| employeeAttendancePart.getDate()==null||employeeAttendancePart.getIntime()==null||employeeAttendancePart.getOuttime()==null){
-					return new Status(2,"There is empty field in excel file");
+					return new Status(2,messageSource.getMessage(
+							MessageConstant.Empty_Filed_ExcelFile,
+							null, null));
 				}else{
 				Employeeattendance employeeattendance =new Employeeattendance();
 				employeeattendance.setEmployee(employeeAttendancePart.getEmployee());
@@ -163,16 +169,18 @@ public class EmployeeAttendanceController extends HttpServlet {
 				employeeattendance.setOuttime(employeeAttendancePart.getOuttime());
 				employeeAttendanceDto.setIntime(employeeAttendancePart.getIntime());
 				employeeAttendanceDto.setOuttime(employeeAttendancePart.getOuttime());
-				employeeattendance.setTotaltime(calculateTotalTime(employeeAttendanceDto));
+				employeeattendance.setTotaltime(calculateTime(employeeAttendanceDto));
 				employeeattendance.setStatus(getEmployeeAttendanceStatus(employeeAttendanceDto));
 				employeeAttendanceServices.addEntity(employeeattendance);
 				}
 			
 			}
 			}else{
-				return new Status(2,"There is no data in xlsx file");
+				return new Status(2,messageSource.getMessage(MessageConstant.Empty_Filed_ExcelFile,
+						null, null));
 			}
-			return new Status(1,"Xlsx data upload Successfully !");
+			return new Status(1,messageSource.getMessage(MessageConstant.Excel_Upload_Successfully,
+					null, null));
 		} catch (ConstraintViolationException cve) {
 			logger.error(cve);
 			cve.printStackTrace();
@@ -188,6 +196,13 @@ public class EmployeeAttendanceController extends HttpServlet {
 		}
 	}
 
+	public long calculateTime(EmployeeAttendanceDto employeeAttendanceDto)
+			throws ClassNotFoundException, SQLException {
+		Time intime = employeeAttendanceDto.getIntime();
+		Time outtime = employeeAttendanceDto.getOuttime();
+		long totalTime =  intime.getTime() - outtime.getTime();		
+		return (totalTime / (60 * 60 * 1000) % 24);
+	}
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody EmployeeAttendanceDto getEmployeeAttendance(
 			@PathVariable("id") long id) {
@@ -282,7 +297,9 @@ public class EmployeeAttendanceController extends HttpServlet {
 							employee.getId(),
 							YearUtil.convertToDate(yearMonthString));
 			if(employeeattendanceList.size()==0){
-				return new Status(0,"There is no any attendance for this month"); 
+				return new Status(0,messageSource.getMessage(
+						MessageConstant.Attendance_For_Month, null,
+						null)); 
 			}
 		} catch (Exception e) {
 			logger.error(e);
@@ -397,7 +414,9 @@ public class EmployeeAttendanceController extends HttpServlet {
 				    attendanceWorkInfoDto.setTotalHolidayinMonth(holidayCount);			   
 				    attendanceWorkInfoDtos.add(attendanceWorkInfoDto);
 			}else{
-				return new Status(0,"There is no any attendance for this month"); 
+				return new Status(0,messageSource.getMessage(
+						MessageConstant.Attendance_For_Month, null,
+						null)); 
 			}
 		} catch (Exception e) {
 			logger.error(e);
@@ -409,7 +428,7 @@ public class EmployeeAttendanceController extends HttpServlet {
 			throws ClassNotFoundException, SQLException {
 		Time intime = employeeAttendanceDto.getIntime();
 		Time outtime = employeeAttendanceDto.getOuttime();
-		long totalTime = outtime.getTime() - intime.getTime();
+		long totalTime = outtime.getTime() - intime.getTime();		
 		return (totalTime / (60 * 60 * 1000) % 24);
 	}
 	
