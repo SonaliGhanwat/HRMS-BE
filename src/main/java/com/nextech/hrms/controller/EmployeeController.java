@@ -227,6 +227,25 @@ public class EmployeeController extends HttpServlet {
 				MessageConstant.Employee_Update_Successfully, null, null));
 	}
 
+	
+	@RequestMapping(value = "/getEmployeeByUserId/{userId}", method = RequestMethod.GET, headers = "Accept=application/json")
+	public @ResponseBody Status getEmployeeByUserId(@PathVariable("userId") String userId) {
+		List<Employee> employees = null;
+		try {
+			 Employee employee = employeeServices.getEmployeeByUserId(userId);
+			 if(employee.getUsertype().getId()!=1){
+		        employees = employeeServices.getEmployeeByReportTo((int) employee.getId());
+		        if(employees==null){
+		        	return new Status (0,"Employee does not exits");
+		        }
+			 }else{
+				 employees = employeeServices.getEntityList(Employee.class);
+			 }
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		return new Status (1,"Employee List",employees);
+	}
 	@RequestMapping(value = "/resetpassword", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
 	public @ResponseBody Status resetPassword(@RequestBody Employee employee,
 			HttpServletRequest request, HttpServletResponse response)
