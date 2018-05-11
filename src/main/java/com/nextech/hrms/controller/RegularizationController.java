@@ -177,18 +177,37 @@ public class RegularizationController {
 				Regularization regularization = regularizationServices.getEntityById(Regularization.class, regularizationDto.getId());
 				regularization.setStatus(regularizationDto.getStatus());
 				regularizationServices.updateEntity(regularization);
+				if(regularizationDto.getStatus()=="Approved"){
 				Employeeattendance employeeattendance = employeeAttendanceServices.getEmpolyeeAttendanceByIdandDate(regularization.getEmployee().getId(), regularization.getDate());
 				long totalTime = employeeattendance.getTotaltime() + regularization.getRegularizedHours();
 				EmployeeAttendanceDto attendanceDto = new EmployeeAttendanceDto();
-				attendanceDto.setTotaltime(totalTime);
+				attendanceDto.setTotaltime(totalTime);				
 				employeeattendance.setTotaltime(attendanceDto.getTotaltime());
+				employeeattendance.setStatus(getEmployeeAttendanceStatus(attendanceDto.getTotaltime()));
 				employeeAttendanceServices.updateEntity(employeeattendance);
 				
-				
+				}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		 return new Status(1, "Status Update Successfully");
 	}
+	public String getEmployeeAttendanceStatus(
+			long totalTime) {
+		try {
+			if (totalTime >= 1
+					&& totalTime <= 4) {
+				return "HalfDay";
+			} else if (totalTime >= 4) {
+				return "Fullday";
+			} else {
+				return "Absent";
+			}
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		return null;
+	}
 }
+
