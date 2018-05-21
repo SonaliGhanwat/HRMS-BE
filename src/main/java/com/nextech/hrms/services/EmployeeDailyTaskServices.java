@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.nextech.hrms.dto.EmployeeDailyTaskDto;
 import com.nextech.hrms.model.Employeedailytask;
+import com.nextech.hrms.model.Employeeleave;
 
 public interface EmployeeDailyTaskServices extends CRUDService<Employeedailytask> {
 	
@@ -19,5 +20,7 @@ public interface EmployeeDailyTaskServices extends CRUDService<Employeedailytask
 	public void addEmployeeDailyTaskExcel(List<EmployeeDailyTaskDto> employeeDailyTaskDtos)throws Exception;
 	
 	public List<Employeedailytask> getEmployeeDailyTaskByUserid(long empId) throws Exception;
+	
+	public List<Employeedailytask> getEmployeeTaskByEmployeeId(long empId)  throws Exception;
 }
 

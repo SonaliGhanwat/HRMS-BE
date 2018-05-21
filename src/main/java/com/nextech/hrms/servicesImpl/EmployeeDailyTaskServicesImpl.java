@@ -13,6 +13,7 @@ import com.nextech.hrms.factory.EmployeeAttendanceFactory;
 import com.nextech.hrms.factory.EmployeeDailyTaskFactory;
 import com.nextech.hrms.model.Employeeattendance;
 import com.nextech.hrms.model.Employeedailytask;
+import com.nextech.hrms.model.Employeeleave;
 import com.nextech.hrms.services.EmployeeDailyTaskServices;
 @Service
 public class EmployeeDailyTaskServicesImpl extends CRUDServiceImpl<Employeedailytask> implements EmployeeDailyTaskServices {
@@ -81,6 +82,13 @@ public class EmployeeDailyTaskServicesImpl extends CRUDServiceImpl<Employeedaily
 			throws Exception {
 		// TODO Auto-generated method stub
 		return employeeDailyTaskDao.getEmployeeDailyTaskByUserid(empId);
+	}
+
+	@Override
+	public List<Employeedailytask> getEmployeeTaskByEmployeeId(long empId)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return employeeDailyTaskDao.getEmployeeTaskByEmployeeId(empId);
 	}
 }
 

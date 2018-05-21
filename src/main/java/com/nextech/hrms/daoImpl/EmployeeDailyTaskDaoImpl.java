@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import com.nextech.hrms.dao.EmployeeDailyTaskDao;
 import com.nextech.hrms.model.Employeeattendance;
 import com.nextech.hrms.model.Employeedailytask;
+import com.nextech.hrms.model.Employeeleave;
 
 @Repository
 public class EmployeeDailyTaskDaoImpl extends SuperDaoImpl<Employeedailytask> implements EmployeeDailyTaskDao {
@@ -37,6 +38,15 @@ public class EmployeeDailyTaskDaoImpl extends SuperDaoImpl<Employeedailytask> im
 		session = sessionFactory.openSession();
 		 Criteria criteria = session.createCriteria(Employeedailytask.class);
 		  criteria.add(Restrictions.eq("employee.id",empId));
+		  List<Employeedailytask> employeedailytasks =criteria.list();
+		  return employeedailytasks;
+	}
+	@Override
+	public List<Employeedailytask> getEmployeeTaskByEmployeeId(long empId)
+			throws Exception {
+		session = sessionFactory.openSession();
+		 Criteria criteria = session.createCriteria(Employeedailytask.class);
+		  criteria.add(Restrictions.eq("employee.id", empId));
 		  List<Employeedailytask> employeedailytasks =criteria.list();
 		  return employeedailytasks;
 	}

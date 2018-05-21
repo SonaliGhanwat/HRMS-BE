@@ -37,6 +37,7 @@
 				<value>com.nextech.hrms.model.Usertypepageassociation</value>
 				<value>com.nextech.hrms.model.Regularization</value>
 				<value>com.nextech.hrms.model.Department</value>
+				<value>com.nextech.hrms.model.Project</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

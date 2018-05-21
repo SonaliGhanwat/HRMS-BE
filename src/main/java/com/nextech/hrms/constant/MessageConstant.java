@@ -49,8 +49,8 @@ public class MessageConstant {
 	public static final String Reset_Password="resetPassword";
 	public static final String Login_Successfully="loginSuccessfully";
 	public static final String AllReady_Apply_Leave="allReadyApplyLeave";
-	public static final String Employee_Type_Added_Successfully="allReadyApplyLeave";
-	public static final String Employee_Type_Update_Successfully="allReadyApplyLeave";
+	public static final String Employee_Type_Added_Successfully="employeeTypeAdd";
+	public static final String Employee_Type_Update_Successfully="employeeTypeUpdate";
 	public static final String Employee_Type_Delete_Successfully="employeeTypeDelete";
 	public static final String Notification_Added_Successfully="notificationAdd";
 	public static final String Notification_Update_Successfully="notificationUpdate";
@@ -70,6 +70,8 @@ public class MessageConstant {
 	public static final String SeekLeave_Over="seekLeave";
 	public static final String PaidLeave_Over="paidLeave";
 	public static final String Alreay_Add_Leave="alreadyAddLeave";
-	
+	public static final String Project_Added_Successfully="projectAdd";
+	public static final String Project_Delete_Successfully="projectDelete";
+	public static final String Project_Update_Successfully="projectUpdate";
 	
 }

@@ -168,7 +168,7 @@ public class EmployeeController extends HttpServlet {
 						MessageConstant.Valid_UserId, null, null));
 			} else if (!employeeResult.getPassword().equals(
 					employee.getPassword())) {
-				return new Status(1, messageSource.getMessage(
+				return new Status(2, messageSource.getMessage(
 						MessageConstant.Valid_Password, null, null));
 			}
 
