@@ -104,6 +104,16 @@ public class EmployeeDaoImpl extends SuperDaoImpl<Employee> implements EmployeeD
 		session.close();
 		return employee;
 	}
+
+	@Override
+	public List<Employee> getEmployeeByUserIdInList(String userId)
+			throws Exception {
+		session = sessionFactory.openSession();
+		 Criteria criteria = session.createCriteria(Employee.class);
+		  criteria.add(Restrictions.eq("userid", userId));
+		  List<Employee> employees =criteria.list();
+		  return employees;
+	}
 	
 
 }

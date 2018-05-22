@@ -124,5 +124,12 @@ public class EmployeeServicesImpl extends CRUDServiceImpl<Employee> implements E
 	public Employee getEmployeeDataByUserIdAndPhoneNumber(String userid,
 			String emailid, long phoneNumber) throws Exception {
 		return employeeDao.getEmployeeDataByUserIdAndPhoneNumber(userid,emailid,phoneNumber);
+	}
+
+	@Override
+	public List<Employee> getEmployeeByUserIdInList(String userId)
+			throws Exception {
+		
+		return employeeDao.getEmployeeByUserIdInList(userId);
 	}	
 }

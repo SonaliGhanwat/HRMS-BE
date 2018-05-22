@@ -32,6 +32,6 @@ public interface EmployeeServices extends CRUDService<Employee> {
 	
 	public Employee getEmployeeDataByUserIdAndPhoneNumber(String userid ,String emailid,long phoneNumber) throws Exception;
  
-
+	public List<Employee>  getEmployeeByUserIdInList(String userId) throws Exception;
 
 }

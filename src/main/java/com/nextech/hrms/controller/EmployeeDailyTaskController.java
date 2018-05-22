@@ -105,6 +105,7 @@ public class EmployeeDailyTaskController {
 
 		} catch (Exception e) {
 			logger.error(e);
+			logger.error("Employee daily task list");
 
 		}
 		return  employeedailytasks; // TODO Use proper message to indicate correct reason user
@@ -198,19 +199,15 @@ public class EmployeeDailyTaskController {
 		
 	        Employee employee = employeeServices.getEmployeeByUserId(userId);
 	        List<Employee> employees = employeeServices.getEmployeeByReportTo((int) employee.getId());
-	       /* if(employees==null){
+	        if(employees==null){
 	        	logger.error("Employee does not exits");
 	        	 return new Status(1,"Employee does not exits") ;
-				}  */
+				}  
 	        for (Employee employee2 : employees) {
 	        	employeedailytasks =  employeeDailyTaskServices.getEmployeeTaskByEmployeeId(employee2.getId());
 	        	for (Employeedailytask employeedailytask : employeedailytasks) {
-	        		
-	        		
-	        			EmployeeDailyTaskDto employeeDailyTaskDto= new EmployeeDailyTaskDto();
-	   			
-	   				 
-	   				employeeDailyTaskDto.setId(employeedailytask.getId());
+        			EmployeeDailyTaskDto employeeDailyTaskDto= new EmployeeDailyTaskDto();
+     				employeeDailyTaskDto.setId(employeedailytask.getId());
 	   				employeeDailyTaskDto.setEmployee(employeedailytask.getEmployee());
 	   				employeeDailyTaskDto.setTaskName(employeedailytask.getTaskName());
 	   				employeeDailyTaskDto.setStarttime(employeedailytask.getStarttime());
@@ -218,10 +215,8 @@ public class EmployeeDailyTaskController {
 	   				employeeDailyTaskDto.setEstimationTime(employeedailytask.getEstimationTime());
 	   				employeeDailyTaskDto.setStatus(employeedailytask.getStatus());
 	   				employeeDailyTaskDto.setDate(employeedailytask.getDate());
-	   				// employeeLeaveDTO.setPendingLeave(totalLeave);
-	   				dailyTaskDtos.add(employeeDailyTaskDto);
-		        		//employeeleaveList.add(employeeleave2);
-		        	
+	   				employeeDailyTaskDto.setTakenTime(employeedailytask.getTakenTime());
+	   				dailyTaskDtos.add(employeeDailyTaskDto);		        	
 				}
 	        }     
 	      

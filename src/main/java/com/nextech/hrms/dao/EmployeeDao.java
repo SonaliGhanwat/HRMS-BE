@@ -22,4 +22,6 @@ public interface EmployeeDao extends SuperDao<Employee>{
 	public List<Employee> getMultipleUsersById(List<Long> ids) throws Exception;
 	
 	public Employee getEmployeeDataByUserIdAndPhoneNumber(String userid ,String emailid,long phoneNumber) throws Exception;
+
+	public List<Employee>  getEmployeeByUserIdInList(String userId) throws Exception;
 }
