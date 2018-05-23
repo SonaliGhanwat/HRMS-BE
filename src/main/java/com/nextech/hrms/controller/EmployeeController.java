@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.nextech.hrms.dto.EmployeeAttendanceDto;
 import com.nextech.hrms.dto.EmployeeAttendancePart;
+import com.nextech.hrms.dto.EmployeeDailyTaskDto;
 import com.nextech.hrms.dto.EmployeePart;
 import com.nextech.hrms.dto.PageDTO;
 import com.nextech.hrms.dto.UserTypePageAssoDTO;
@@ -38,6 +39,7 @@ import com.nextech.hrms.factory.EmployeeFactory;
 import com.nextech.hrms.factory.UserTypeFactory;
 import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.Employeeattendance;
+import com.nextech.hrms.model.Employeedailytask;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.services.EmployeeServices;
 import com.nextech.hrms.services.UserTypeServices;
@@ -249,14 +251,24 @@ public class EmployeeController extends HttpServlet {
 	
 	@RequestMapping(value = "/getEmployeeByUserIdinList/{userId}", method = RequestMethod.GET, headers = "Accept=application/json")
 	public @ResponseBody Status getEmployeeByUserIdInList(@PathVariable("userId") String userId) {
-		List<Employee> employees = null;
+		
+		List<Employee>employeesData = new ArrayList<Employee>();
 		try {
-			  employees = employeeServices.getEmployeeByUserIdInList(userId);
+			Employee employee = employeeServices.getEmployeeByUserId(userId);
+			  List<Employee> employees = employeeServices.getEmployeeByReportTo((int) employee.getId());
+			  if(employees!=null){
+				  for (Employee employee2 : employees) {
+						employeesData.add(employee2);
+					}
+			  }
+		
+		   employeesData.add(employee);
+			
 			 
 		} catch (Exception e) {
 			logger.error(e);
 		}
-		return new Status (1,"Employee List",employees);
+		return new Status (1,"Employee List",employeesData);
 	}
 	@RequestMapping(value = "/resetpassword", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
 	public @ResponseBody Status resetPassword(@RequestBody Employee employee,

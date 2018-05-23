@@ -8,7 +8,7 @@ public class ProjectDto extends AbstractDTO{
 	private Date endDate;
 	private Date startDate;
 	private String projecttype;
-	private String description;
+	private String status;
 	
 public ProjectDto(){
 		
@@ -40,12 +40,13 @@ public ProjectDto(){
 	public void setProjecttype(String projecttype) {
 		this.projecttype = projecttype;
 	}
-	public String getDescription() {
-		return description;
+	public String getStatus() {
+		return status;
 	}
-	public void setDescription(String description) {
-		this.description = description;
+	public void setStatus(String status) {
+		this.status = status;
 	}
+	
 	
 	
 	

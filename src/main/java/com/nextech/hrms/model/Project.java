@@ -19,7 +19,7 @@ public class Project implements Serializable {
 	private long id;
 
 	@Column(name="created_by")
-	private int createdBy;
+	private long createdBy;
 
 	@Column(name="created_date")
 	private Timestamp createdDate;
@@ -33,6 +33,8 @@ public class Project implements Serializable {
 	private String name;
 
 	private String projecttype;
+	
+	private String status;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name="start_date")
@@ -58,13 +60,17 @@ public class Project implements Serializable {
 	}
 
 
-	public int getCreatedBy() {
-		return this.createdBy;
+	
+
+	public long getCreatedBy() {
+		return createdBy;
 	}
 
-	public void setCreatedBy(int createdBy) {
+
+	public void setCreatedBy(long createdBy) {
 		this.createdBy = createdBy;
 	}
+
 
 	public Timestamp getCreatedDate() {
 		return this.createdDate;
@@ -85,6 +91,16 @@ public class Project implements Serializable {
 	
 
 	
+	public String getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+
 	public boolean isActive() {
 		return isActive;
 	}

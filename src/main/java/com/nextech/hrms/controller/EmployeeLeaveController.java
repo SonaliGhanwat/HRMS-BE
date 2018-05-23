@@ -492,10 +492,10 @@ public class EmployeeLeaveController {
 		
 	        Employee employee = employeeServices.getEmployeeByUserId(userId);
 	        List<Employee> employees = employeeServices.getEmployeeByReportTo((int) employee.getId());
-	       /* if(employees==null){
+	        if(employees==null){
 	        	logger.error("Employee does not exits");
 	        	 return new Status(1,"Employee does not exits") ;
-				}  */
+				} 
 	        for (Employee employee2 : employees) {
 	        	 employeeleaves =  employeeLeaveServices.getEmployeeLeaveByEmployeeId(employee2.getId());
 	        	for (Employeeleave employeeleave2 : employeeleaves) {

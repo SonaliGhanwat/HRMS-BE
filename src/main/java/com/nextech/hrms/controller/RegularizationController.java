@@ -146,8 +146,7 @@ public class RegularizationController {
 	        	for (Regularization regularization : regularizations) {
 	        		
 	        		if(regularization.getStatus().equals("New Request For Regularization")){
-	        			RegularizationDto regularizationDto= new RegularizationDto();
-	   				
+	        			RegularizationDto regularizationDto= new RegularizationDto();	   				
 	        			regularizationDto.setId(regularization.getId());
 	        			regularizationDto.setDate(regularization.getDate());
 	   				 regularizationDto.setTotalNumberofHoursworked(regularization.getTotalnumberofHoursworked());
@@ -171,9 +170,7 @@ public class RegularizationController {
 	
 	@RequestMapping(value = "/regularizationStatusUpdate", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody Status addEmployeeLeaveStatus(@RequestBody  RegularizationDto regularizationDto, HttpServletRequest request ) {
-		try {
-		
-			
+		try {			
 				Regularization regularization = regularizationServices.getEntityById(Regularization.class, regularizationDto.getId());
 				regularization.setStatus(regularizationDto.getStatus());
 				regularizationServices.updateEntity(regularization);

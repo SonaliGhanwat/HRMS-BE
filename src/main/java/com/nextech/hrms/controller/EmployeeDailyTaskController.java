@@ -218,7 +218,8 @@ public class EmployeeDailyTaskController {
 	   				employeeDailyTaskDto.setTakenTime(employeedailytask.getTakenTime());
 	   				dailyTaskDtos.add(employeeDailyTaskDto);		        	
 				}
-	        }     
+	        } 
+	    	
 	      
 		} catch (Exception e) {
 			logger.error(e);
