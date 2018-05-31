@@ -97,4 +97,15 @@ public class EmployeeAttendanceDaoImpl extends SuperDaoImpl<Employeeattendance> 
 		 List<Employeeattendance> employeeattendances = query.list();
 		  return employeeattendances;
 	}
+
+	@Override
+	public List<Employeeattendance> getEmployeeAttendanceByEmployeeIdandStatus(
+			long empId, String status) throws Exception {
+		session = sessionFactory.openSession();
+		 Criteria criteria = session.createCriteria(Employeeattendance.class);
+		  criteria.add(Restrictions.eq("employee.id",empId));
+		  criteria.add(Restrictions.eq("status",status));
+		  List<Employeeattendance> employeeattendance =criteria.list();
+		  return employeeattendance;
+	}
 }

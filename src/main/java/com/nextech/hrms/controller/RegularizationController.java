@@ -174,7 +174,7 @@ public class RegularizationController {
 				Regularization regularization = regularizationServices.getEntityById(Regularization.class, regularizationDto.getId());
 				regularization.setStatus(regularizationDto.getStatus());
 				regularizationServices.updateEntity(regularization);
-				if(regularizationDto.getStatus()=="Approved"){
+				if(regularizationDto.getStatus().equals("Approved")){
 				Employeeattendance employeeattendance = employeeAttendanceServices.getEmpolyeeAttendanceByIdandDate(regularization.getEmployee().getId(), regularization.getDate());
 				long totalTime = employeeattendance.getTotaltime() + regularization.getRegularizedHours();
 				EmployeeAttendanceDto attendanceDto = new EmployeeAttendanceDto();

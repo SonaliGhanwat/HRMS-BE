@@ -29,4 +29,11 @@ public class RegularizationServicesImpl extends CRUDServiceImpl<Regularization> 
 		// TODO Auto-generated method stub
 		return regularizationDao.getRegularizationByEmployeeId(empId);
 	}
+
+	@Override
+	public List<Regularization> getRegularizationByEmployeeIdandDate(
+			long empId, Date date) throws Exception {
+		// TODO Auto-generated method stub
+		return regularizationDao.getRegularizationByEmployeeIdandDate(empId, date);
+	}
 }

@@ -13,4 +13,6 @@ public interface RegularizationServices extends CRUDService<Regularization>{
 	public Regularization getRegularizationByUseridandDate(long empId,Date date)throws Exception;
 	
 	public List<Regularization> getRegularizationByEmployeeId(long empId)  throws Exception;
+	
+	public List<Regularization> getRegularizationByEmployeeIdandDate(long empId,Date date)  throws Exception;
 }

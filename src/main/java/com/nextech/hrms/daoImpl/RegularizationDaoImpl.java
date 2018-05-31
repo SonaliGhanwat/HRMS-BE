@@ -40,4 +40,15 @@ public class RegularizationDaoImpl extends SuperDaoImpl<Regularization> implemen
 		  return regularizations;
 	}
 
+	@Override
+	public List<Regularization> getRegularizationByEmployeeIdandDate(
+			long empId, Date date) throws Exception {
+		session = sessionFactory.openSession();
+		 Criteria criteria = session.createCriteria(Regularization.class);
+		 criteria.add(Restrictions.eq("employee.id", empId));
+		  criteria.add(Restrictions.eq("date",date));
+		  List<Regularization> regularizations =criteria.list();
+		  return regularizations;
+	}
+
 }

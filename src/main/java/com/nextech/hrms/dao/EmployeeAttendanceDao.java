@@ -16,6 +16,8 @@ public interface EmployeeAttendanceDao extends SuperDao<Employeeattendance> {
     
 	public List<Employeeattendance> getEmployeeAttendanceByEmployeeIdandDate(long empId,Date date)throws Exception;
 	
+	public List<Employeeattendance> getEmployeeAttendanceByEmployeeIdandStatus(long empId,String status)throws Exception;
+	
 }
 
 

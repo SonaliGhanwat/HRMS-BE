@@ -45,6 +45,7 @@ import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.Employeeleave;
 import com.nextech.hrms.model.Holiday;
 import com.nextech.hrms.model.Page;
+import com.nextech.hrms.model.Regularization;
 import com.nextech.hrms.model.Status;
 import com.nextech.hrms.model.Employeeattendance;
 import com.nextech.hrms.model.Usertype;
@@ -53,6 +54,7 @@ import com.nextech.hrms.services.EmployeeAttendanceServices;
 import com.nextech.hrms.services.EmployeeLeaveServices;
 import com.nextech.hrms.services.EmployeeServices;
 import com.nextech.hrms.services.HolidayServices;
+import com.nextech.hrms.services.RegularizationServices;
 import com.nextech.hrms.util.DateUtil;
 import com.nextech.hrms.util.YearUtil;
 
@@ -78,6 +80,9 @@ public class EmployeeAttendanceController extends HttpServlet {
 
 	@Autowired
 	EmployeeServices employeeServices;
+	
+	@Autowired
+	RegularizationServices regularizationServices;
 	
 	@Autowired
 	HolidayServices holidayServices;
@@ -424,12 +429,73 @@ public class EmployeeAttendanceController extends HttpServlet {
 		return new Status(1,"",attendanceWorkInfoDtos); 
 	}
 	 
+	@RequestMapping(value = "/getAttendanceforNotification/{userid}", method = RequestMethod.GET, headers = "Accept=application/json")
+	public @ResponseBody Status calculateEmployeeAttendanceById(
+			@PathVariable("userid") String userid) throws Exception {
+		List<Employeeattendance> employeeattendanceList = null;
+		List<EmployeeAttendanceDto> attendanceDtos = new ArrayList<EmployeeAttendanceDto>();
+		Employee employee = employeeServices.getEmployeeByUserId(userid);
+
+		try {
+			employeeattendanceList = employeeAttendanceServices
+					.getEmployeeattendanceByUserid(employee.getId());
+			for (Employeeattendance employeeattendance : employeeattendanceList) { 
+				if(employeeattendance.getStatus().equals("Fullday") && employeeattendance.getTotaltime()<9){
+					EmployeeAttendanceDto employeeattendance2 = new EmployeeAttendanceDto();
+					employeeattendance2.setEmployee(employeeattendance.getEmployee());
+					employeeattendance2.setIntime(employeeattendance.getIntime());
+					employeeattendance2.setOuttime(employeeattendance.getOuttime());
+					employeeattendance2.setDate(employeeattendance.getDate());
+					employeeattendance2.setTotaltime(employeeattendance.getTotaltime());
+					employeeattendance2.setStatus(employeeattendance.getStatus());
+					attendanceDtos.add(employeeattendance2);
+					
+				}
+				
+			}
+			
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		return new Status(1,"",attendanceDtos); 
+	}
+	
+	@RequestMapping(value = "/getAttendanceByStatus/{userid}", method = RequestMethod.GET, headers = "Accept=application/json")
+	public @ResponseBody Status calculateEmployeeAttendanceByStatus(
+			@PathVariable("userid") String userid) throws Exception {
+		List<Employeeattendance> employeeattendanceList = null;
+		List<EmployeeAttendanceDto> attendanceDtos = new ArrayList<EmployeeAttendanceDto>();
+		Employee employee = employeeServices.getEmployeeByUserId(userid);
+        String status = "Absent";
+		try {
+			employeeattendanceList = employeeAttendanceServices
+					.getEmployeeAttendanceByEmployeeIdandStatus(employee.getId(),status);
+			for (Employeeattendance employeeattendance : employeeattendanceList) {
+				Employeeleave employeeleaves = employeeLeaveServices.getEmpolyeeleaveByIdandDate(employeeattendance.getEmployee().getId(), employeeattendance.getDate());
+				Regularization regularizations =  regularizationServices.getRegularizationByUseridandDate(employeeattendance.getEmployee().getId(), employeeattendance.getDate());
+			
+				if(employeeleaves==null && regularizations==null){
+					EmployeeAttendanceDto attendanceDto = new EmployeeAttendanceDto();
+					attendanceDto.setEmployee(employeeattendance.getEmployee());
+					attendanceDto.setDate(employeeattendance.getDate());
+					attendanceDto.setStatus(employeeattendance.getStatus());
+					attendanceDtos.add(attendanceDto);
+					
+				}
+			}
+			
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		return new Status(1,"",attendanceDtos); 
+	}
 	public long calculateTotalTime(EmployeeAttendanceDto employeeAttendanceDto)
 			throws ClassNotFoundException, SQLException {
 		Time intime = employeeAttendanceDto.getIntime();
 		Time outtime = employeeAttendanceDto.getOuttime();
 		long totalTime = outtime.getTime() - intime.getTime();		
 		return (totalTime / (60 * 60 * 1000) % 24);
+		
 	}
 	
  /*@Scheduled(initialDelay=10000, fixedRate=60000)
