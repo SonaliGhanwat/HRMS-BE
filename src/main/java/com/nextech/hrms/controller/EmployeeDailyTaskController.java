@@ -53,18 +53,39 @@ public class EmployeeDailyTaskController {
 
 	static  Logger logger = Logger.getLogger(EmployeeDailyTaskController.class);
 
-	@RequestMapping(value = "/create", method = RequestMethod.POST,headers = "Accept=application/json")
+	@RequestMapping(value = "/create/{userid}", method = RequestMethod.POST,headers = "Accept=application/json")
 	public @ResponseBody
-	Status addEmployee(@RequestBody EmployeeDailyTaskDto employeeDailyTaskDto) {
+	Status addEmployee(@PathVariable("userid") String userid ,@RequestBody EmployeeDailyTaskDto employeeDailyTaskDto) {
 		try {
 			Employeeleave employeeleaves = employeeLeaveServices.getEmpolyeeleaveByIdandDate(employeeDailyTaskDto.getEmployee().getId(),employeeDailyTaskDto.getDate());
 			if(employeeleaves!=null){
-				return new Status(1,"Sorry You have allready applied leave for this day,So you cant fill Attendance");
+				return new Status(1,"Sorry You have allready applied leave for this day,So you cant fill Daily Task");
 			}else{
 			employeeDailyTaskDto.setIsActive(true);
 			employeeDailyTaskDto.setTakenTime(calculateTotalTime(employeeDailyTaskDto));
-			employeeDailyTaskServices.addEntity(EmployeeDailyTaskFactory.setEmployeeDailyTask(employeeDailyTaskDto));
-			return new Status(1, messageSource.getMessage(MessageConstant.EmployeeDailyTask_Added_Successfully, null,null));
+			 Employee employee = employeeServices.getEmployeeByUserId(userid);
+			 if(employee.getId()!=employeeDailyTaskDto.getEmployee().getId()){
+				 Employeedailytask employeedailytask = new Employeedailytask();
+				
+				 employeedailytask.setEmployee(employeeDailyTaskDto.getEmployee());
+				 employeedailytask.setDate(employeeDailyTaskDto.getDate());
+				 employeedailytask.setTaskName(employeeDailyTaskDto.getTaskName());
+				 employeedailytask.setEstimationTime(employeeDailyTaskDto.getEstimationTime());
+				 employeedailytask.setStarttime(employeeDailyTaskDto.getStarttime());
+				 employeedailytask.setEndtime(employeeDailyTaskDto.getEndtime());
+				 employeedailytask.setTakenTime(employeeDailyTaskDto.getTakenTime());
+				 employeedailytask.setStatus(employeeDailyTaskDto.getStatus());
+				 employeedailytask.setDescription(employeeDailyTaskDto.getDescription());
+				 employeedailytask.setAssignBy(employee.getId());
+				 employeedailytask.setIsActive(true);
+				employeeDailyTaskServices.addEntity(employeedailytask);
+				return new Status(1, messageSource.getMessage(MessageConstant.EmployeeDailyTask_Added_Successfully, null,null));
+			 }else {
+				
+				 employeeDailyTaskServices.addEntity(EmployeeDailyTaskFactory.setEmployeeDailyTask(employeeDailyTaskDto));
+				 return new Status(1, messageSource.getMessage(MessageConstant.EmployeeDailyTask_Added_Successfully, null,null));
+			}			
+			
 		}
 		}catch (Exception e) {
 			logger.error(e);
@@ -140,12 +161,13 @@ public class EmployeeDailyTaskController {
 		}
 		return  employeedailytasks; // TODO Use proper message to indicate correct reason user
 	}
+	
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE,headers = "Accept=application/json")
 	public @ResponseBody
 	Status deleteEmployee(@PathVariable("id") long id) {
 
 		try {
-			employeeDailyTaskServices.getEmployeeDailyTaskDtoByid(id);
+			employeeDailyTaskServices.getEmployeeDailyTaskDtoByid(id); 
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Status(0,messageSource.getMessage(MessageConstant.EMPLOYEE_DOES_NOT_EXISTS, null,null));
@@ -228,5 +250,37 @@ public class EmployeeDailyTaskController {
 			 
 		}
 		return new Status(0,"",dailyTaskDtos) ;
+	}
+	
+	@RequestMapping(value = "/getTaskByUserid/{userid}", method = RequestMethod.GET,headers = "Accept=application/json")
+	public @ResponseBody Status getDailyTaskByUserId( @PathVariable("userid") String userid) {
+		List<Employeedailytask> employeedailytasks = null;
+		List<EmployeeDailyTaskDto> dailyTaskDtos = new ArrayList<EmployeeDailyTaskDto>();
+		try {
+			Employee employee = employeeServices.getEmployeeByUserId(userid);
+			employeedailytasks = employeeDailyTaskServices
+					.getEmployeeDailyTaskByUserid(employee.getId());	
+			for (Employeedailytask employeedailytask : employeedailytasks) {
+				if(employeedailytask.getEmployee().getId()!=employeedailytask.getAssignBy()){
+					EmployeeDailyTaskDto employeeDailyTaskDto= new EmployeeDailyTaskDto();
+     				employeeDailyTaskDto.setId(employeedailytask.getId());
+	   				employeeDailyTaskDto.setEmployee(employeedailytask.getEmployee());
+	   				employeeDailyTaskDto.setTaskName(employeedailytask.getTaskName());
+	   				employeeDailyTaskDto.setStarttime(employeedailytask.getStarttime());
+	   				employeeDailyTaskDto.setEndtime(employeedailytask.getEndtime());
+	   				employeeDailyTaskDto.setEstimationTime(employeedailytask.getEstimationTime());
+	   				employeeDailyTaskDto.setStatus(employeedailytask.getStatus());
+	   				employeeDailyTaskDto.setDate(employeedailytask.getDate());
+	   				employeeDailyTaskDto.setTakenTime(employeedailytask.getTakenTime());
+	   				employeeDailyTaskDto.setAssignBy(employeedailytask.getAssignBy());
+	   				dailyTaskDtos.add(employeeDailyTaskDto);		        	
+				}
+			}
+
+		} catch (Exception e) {
+			logger.error(e);
+
+		}
+		return new Status(1,"daily task list",dailyTaskDtos)  ; 
 	}
 }

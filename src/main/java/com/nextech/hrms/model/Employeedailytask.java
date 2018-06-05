@@ -51,6 +51,9 @@ public class Employeedailytask implements Serializable {
 
 	@Column(name="updated_date")
 	private Timestamp updatedDate;
+	
+	@Column(name="assign_by")
+	private long assignBy;
 
 	//bi-directional many-to-one association to Employee
 	@ManyToOne
@@ -167,6 +170,14 @@ public class Employeedailytask implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public long getAssignBy() {
+		return assignBy;
+	}
+
+	public void setAssignBy(long assignBy) {
+		this.assignBy = assignBy;
 	}
 	
 	

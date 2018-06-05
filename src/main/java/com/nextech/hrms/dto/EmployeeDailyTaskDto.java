@@ -15,6 +15,7 @@ public class EmployeeDailyTaskDto extends AbstractDTO{
 	private long takenTime;
 	private String status;
 	private String description;
+	private long assignBy;
 	public Employee getEmployee() {
 		return employee;
 	}
@@ -70,6 +71,12 @@ public class EmployeeDailyTaskDto extends AbstractDTO{
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public long getAssignBy() {
+		return assignBy;
+	}
+	public void setAssignBy(long assignBy) {
+		this.assignBy = assignBy;
 	}
 	
 }
