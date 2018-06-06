@@ -18,6 +18,10 @@ public interface EmployeeAttendanceDao extends SuperDao<Employeeattendance> {
 	
 	public List<Employeeattendance> getEmployeeAttendanceByEmployeeIdandStatus(long empId,String status)throws Exception;
 	
+	public List<Employeeattendance> getEmployeeattendanceByUseridandHasRead(long empId) throws Exception;
+	
+	 public List<Employeeattendance> getEmployeeAttendanceByEmployeeIdandStatusandHasRead(long empId,String status)throws Exception;
+	
 }
 
 

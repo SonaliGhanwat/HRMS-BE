@@ -38,6 +38,8 @@ public class Employeeattendance implements Serializable {
 	private Time intime;
 
 	private boolean isActive;
+	
+	private boolean hasRead;
 
 	private Time outtime;
 
@@ -143,6 +145,15 @@ public class Employeeattendance implements Serializable {
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
 	}
+
+	public boolean isHasRead() {
+		return hasRead;
+	}
+
+	public void setHasRead(boolean hasRead) {
+		this.hasRead = hasRead;
+	}
+	
 	/*public List<Regularization> getRegularizations() {
 		return this.regularizations;
 	}

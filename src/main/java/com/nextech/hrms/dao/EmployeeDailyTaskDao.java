@@ -12,4 +12,6 @@ public interface EmployeeDailyTaskDao extends SuperDao<Employeedailytask> {
 	public List<Employeedailytask> getEmployeeDailyTaskByUserid(long empId) throws Exception;
 
 	public List<Employeedailytask> getEmployeeTaskByEmployeeId(long empId)  throws Exception;
+	
+	public List<Employeedailytask> getEmployeeDailyTaskByUseridandHasRead(long empId) throws Exception;
 }

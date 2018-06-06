@@ -33,6 +33,7 @@ public class EmployeeDailyTaskFactory {
 	    employeedailytask.setDescription(employeeDailyTaskDto.getDescription());
 	    employeedailytask.setAssignBy(employeeDailyTaskDto.getEmployee().getId());
 		employeedailytask.setIsActive(true);
+		employeedailytask.setHasRead(true);
 		return employeedailytask;
 	}
 	public static EmployeeDailyTaskDto setEmployeeDailyTaskList(Employeedailytask employeedailytask)throws Exception{
@@ -50,6 +51,7 @@ public class EmployeeDailyTaskFactory {
 		employeeDailyTaskDto.setUpdatedDate(employeedailytask.getUpdatedDate());
 		employeeDailyTaskDto.setDescription(employeedailytask.getDescription());
 		employeeDailyTaskDto.setIsActive(true);
+		employeeDailyTaskDto.setHasRead(true);
 		return employeeDailyTaskDto;
 		
 	}
@@ -68,6 +70,7 @@ public class EmployeeDailyTaskFactory {
 		employeedailytask.setUpdatedDate(employeeDailyTaskDto.getUpdatedDate());
 		employeedailytask.setDescription(employeeDailyTaskDto.getDescription());
 		employeedailytask.setIsActive(true);
+		employeedailytask.setHasRead(true);
 		return employeedailytask;
 	}
 	public static List<EmployeeDailyTaskDto> setEmployeeDailyTaskExcel(MultipartFile employeeDailyTaskExcelFile)throws Exception{

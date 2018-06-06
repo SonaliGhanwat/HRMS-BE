@@ -111,6 +111,20 @@ public class EmployeeAttendanceServicesImpl extends CRUDServiceImpl<Employeeatte
 		return employeeAttendanceDao.getEmployeeAttendanceByEmployeeIdandStatus(empId, status);
 	}
 
+	@Override
+	public List<Employeeattendance> getEmployeeattendanceByUseridandHasRead(
+			long empId) throws Exception {
+		// TODO Auto-generated method stub
+		return employeeAttendanceDao.getEmployeeattendanceByUseridandHasRead(empId);
+	}
+
+	@Override
+	public List<Employeeattendance> getEmployeeAttendanceByEmployeeIdandStatusandHasRead(
+			long empId, String status) throws Exception {
+		// TODO Auto-generated method stub
+		return employeeAttendanceDao.getEmployeeAttendanceByEmployeeIdandStatusandHasRead(empId,status);
+	}
+
 	
 	
 }

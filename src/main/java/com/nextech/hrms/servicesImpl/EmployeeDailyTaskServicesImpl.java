@@ -90,5 +90,12 @@ public class EmployeeDailyTaskServicesImpl extends CRUDServiceImpl<Employeedaily
 		// TODO Auto-generated method stub
 		return employeeDailyTaskDao.getEmployeeTaskByEmployeeId(empId);
 	}
+
+	@Override
+	public List<Employeedailytask> getEmployeeDailyTaskByUseridandHasRead(
+			long empId) throws Exception {
+		// TODO Auto-generated method stub
+		return employeeDailyTaskDao.getEmployeeDailyTaskByUseridandHasRead(empId);
+	}
 }
 

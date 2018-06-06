@@ -41,6 +41,7 @@ import com.nextech.hrms.dto.UserTypePageAssoDTO;
 import com.nextech.hrms.dto.UserTypePageAssoPart;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeAttendanceFactory;
+import com.nextech.hrms.model.Department;
 import com.nextech.hrms.model.Employee;
 import com.nextech.hrms.model.Employeeleave;
 import com.nextech.hrms.model.Holiday;
@@ -438,10 +439,11 @@ public class EmployeeAttendanceController extends HttpServlet {
 
 		try {
 			employeeattendanceList = employeeAttendanceServices
-					.getEmployeeattendanceByUserid(employee.getId());
+					.getEmployeeattendanceByUseridandHasRead(employee.getId());
 			for (Employeeattendance employeeattendance : employeeattendanceList) { 
 				if(employeeattendance.getStatus().equals("Fullday") && employeeattendance.getTotaltime()<9){
 					EmployeeAttendanceDto employeeattendance2 = new EmployeeAttendanceDto();
+					employeeattendance2.setId(employeeattendance.getId());
 					employeeattendance2.setEmployee(employeeattendance.getEmployee());
 					employeeattendance2.setIntime(employeeattendance.getIntime());
 					employeeattendance2.setOuttime(employeeattendance.getOuttime());
@@ -469,13 +471,14 @@ public class EmployeeAttendanceController extends HttpServlet {
         String status = "Absent";
 		try {
 			employeeattendanceList = employeeAttendanceServices
-					.getEmployeeAttendanceByEmployeeIdandStatus(employee.getId(),status);
+					.getEmployeeAttendanceByEmployeeIdandStatusandHasRead(employee.getId(),status);
 			for (Employeeattendance employeeattendance : employeeattendanceList) {
 				Employeeleave employeeleaves = employeeLeaveServices.getEmpolyeeleaveByIdandDate(employeeattendance.getEmployee().getId(), employeeattendance.getDate());
 				Regularization regularizations =  regularizationServices.getRegularizationByUseridandDate(employeeattendance.getEmployee().getId(), employeeattendance.getDate());
 			
 				if(employeeleaves==null && regularizations==null){
 					EmployeeAttendanceDto attendanceDto = new EmployeeAttendanceDto();
+					attendanceDto.setId(employeeattendance.getId());
 					attendanceDto.setEmployee(employeeattendance.getEmployee());
 					attendanceDto.setDate(employeeattendance.getDate());
 					attendanceDto.setStatus(employeeattendance.getStatus());
@@ -489,6 +492,37 @@ public class EmployeeAttendanceController extends HttpServlet {
 		}
 		return new Status(1,"",attendanceDtos); 
 	}
+	
+	@RequestMapping(value = "changeHasReadStatus/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
+	public @ResponseBody Status deleteAttendanceByhasRead(@PathVariable("id") long id) {
+
+		try {
+			Employeeattendance employeeattendance = employeeAttendanceServices.getEntityById(
+					Employeeattendance.class, id);
+			employeeattendance.setHasRead(false);
+			employeeAttendanceServices.updateEntity(employeeattendance);
+			return new Status(0, "Has read cheack Successfully");
+		} catch (Exception e) {
+			logger.error(e);
+			return new Status(0, e.toString());
+		}
+	}
+	
+	@RequestMapping(value = "changeHasReadAbsentStatus/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
+	public @ResponseBody Status deleteDepartment(@PathVariable("id") long id) {
+
+		try {
+			Employeeattendance employeeattendance = employeeAttendanceServices.getEntityById(
+					Employeeattendance.class, id);
+			employeeattendance.setHasRead(false);
+			employeeAttendanceServices.updateEntity(employeeattendance);
+			return new Status(0, "Has read cheack Successfully");
+		} catch (Exception e) {
+			logger.error(e);
+			return new Status(0, e.toString());
+		}
+	}
+
 	public long calculateTotalTime(EmployeeAttendanceDto employeeAttendanceDto)
 			throws ClassNotFoundException, SQLException {
 		Time intime = employeeAttendanceDto.getIntime();

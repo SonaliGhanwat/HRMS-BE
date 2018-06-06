@@ -50,5 +50,15 @@ public class EmployeeDailyTaskDaoImpl extends SuperDaoImpl<Employeedailytask> im
 		  List<Employeedailytask> employeedailytasks =criteria.list();
 		  return employeedailytasks;
 	}
+	@Override
+	public List<Employeedailytask> getEmployeeDailyTaskByUseridandHasRead(
+			long empId) throws Exception {
+		session = sessionFactory.openSession();
+		 Criteria criteria = session.createCriteria(Employeedailytask.class);
+		  criteria.add(Restrictions.eq("employee.id", empId));
+		  criteria.add(Restrictions.eq("hasRead",true));
+		  List<Employeedailytask> employeedailytasks =criteria.list();
+		  return employeedailytasks;
+	}
 
 }

@@ -32,6 +32,7 @@ public class EmployeeAttendanceFactory {
 		employeeattendance.setCreatedDate(employeeAttendanceDto.getCreatedDate());
 		employeeattendance.setUpdatedDate(employeeAttendanceDto.getUpdatedDate());
 		employeeattendance.setIsActive(true);
+		employeeattendance.setHasRead(true);
 		return employeeattendance;
 	}
 	
@@ -47,6 +48,7 @@ public class EmployeeAttendanceFactory {
 		employeeattendance.setCreatedDate(employeeAttendanceDto.getCreatedDate());
 		employeeattendance.setUpdatedDate(employeeAttendanceDto.getUpdatedDate());
 		employeeattendance.setIsActive(true);
+		employeeattendance.setHasRead(true);
 		return employeeattendance;
 	}
 
@@ -63,6 +65,7 @@ public class EmployeeAttendanceFactory {
 		employeeAttendanceDto.setCreatedDate(employeeattendance.getCreatedDate());
 		employeeAttendanceDto.setUpdatedDate(employeeattendance.getUpdatedDate());
 		employeeAttendanceDto.setIsActive(true);
+		employeeAttendanceDto.setHasRead(true);
 		return employeeAttendanceDto;
 	}
 

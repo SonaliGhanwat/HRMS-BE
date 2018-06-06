@@ -9,6 +9,7 @@ public class AbstractDTO {
 	private boolean isIsActive;
 	private long createdBy;
 	private long updatedBy;
+	private boolean hasRead;
 	
 	public long getId() {
 		return id;
@@ -45,6 +46,12 @@ public class AbstractDTO {
 	}
 	public void setUpdatedBy(long updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+	public boolean isHasRead() {
+		return hasRead;
+	}
+	public void setHasRead(boolean hasRead) {
+		this.hasRead = hasRead;
 	}
 	
 	

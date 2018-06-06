@@ -26,6 +26,7 @@ import com.nextech.hrms.dto.EmployeeLeaveDto;
 import com.nextech.hrms.constant.MessageConstant;
 import com.nextech.hrms.factory.EmployeeDailyTaskFactory;
 import com.nextech.hrms.model.Employee;
+import com.nextech.hrms.model.Employeeattendance;
 import com.nextech.hrms.model.Employeedailytask;
 import com.nextech.hrms.model.Employeeleave;
 import com.nextech.hrms.model.Status;
@@ -62,6 +63,7 @@ public class EmployeeDailyTaskController {
 				return new Status(1,"Sorry You have allready applied leave for this day,So you cant fill Daily Task");
 			}else{
 			employeeDailyTaskDto.setIsActive(true);
+			employeeDailyTaskDto.setHasRead(true);
 			employeeDailyTaskDto.setTakenTime(calculateTotalTime(employeeDailyTaskDto));
 			 Employee employee = employeeServices.getEmployeeByUserId(userid);
 			 if(employee.getId()!=employeeDailyTaskDto.getEmployee().getId()){
@@ -78,6 +80,7 @@ public class EmployeeDailyTaskController {
 				 employeedailytask.setDescription(employeeDailyTaskDto.getDescription());
 				 employeedailytask.setAssignBy(employee.getId());
 				 employeedailytask.setIsActive(true);
+				 employeedailytask.setHasRead(true);
 				employeeDailyTaskServices.addEntity(employeedailytask);
 				return new Status(1, messageSource.getMessage(MessageConstant.EmployeeDailyTask_Added_Successfully, null,null));
 			 }else {
@@ -259,7 +262,7 @@ public class EmployeeDailyTaskController {
 		try {
 			Employee employee = employeeServices.getEmployeeByUserId(userid);
 			employeedailytasks = employeeDailyTaskServices
-					.getEmployeeDailyTaskByUserid(employee.getId());	
+					.getEmployeeDailyTaskByUseridandHasRead(employee.getId());	
 			for (Employeedailytask employeedailytask : employeedailytasks) {
 				if(employeedailytask.getEmployee().getId()!=employeedailytask.getAssignBy()){
 					EmployeeDailyTaskDto employeeDailyTaskDto= new EmployeeDailyTaskDto();
@@ -282,5 +285,20 @@ public class EmployeeDailyTaskController {
 
 		}
 		return new Status(1,"daily task list",dailyTaskDtos)  ; 
+	}
+	
+	@RequestMapping(value = "changeHasReadDailyTaskStatus/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
+	public @ResponseBody Status deleteDepartment(@PathVariable("id") long id) {
+
+		try {
+			Employeedailytask employeedailytask = employeeDailyTaskServices.getEntityById(
+					Employeedailytask.class, id);
+			employeedailytask.setHasRead(false);
+			employeeDailyTaskServices.updateEntity(employeedailytask);
+			return new Status(0, "Has read cheack Successfully");
+		} catch (Exception e) {
+			logger.error(e);
+			return new Status(0, e.toString());
+		}
 	}
 }

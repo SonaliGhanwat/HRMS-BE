@@ -37,6 +37,8 @@ public class Employeedailytask implements Serializable {
 	private String description;
 
 	private boolean isActive;
+	
+	private boolean hasRead;
 
 	private Time starttime;
 	
@@ -178,6 +180,14 @@ public class Employeedailytask implements Serializable {
 
 	public void setAssignBy(long assignBy) {
 		this.assignBy = assignBy;
+	}
+
+	public boolean isHasRead() {
+		return hasRead;
+	}
+
+	public void setHasRead(boolean hasRead) {
+		this.hasRead = hasRead;
 	}
 	
 	
